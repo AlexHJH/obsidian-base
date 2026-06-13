@@ -1,0 +1,17 @@
+# Obsidian
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/hotkeys.json
+.obsidian/core-plugins.json
+.obsidian/community-plugins.json
+.trash/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git plugin cruft
+.obsidian/plugins/obsidian-git/data.json
+
+# Hermes
+.hermes/
