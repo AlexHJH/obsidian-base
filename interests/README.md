@@ -9,5 +9,7 @@
 - AI Agent 框架 & 工具
 - 量化交易策略 (A股)
 - MLX / Apple Silicon 推理
-- 自动驾驶 & 封闭园区物流
-- LLM 推理优化 & 部署
+- AI 芯片 & 半导体
+- MLSys / OSDI 等系统顶会
+- AI 编译器 (TVM, Triton, MLIR)
+- 大模型推理 & 部署
