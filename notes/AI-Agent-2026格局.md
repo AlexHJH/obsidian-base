@@ -1,6 +1,6 @@
 # AI Agent 2026 格局
 
-- 整理自: [[inbox/2026-06-13-ClaudeCode-AI编程拐点]], [[inbox/2026-06-13-AI-Agent框架]], [[inbox/2026-06-13-MCP与Agent范式]]
+- 整理自: [[inbox/2026-06-13-ClaudeCode-AI编程拐点]], [[inbox/2026-06-13-AI-Agent框架]], [[inbox/2026-06-13-MCP与Agent范式]], [[inbox/2026-06-17-AI-Agent框架2026横评]]
 - 标签: #AI-Agent #MCP #LangGraph #ClaudeCode #框架对比
 
 ## 范式跃迁
