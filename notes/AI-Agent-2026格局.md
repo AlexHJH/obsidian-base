@@ -7,10 +7,12 @@
 2026 年 Agent 从"被动响应"转向"主动决策"，三大驱动力：MCP 协议标准化、长期记忆架构、多 Agent 协作。
 
 ## 框架横评
-- **LangGraph #1**：复杂有状态工作流首选，PostgresSaver 检查点成熟
-- **Claude Agent SDK #2**：Anthropic 官方 SDK，编程场景最强
-- **AutoGen 2.0**：事件驱动重构，但无限对话循环风险
-- **CrewAI 0.95**：角色式多 Agent 协作
+- **LangGraph #1**：复杂有状态工作流首选，PostgresSaver 检查点成熟，月搜索量 27.1K 领先
+- **Claude Agent SDK #2**：Anthropic 官方 SDK，编程场景最强（Claude Code 底座）
+- **AutoGen 2.0**：事件驱动重构，原型验证最快，但无限对话循环风险、治理靠补
+- **CrewAI 0.95**：角色→任务→流程，业务团队上手最快
+- 选型铁律：验证想法→AutoGen；业务落地→CrewAI；进生产→LangGraph
+- Gartner：82% 企业计划 12 个月内部署 AI Agent；详见 [[inbox/2026-06-20-AI-Agent企业落地调研]]
 
 ## MCP 协议
 - 基于 JSON-RPC 双向通信，统一 Claude/GPT/DeepSeek 工具调用
