@@ -26,6 +26,14 @@
 - llama.cpp（边缘推理）
 - LMDeploy（双后端）
 
+## Prefill-Decode 分离架构（2026）
+Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满 HBM 带宽）硬件需求相反，混跑同一 GPU 互相 stall。分离架构将两者拆到不同实例/集群，可获约 2 倍吞吐提升。
+- **vLLM 实现**：双实例（prefiller + decoder），用 connector 传输 KV cache
+- **Prefill-as-a-Service**：1 个 prefiller 服务多 decoder，跨集群进一步优化
+- **核心挑战**：KV cache 跨节点传输开销；2026 年 NIXL（NVIDIA）+ UCX/GDS 成标准后端
+- **落地**：Meta、Perplexity 已生产部署；vLLM 仍 experimental，SGLang 跟进
+- 整理自 [[inbox/2026-06-18-推理分离-Prefill-Decode-Disaggregation]]
+
 ## 关联
-- 架构演进见 [[inbox/2026-06-18-推理分离-Prefill-Decode-Disaggregation]]（prefill/decode 分离范式）
 - Apple Silicon 本地推理见 [[MLX生态2026]]
+- 算力扩张与先进封装见 [[AI芯片推理硬件2026全景]]
