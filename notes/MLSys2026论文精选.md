@@ -1,6 +1,6 @@
 # MLSys 2026 论文精选
 
-- 整理自: [[inbox/2026-06-14-ExecuTorch-MLSys最佳工业论文]], [[inbox/2026-06-14-LEANN-MLSys最佳论文]], [[inbox/2026-06-17-OSDI26-ML系统论文]], [[inbox/2026-06-20-OSDI26-新一批论文]]
+- 整理自: [[inbox/2026-06-14-ExecuTorch-MLSys最佳工业论文]], [[inbox/2026-06-14-LEANN-MLSys最佳论文]], [[inbox/2026-06-17-OSDI26-ML系统论文]]（2026-06-20 OSDI'26 新一批论文已归档合并）
 - 标签: #MLSys #端侧推理 #PyTorch #向量检索 #RAG #OSDI
 
 ## ExecuTorch: 最佳工业论文
@@ -21,6 +21,8 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - **Xkernel**：用编译器技术自动化 OS 内核参数调优，重新思考内核性能可调优性
 - **Sereno**（SJTU/华为）：治移动端 LLM 推理的内存带宽竞争，端侧瓶颈转向带宽而非算力
 - **FlowANN**：拆解图依赖做十亿级 GPU 向量搜索，RAG 检索基础设施级优化
+- **Revisiting Pipeline Parallelism for LLM Serving**（高丽大学）：重审 LLM 服务的流水线并行调度
+- **Oxbow**（Tianyin Xu 团队）：多组件文件系统的协同架构，OSDI'26 Operational Systems 赛道
 - OSDI'26（7月13-15日西雅图）取消 author response、新增 Operational Systems 赛道（OpenTela 入选）
 
 ## 信号
