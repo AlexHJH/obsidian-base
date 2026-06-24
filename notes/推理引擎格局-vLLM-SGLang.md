@@ -37,3 +37,11 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 ## 关联
 - Apple Silicon 本地推理见 [[MLX生态2026]]
 - 算力扩张与先进封装见 [[AI芯片推理硬件2026全景]]
+
+## KV Cache 瓶颈与 TurboQuant 4-bit 量化
+整理自 [[inbox/2026-06-21-大模型推理优化全景-KVCache与TurboQuant]]
+- 竞争核心从算力转向显存利用率/吞吐/单位 Token 成本/延迟四维博弈
+- **KV Cache 显存瓶颈**：30B 模型 128k 上下文单条即占 32GB（FP16），超 RTX 4090 物理显存上限
+- **TurboQuant**：99% 普通通道压至 4-bit、1% 离群通道保 FP16，显存降 75%、精度损 <1.2%
+- **连续批处理**：GPU 利用率 45% → 85%+，尾延迟降 60%
+- 组合优化（量化 + vLLM + 稀疏化 + Serverless）：百万 Token 成本 $100 → $5，降本 95%
