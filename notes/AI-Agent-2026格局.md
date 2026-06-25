@@ -1,6 +1,6 @@
 # AI Agent 2026 格局
 
-- 整理自: [[inbox/2026-06-13-ClaudeCode-AI编程拐点]], [[inbox/2026-06-13-AI-Agent框架]], [[inbox/2026-06-13-MCP与Agent范式]], [[inbox/2026-06-17-AI-Agent框架2026横评]]
+- 整理自: [[inbox/2026-06-13-ClaudeCode-AI编程拐点]], [[inbox/2026-06-13-AI-Agent框架]], [[inbox/2026-06-13-MCP与Agent范式]], [[inbox/2026-06-17-AI-Agent框架2026横评]], [[inbox/2026-06-22-Agent框架2026生产级横评]]
 - 标签: #AI-Agent #MCP #LangGraph #ClaudeCode #框架对比
 
 ## 范式跃迁
@@ -32,3 +32,11 @@
 - coding agent 从 copilot → autonomous 跃迁
 - Agent 推理消耗 token 量远超训练，利好推理基础设施
 - 软件工程经济模型重写：按 token vs 按开发者时间计费
+
+## 2026 生产级框架横评（2026-06）
+整理自 [[inbox/2026-06-22-Agent框架2026生产级横评]]
+- 基于 healthcare/logistics/fintech/电商真实生产经验横评 8 大框架
+- 生产可靠性：LangGraph 与 Intuz 评级最高（5 星）；成本风险：AutoGen 2.0 高（无界对话循环）
+- 选型取决于容错能力、可观测性需求、团队调试能力三点
+- Jetbrains 6 月综述补充：Haystack(生产 RAG)、AutoGen(多智能体)、Semantic Kernel(企业集成)
+- 与上方 [[#框架横评]]（06-17）互补：从社区热度转向生产可靠性视角
