@@ -1,6 +1,7 @@
 # AI Agent 2026 格局
 
 - 整理自: [[inbox/2026-06-13-ClaudeCode-AI编程拐点]], [[inbox/2026-06-13-AI-Agent框架]], [[inbox/2026-06-13-MCP与Agent范式]], [[inbox/2026-06-17-AI-Agent框架2026横评]], [[inbox/2026-06-22-Agent框架2026生产级横评]]
+ 整理自: [[inbox/2026-06-13-ClaudeCode-AI编程拐点]], [[inbox/2026-06-13-AI-Agent框架]], [[inbox/2026-06-13-MCP与Agent范式]], [[inbox/2026-06-17-AI-Agent框架2026横评]], [[inbox/2026-06-22-Agent框架2026生产级横评]], [[inbox/2026-06-23-Agent协议生态2026-MCP-A2A-ACP-UCP]]
 - 标签: #AI-Agent #MCP #LangGraph #ClaudeCode #框架对比
 
 ## 范式跃迁
@@ -24,6 +25,15 @@
 ## MCP 协议
 - 基于 JSON-RPC 双向通信，统一 Claude/GPT/DeepSeek 工具调用
 - 一次开发多模型复用，成为事实标准
+
+## Agent 协议生态 2026：四大协议分层
+整理自 [[inbox/2026-06-23-Agent协议生态2026-MCP-A2A-ACP-UCP]]（2026-06-26 归档）
+截至 2026 Q1，Agent 互操作已形成四大协议并存、分层互补格局（非竞争）：
+- **MCP**（Anthropic 2024.11）：工具层，Agent↔工具 JSON-RPC 标准化接口，事实标准
+- **A2A**（Google 2025.04）：协作层，Agent Card 数字名片 + 任务发现/委托，跨厂商协作；2026 升级支持 Agent Marketplace 直接售卖
+- **ACP**（IBM/BeeAI）：运行时层，Agent 生命周期管理与编排
+- **UCP**：上下文层，统一多 Agent 共享上下文一致性
+- 协议栈：MCP(工具) → A2A(协作) → ACP(运行时) → UCP(上下文)
 
 ## 记忆架构
 工作记忆 → 短期记忆 → 长期记忆，向量数据库 + 知识图谱混合

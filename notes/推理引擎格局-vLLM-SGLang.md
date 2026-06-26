@@ -1,6 +1,7 @@
 # 推理引擎格局：vLLM vs SGLang
 
 - 整理自: [[inbox/2026-06-15-vLLM-SGLang推理引擎格局]], [[inbox/2026-06-17-vLLM-SGLang商业化-推理引擎]]
+ 整理自: [[inbox/2026-06-15-vLLM-SGLang推理引擎格局]], [[inbox/2026-06-17-vLLM-SGLang商业化-推理引擎]], [[inbox/2026-06-23-推理分离架构18月回顾-DisaggInference]]
 - 标签: #推理引擎 #vLLM #SGLang #开源 #大模型部署
 
 ## 商业化（2026）
@@ -33,6 +34,11 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - **核心挑战**：KV cache 跨节点传输开销；2026 年 NIXL（NVIDIA）+ UCX/GDS 成标准后端
 - **落地**：Meta、Perplexity 已生产部署；vLLM 仍 experimental，SGLang 跟进
 - 整理自 [[inbox/2026-06-18-推理分离-Prefill-Decode-Disaggregation]]
+补充整理自 [[inbox/2026-06-23-推理分离架构18月回顾-DisaggInference]]（2026-06-26 归档，UCSD Hao AI Lab 18 个月回顾）
+- DistServe 提出 18 个月后，几乎所有生产级框架（NVIDIA Dynamo、vLLM、SGLang、LMCache、Mooncake、llm-d）均已采用分离架构
+- **NIXL**（NVIDIA Inference Transfer Library）成 2026 KV cache 跨 GPU 传输标准，支持 RDMA 线速传输
+- **NVIDIA Dynamo**：分离推理编排框架（路由 + KV 传输 + 自动扩缩容）
+- **AMPD**（arXiv 2602.14516）：面向多轮对话的分离推理，解决增量 prefill 调度
 
 ## 关联
 - Apple Silicon 本地推理见 [[MLX生态2026]]

@@ -1,6 +1,7 @@
 # MLSys 2026 论文精选
 
 - 整理自: [[inbox/2026-06-14-ExecuTorch-MLSys最佳工业论文]], [[inbox/2026-06-14-LEANN-MLSys最佳论文]], [[inbox/2026-06-17-OSDI26-ML系统论文]]（2026-06-20 OSDI'26 新一批论文已归档合并）
+ 整理自: [[inbox/2026-06-14-ExecuTorch-MLSys最佳工业论文]], [[inbox/2026-06-14-LEANN-MLSys最佳论文]], [[inbox/2026-06-17-OSDI26-ML系统论文]]（2026-06-20 OSDI'26 新一批论文已归档合并），[[inbox/2026-06-23-MLSys2026-LLM推理系统论文速览]], [[inbox/2026-06-23-OSDI26-OpenTela异构HPC集群LLM服务]]
 - 标签: #MLSys #端侧推理 #PyTorch #向量检索 #RAG #OSDI
 
 ## ExecuTorch: 最佳工业论文
@@ -15,6 +16,18 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 用 gossip 协议替代中心调度器 + CRDT 状态管理，网络分区下仍维持全局资源视图
 - 支持异构 GPU 混合推理，已开源（Apache 2.0）并用于 SwissAI 生产环境
 - 关联 [[AI芯片推理硬件2026全景]]
+补充整理自 [[inbox/2026-06-23-OSDI26-OpenTela异构HPC集群LLM服务]]（2026-06-26 归档）
+- 痛点定位：HPC(Slurm) 缺少 K8s 式控制面（服务发现/路由/负载均衡），算力跨域碎片化，节点不可外联
+- 方案：CRDT gossip 容错服务发现 + 统一 API 适配多调度器/推理引擎 + 异构感知调度，全程用户态无特权
+- USENIX 页标题 LLMFabric，PDF 名 OpenTela；作者跨 ETH/Cambridge/EPFL/MIT/HKUST
+- 同组 BALBOA(OSDI 研究轨)：SmartNIC 上 RDMA 卸载引擎，增强数据中心网络服务
+
+## MLSys 2026 LLM 推理系统：LMCache 与投机解码
+整理自 [[inbox/2026-06-23-MLSys2026-LLM推理系统论文速览]]（2026-06-26 归档）
+- **LMCache**：首个开源跨引擎 KV cache 层，将 vLLM/SGLang 的 KV cache 移出 GPU 显存并跨请求/引擎共享；CacheGen 压缩 + Cacheblend 非前缀共享，已在 30+ 公司生产落地(Google/AWS/NVIDIA/IBM)
+- **Cascade**：效用驱动的 MoE 投机解码；**HiSpec**：分层投机解码；**HiServe**：混合 LLM 前缀缓存服务
+- **Kascade**：长上下文稀疏注意力；另有「MoE 专家负载均衡的收益递减」分析
+- 趋势：KV cache 外移复用 + MoE 专用调度成推理系统研究主线；关联 [[推理引擎格局-vLLM-SGLang]]
 
 ## OSDI'26 论文（ML 系统方向）
 - **ECHO**（SJTU/华为）：KV Cache 无损预取卸载，针对原生稀疏注意力 LLM 推理优化
