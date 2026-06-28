@@ -51,3 +51,16 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - **TurboQuant**：99% 普通通道压至 4-bit、1% 离群通道保 FP16，显存降 75%、精度损 <1.2%
 - **连续批处理**：GPU 利用率 45% → 85%+，尾延迟降 60%
 - 组合优化（量化 + vLLM + 稀疏化 + Serverless）：百万 Token 成本 $100 → $5，降本 95%
+
+## 推理系统治理：多引擎控制平面（2026-06-25 归档）
+整理自 [[inbox/2026-06-25-推理-推理系统治理与多引擎共存]]
+- 推理层从「模型附属组件」升级为 AI Infra 核心层；推理成本已成 AI 商业化决定项
+- 模型侧（MoE/多模态/Agent/超长上下文）+ 硬件侧（GPU/NPU/定制加速器）双线推高复杂度 → 多引擎并存成工程必然
+- 控制平面（如 GPUStack）把推理从「项目级资产」升级为「平台级资产」
+- 关联 [[AI-Agent-2026格局]]（Agent 长程任务推高推理复杂度）
+
+## EAGLE-3 自推测解码（2026-06-25 归档）
+整理自 [[inbox/2026-06-25-推理-EAGLE3自推测解码]]
+- EAGLE-3 用目标模型自身内部状态做 self-speculation，省去独立 draft 模型显存
+- DeepSeek-R1 Multi-Token-Prediction 为同类「模型原生多 token 预测」思路
+- TensorRT-LLM 推测解码最高 3.6× 吞吐；接受率（acceptance rate）决定收益
