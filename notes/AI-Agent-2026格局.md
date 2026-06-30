@@ -30,7 +30,7 @@
 整理自 [[inbox/2026-06-23-Agent协议生态2026-MCP-A2A-ACP-UCP]]（2026-06-26 归档）
 截至 2026 Q1，Agent 互操作已形成四大协议并存、分层互补格局（非竞争）：
 - **MCP**（Anthropic 2024.11）：工具层，Agent↔工具 JSON-RPC 标准化接口，事实标准
-- **A2A**（Google 2025.04）：协作层，Agent Card 数字名片 + 任务发现/委托，跨厂商协作；2026 升级支持 Agent Marketplace 直接售卖
+- **A2A**（Google 2025.04）：协作层，Agent Card 数字名片 + 任务发现/委托，跨厂商协作；2026 升级支持 Agent Marketplace 直接售卖；Google Cloud Next 2026 披露已从 50+ 扩展到 **150 组织进入生产**（非试点），在不同平台 Agent 间路由真实任务（整理自 [[inbox/2026-06-26-Agent-A2A进入生产规模]]）
 - **ACP**（IBM/BeeAI）：运行时层，Agent 生命周期管理与编排
 - **UCP**：上下文层，统一多 Agent 共享上下文一致性
 - 协议栈：MCP(工具) → A2A(协作) → ACP(运行时) → UCP(上下文)
