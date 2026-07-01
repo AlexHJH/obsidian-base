@@ -50,3 +50,11 @@
 - 选型取决于容错能力、可观测性需求、团队调试能力三点
 - Jetbrains 6 月综述补充：Haystack(生产 RAG)、AutoGen(多智能体)、Semantic Kernel(企业集成)
 - 与上方 [[#框架横评]]（06-17）互补：从社区热度转向生产可靠性视角
+
+## Agent 支付协议兴起：AP2 / ACP / MPP / x402（2026-06-28 归档）
+整理自 [[inbox/2026-06-28-Agent-Agent支付协议AP2-ACP-MPP]]
+- 2026 年 Agent 协议栈从工具/协作层延伸至支付层，在 MCP/A2A 之上涌现四大支付协议
+- AP2（Google，60+ 伙伴）：加密签名 Mandate，A2A+MCP 的支付层伴侣，支持卡 + 加密货币
+- ACP（OpenAI×Stripe）：结账流标准化；MPP（Stripe×Tempo）：sessions 模型 + 流式微支付
+- x402（Coinbase）：加密支付标准；Adyen Agentic（2026-06-16）：商户一次集成覆盖全 agent 商业
+- 与上方 [[#Agent 协议生态 2026：四大协议分层]] 互补：从「Agent 互操作」延伸至「Agent 自主交易」

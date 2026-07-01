@@ -64,3 +64,15 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - EAGLE-3 用目标模型自身内部状态做 self-speculation，省去独立 draft 模型显存
 - DeepSeek-R1 Multi-Token-Prediction 为同类「模型原生多 token 预测」思路
 - TensorRT-LLM 推测解码最高 3.6× 吞吐；接受率（acceptance rate）决定收益
+
+## Stream2LLM：流式预填降低 TTFT（2026-06-28 归档）
+整理自 [[inbox/2026-06-28-推理-Stream2LLM流式预填降低TTFT]]
+- MLSys 2026 论文，扩展 vLLM 支持并发下的流式输入，将上下文流式传输与预填重叠
+- TTFT 较非流式基线降低 3.9–11×；低负载下各流式调度器性能趋同，高负载下收益最大
+- 两阶段调度器：阶段1按优先级选请求 + 可行性计算，阶段2分配资源，失败则抢占
+
+## LayeredPrefill：分层预填重构 MoE 调度（2026-06-28 归档）
+整理自 [[inbox/2026-06-28-推理-LayeredPrefill-MoE服务调度]]
+- 首尔大学 MLSys 2026 论文，将模型纵向切分为连续层组，跨层组交错 prefill 与 decode
+- 消除 chunked prefill 在 MoE 上的冗余专家权重重载（内存流量 +39%、能耗上升）
+- 调度轴从 token 转为 layer，改善 TTFT–TBT 帕累托前沿；开源：github.com/scale-snu/layered-prefill
