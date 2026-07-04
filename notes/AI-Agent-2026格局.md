@@ -5,7 +5,15 @@
 - 标签: #AI-Agent #MCP #LangGraph #ClaudeCode #框架对比
 
 ## 范式跃迁
-2026 年 Agent 从"被动响应"转向"主动决策"，三大驱动力：MCP 协议标准化、长期记忆架构、多 Agent 协作。
+2026 年 Agent 从"被动响应"转向"主动决策"，三大驱动力：MCP 协议标准化、长期记忆架构、多 Agent 协作。Gartner 预测 2026 年底 40% 企业应用将集成 AI Agent。
+
+## PE Collective 框架全景（2026-06）
+整理自 [[inbox/2026-06-30-Agent-2026年Agent框架全景对比]]
+- LangGraph 生产就绪度 5/5，2026.2 发布 0.3.x 引入 PostgresSaver
+- AutoGen 1.0 GA（2026.2），转向 v2 事件驱动架构
+- CrewAI 0.95 新增 Anthropic/Google tool-call 路由 + 异步 crew runner
+- 新晋框架：Pydantic AI（类型安全）、LlamaIndex（RAG 优先）
+- 成本风险：LangGraph/Anthropic 低，AutoGen 高（无界对话循环）
 
 ## 框架横评
 - **LangGraph #1**：复杂有状态工作流首选，PostgresSaver 检查点成熟，月搜索量 27.1K 领先
