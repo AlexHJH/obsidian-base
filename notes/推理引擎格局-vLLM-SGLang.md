@@ -71,6 +71,12 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - TTFT 较非流式基线降低 3.9–11×；低负载下各流式调度器性能趋同，高负载下收益最大
 - 两阶段调度器：阶段1按优先级选请求 + 可行性计算，阶段2分配资源，失败则抢占
 
+## DFlash：并行扩散投机解码（2026-07 归档）
+整理自 [[inbox/2026-07-01-推理-DFlash投机解码与slime框架]]
+- LMSYS/Z Lab/Modal 联合发布，用轻量扩散模型并行生成候选 token 块，替代 EAGLE 串行瓶颈
+- SGLang 已集成；NVIDIA TensorRT-LLM 在 Blackwell 上 gpt-oss-120b 达 5.8× 吞吐
+- 智谱开源 slime RL 框架：Megatron+SGLang 原生透传，GLM-5.2 后训练仅 2 天
+
 ## LayeredPrefill：分层预填重构 MoE 调度（2026-06-28 归档）
 整理自 [[inbox/2026-06-28-推理-LayeredPrefill-MoE服务调度]]
 - 首尔大学 MLSys 2026 论文，将模型纵向切分为连续层组，跨层组交错 prefill 与 decode

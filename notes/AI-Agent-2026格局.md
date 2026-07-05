@@ -59,6 +59,12 @@
 - Jetbrains 6 月综述补充：Haystack(生产 RAG)、AutoGen(多智能体)、Semantic Kernel(企业集成)
 - 与上方 [[#框架横评]]（06-17）互补：从社区热度转向生产可靠性视角
 
+## LangGraph vs CrewAI：两种编排哲学（2026-07 归档）
+整理自 [[inbox/2026-07-01-Agent-LangGraph-CrewAI生产级对决]]
+- LangGraph 将有状态图作为核心抽象（`interrupt()` 一等公民支持人机协同），CrewAI 以角色-任务-流程层级建模
+- 生产系统选 LangGraph（完整状态保存、可观测性强），快速原型选 CrewAI（午餐前跑通多 Agent）
+- 与上方 [[#框架横评]] 互补：补充「日常开发选型心理模型」维度
+
 ## Agent 支付协议兴起：AP2 / ACP / MPP / x402（2026-06-28 归档）
 整理自 [[inbox/2026-06-28-Agent-Agent支付协议AP2-ACP-MPP]]
 - 2026 年 Agent 协议栈从工具/协作层延伸至支付层，在 MCP/A2A 之上涌现四大支付协议
