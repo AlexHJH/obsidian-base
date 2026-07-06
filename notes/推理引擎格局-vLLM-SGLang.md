@@ -82,3 +82,9 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 首尔大学 MLSys 2026 论文，将模型纵向切分为连续层组，跨层组交错 prefill 与 decode
 - 消除 chunked prefill 在 MoE 上的冗余专家权重重载（内存流量 +39%、能耗上升）
 - 调度轴从 token 转为 layer，改善 TTFT–TBT 帕累托前沿；开源：github.com/scale-snu/layered-prefill
+
+## P-EAGLE：并行投机解码（2026-07 归档）
+整理自 [[inbox/2026-07-02-推理-P-EAGLE并行投机解码]]
+- vLLM 推出 P-EAGLE，将 EAGLE-3 串行草稿生成改为单次前向并行生成 K 个候选 token，消除草稿模型自回归瓶颈
+- B200 上比 EAGLE-3 快 1.69×，一行配置 `parallel_drafting: true` 即可启用
+- 已为 GPT-OSS 120B/20B 和 Qwen3-Coder 30B 提供预训练 head；SGLang issue #23171 跟进中
