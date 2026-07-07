@@ -65,6 +65,14 @@
 - 生产系统选 LangGraph（完整状态保存、可观测性强），快速原型选 CrewAI（午餐前跑通多 Agent）
 - 与上方 [[#框架横评]] 互补：补充「日常开发选型心理模型」维度
 
+## Google ADK 2.0（2026-07-03 归档）
+整理自 [[inbox/2026-07-03-Agent-Google-ADK-2.0升级]]
+- Google Agent Development Kit 发布 2.0，包含 Agent API、事件模型破坏性变更
+- 核心新增 Task API：结构化 Agent-to-Agent 多轮任务委托，支持 human-in-the-loop 和嵌套工作流
+- Agent vs Workflow 分离架构：Agent 定义指令/工具/行为，Workflow 负责基于图的编排
+- 2026.2 发布集成生态（GitHub/Jira/MongoDB + 5 个观测平台含 MLflow+OpenTelemetry）
+- ADK 1.28+ 可读取 ADK 2.0 会话，多语言支持 Python/TS/Go/Java
+
 ## Agent 支付协议兴起：AP2 / ACP / MPP / x402（2026-06-28 归档）
 整理自 [[inbox/2026-06-28-Agent-Agent支付协议AP2-ACP-MPP]]
 - 2026 年 Agent 协议栈从工具/协作层延伸至支付层，在 MCP/A2A 之上涌现四大支付协议
