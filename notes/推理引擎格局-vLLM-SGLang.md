@@ -88,3 +88,10 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - vLLM 推出 P-EAGLE，将 EAGLE-3 串行草稿生成改为单次前向并行生成 K 个候选 token，消除草稿模型自回归瓶颈
 - B200 上比 EAGLE-3 快 1.69×，一行配置 `parallel_drafting: true` 即可启用
 - 已为 GPT-OSS 120B/20B 和 Qwen3-Coder 30B 提供预训练 head；SGLang issue #23171 跟进中
+
+## SGLang vs vLLM 性能差距拉大（2026-07 归档）
+整理自 [[inbox/2026-07-05-推理-SGLang-vLLM性能对比与投机解码]]
+- 社区实测 Qwen3.5-35B-A3B 模型在相同硬件上 SGLang 比 vLLM 快 3.1–5.3×
+- Google Research 发布投机解码综述，确认不损质量前提下可提速 2-3×
+- BentoML 推出 llm-optimizer，支持跨框架（vLLM/SGLang）统一基准测试
+- Inferact（vLLM）估值 $800M，RadixArk（SGLang）估值 $400M，推理框架进入系统化竞争

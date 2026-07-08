@@ -73,6 +73,13 @@
 - 2026.2 发布集成生态（GitHub/Jira/MongoDB + 5 个观测平台含 MLflow+OpenTelemetry）
 - ADK 1.28+ 可读取 ADK 2.0 会话，多语言支持 Python/TS/Go/Java
 
+## 微软 Agent Framework 1.0 GA + Anthropic SDK 独立计费（2026-07 归档）
+整理自 [[inbox/2026-07-05-Agent-2026框架格局与MCP-A2A协议之争]]
+- 微软 Agent Framework 1.0 GA：合并 AutoGen + Semantic Kernel，统一 .NET 生态 Agent 开发
+- Anthropic Claude Agent SDK 6 月独立计费上线，引入 query() 生成器、生命周期钩子、子 Agent 隔离等新原语
+- Google ADK 1.0 支持 Java/Go，拓展企业后端生态
+- MCP（单 Agent 工具调用）与 A2A（多 Agent 协作）两大协议生态持续分化，Google 发布六大协议对比指南
+
 ## Agent 支付协议兴起：AP2 / ACP / MPP / x402（2026-06-28 归档）
 整理自 [[inbox/2026-06-28-Agent-Agent支付协议AP2-ACP-MPP]]
 - 2026 年 Agent 协议栈从工具/协作层延伸至支付层，在 MCP/A2A 之上涌现四大支付协议
