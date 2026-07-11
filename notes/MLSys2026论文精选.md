@@ -40,6 +40,15 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - **Oxbow**（Tianyin Xu 团队）：多组件文件系统的协同架构，OSDI'26 Operational Systems 赛道
 - OSDI'26（7月13-15日西雅图）取消 author response、新增 Operational Systems 赛道（OpenTela 入选）
 
+## Meta Llama 推理部署配置优化 (MLSys 2026 Oral)
+整理自 [[inbox/2026-07-07-推理-MLSys2026-Meta-Llama部署优化]]
+- Meta 系统性分析 Llama 推理部署的数百万种配置组合，覆盖 H100/H200/MI300X GPU
+- 并行策略对比：张量/流水线/专家/上下文并行；continuous batching vs prefill-decode 分离
+- 核心发现：并行策略有阶段特异性（prefill vs decode 最优配置不同）；MoE 架构引入系统级新权衡
+- scale-up（高带宽互联）vs scale-out（标准网络）：超大模型场景下 scale-up 未必经济
+- vLLM 与 DeepLearning.AI 联合推出「Fast & Efficient LLM Inference」课程（2026-06）
+- 关联 [[推理引擎格局-vLLM-SGLang]]
+
 ## 信号
 - 端侧 AI 从「能不能跑」进入「跑得好不好」阶段
 - 存储效率成为端侧推理新瓶颈，动态重算思路值得关注

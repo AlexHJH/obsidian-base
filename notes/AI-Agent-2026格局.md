@@ -66,12 +66,15 @@
 - 与上方 [[#框架横评]] 互补：补充「日常开发选型心理模型」维度
 
 ## Google ADK 2.0（2026-07-03 归档）
-整理自 [[inbox/2026-07-03-Agent-Google-ADK-2.0升级]]
+整理自 [[inbox/2026-07-03-Agent-Google-ADK-2.0升级]], [[inbox/2026-07-07-Agent-2026多Agent框架格局与ADK2.0]]
 - Google Agent Development Kit 发布 2.0，包含 Agent API、事件模型破坏性变更
 - 核心新增 Task API：结构化 Agent-to-Agent 多轮任务委托，支持 human-in-the-loop 和嵌套工作流
 - Agent vs Workflow 分离架构：Agent 定义指令/工具/行为，Workflow 负责基于图的编排
 - 2026.2 发布集成生态（GitHub/Jira/MongoDB + 5 个观测平台含 MLflow+OpenTelemetry）
 - ADK 1.28+ 可读取 ADK 2.0 会话，多语言支持 Python/TS/Go/Java
+- I/O 2026 正式发布 Antigravity 编排面板 + Managed Agents 企业级部署能力
+- 协议层趋同：MCP（工具连接，9700 万下载）和 A2A（Agent 通信，150 组织生产级）成为事实标准
+- 六大框架月搜索量：LangGraph 27,100 领先，CrewAI 14,800 第二
 
 ## 微软 Agent Framework 1.0 GA + Anthropic SDK 独立计费（2026-07 归档）
 整理自 [[inbox/2026-07-05-Agent-2026框架格局与MCP-A2A协议之争]]
