@@ -62,3 +62,10 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - **FastServe**：迭代级抢占式推理调度，提升 GPU 利用率
 - **EROICA**：集群级在线性能诊断
 - 趋势：系统-算法协同（co-design）成为训练扩容主流路径
+
+## MLSys 2026 总结与三大趋势（2026-07-08 归档）
+整理自 [[inbox/2026-07-08-系统顶会-MLSys2026总结]]
+- **Agent 写系统代码**：新手用 AI Agent 写出接近 hackathon 顶级的 kernel；Lidong Zhou 呼吁系统社区为 Agent 作为代码主要作者做准备
+- **LLM Serving 爆发**：6 个 session（翻倍），FlashAgents、Cascade (MoE 投机解码)、HiSpec、LMCache
+- **稀疏计算成标配**：非结构化稀疏、动态稀疏注意力用于超长上下文训练和推理
+- 关联 [[AI-Agent-2026格局]]、[[推理引擎格局-vLLM-SGLang]]
