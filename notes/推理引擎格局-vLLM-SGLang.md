@@ -90,8 +90,12 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 已为 GPT-OSS 120B/20B 和 Qwen3-Coder 30B 提供预训练 head；SGLang issue #23171 跟进中
 
 ## SGLang vs vLLM 性能差距拉大（2026-07 归档）
-整理自 [[inbox/2026-07-05-推理-SGLang-vLLM性能对比与投机解码]]
-- 社区实测 Qwen3.5-35B-A3B 模型在相同硬件上 SGLang 比 vLLM 快 3.1–5.3×
+整理自 [[inbox/2026-07-05-推理-SGLang-vLLM性能对比与投机解码]], [[inbox/2026-07-09-推理-SGLang-vLLM性能差距]]
+- 社区实测 Qwen3.5-35B-A3B 模型在相同硬件上 SGLang 比 vLLM 快 3.1–5.3×（Fish Audio 实测）
+- H100 平台 p99 TTFT：SGLang 13.1ms vs vLLM 23.6ms，RadixAttention 在 prefix-heavy 场景优势显著
+- TensorRT-LLM 在 Blackwell 上 gpt-oss-120b 达 5.8× 吞吐（投机解码加持）
+- vLLM V1 重构后多硬件兼容性仍领先，社区规模约 3× SGLang
+- Inferact（vLLM）估值 $800M，RadixArk（SGLang）估值 $400M，推理引擎成 AI 基础设施主战场
 - Google Research 发布投机解码综述，确认不损质量前提下可提速 2-3×
 - BentoML 推出 llm-optimizer，支持跨框架（vLLM/SGLang）统一基准测试
-- Inferact（vLLM）估值 $800M，RadixArk（SGLang）估值 $400M，推理框架进入系统化竞争
+- 趋势：从「选引擎」到「多引擎控制平面」——GPUStack 等统一编排层兴起

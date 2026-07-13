@@ -83,6 +83,16 @@
 - Google ADK 1.0 支持 Java/Go，拓展企业后端生态
 - MCP（单 Agent 工具调用）与 A2A（多 Agent 协作）两大协议生态持续分化，Google 发布六大协议对比指南
 
+## 2026 Q2 生产级框架排名：LangGraph 领跑，Pydantic AI V2 崛起（2026-07 归档）
+整理自 [[inbox/2026-07-09-Agent-Q2框架排名]]
+- Alice Labs 基于 18+ 生产部署发布 Q2 排名：LangGraph 1.0 稳居第一
+- Pydantic AI V2（6/23）和 LlamaIndex Workflows 1.0（6/22）成最大黑马
+- LangGraph 1.0 新特性：per-node timeouts、DeltaChannel、v2 streaming
+- Claude Agent SDK（6 月）：子 Agent 层级生成 + fallback 模型链，Anthropic 原生生产 Agent
+- CrewAI 1.14（5-6 月）：可插拔后端 + Chat API，多 Agent 原型最快路径
+- Pydantic AI V2：harness-first 重设计，类型安全 Python Agent 新范式
+- 选型速查：进生产→LangGraph；Anthropic 生态→Claude SDK；快速原型→CrewAI；类型安全→Pydantic AI
+
 ## Agent 支付协议兴起：AP2 / ACP / MPP / x402（2026-06-28 归档）
 整理自 [[inbox/2026-06-28-Agent-Agent支付协议AP2-ACP-MPP]]
 - 2026 年 Agent 协议栈从工具/协作层延伸至支付层，在 MCP/A2A 之上涌现四大支付协议
