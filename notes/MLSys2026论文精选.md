@@ -37,6 +37,8 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - **Sereno**（SJTU/华为）：治移动端 LLM 推理的内存带宽竞争，端侧瓶颈转向带宽而非算力
 - **FlowANN**：拆解图依赖做十亿级 GPU 向量搜索，RAG 检索基础设施级优化
 - **Revisiting Pipeline Parallelism for LLM Serving**（高丽大学）：重审 LLM 服务的流水线并行调度
+  - 整理自 [[inbox/2026-07-10-系统顶会-OSDI2026-Pipeline-Parallelism]]（2026-07-14 归档）
+  - 挑战 TP 统治地位，通过 Greedy/Predictive chunk size 动态调整 + Delay Scheduling 重平衡 decode 负载，证明合理调度下 PP 可超越 TP
 - **Oxbow**（Tianyin Xu 团队）：多组件文件系统的协同架构，OSDI'26 Operational Systems 赛道
 - OSDI'26（7月13-15日西雅图）取消 author response、新增 Operational Systems 赛道（OpenTela 入选）
 

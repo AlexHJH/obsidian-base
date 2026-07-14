@@ -99,3 +99,12 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - Google Research 发布投机解码综述，确认不损质量前提下可提速 2-3×
 - BentoML 推出 llm-optimizer，支持跨框架（vLLM/SGLang）统一基准测试
 - 趋势：从「选引擎」到「多引擎控制平面」——GPUStack 等统一编排层兴起
+
+## LLM 推理优化三层体系（2026-07 归档）
+整理自 [[inbox/2026-07-10-推理-LLM推理优化全景2026]]（2026-07-14 归档）
+- 模型层：量化（FP8/INT8/INT4）、剪枝、蒸馏
+- 系统层：Continuous Batching、PagedAttention、投机解码、Prefill-Decode 分离
+- 应用层：上下文压缩（典型 API 浪费 40-60% 输入 token）、Prompt Caching
+- Agent 工作流每次 50-200 次 LLM 调用，推理成本被指数级放大
+- 异构计算（CPU-GPU 显存交换）在探索中，混合场景性能可能下降 28%
+- 推理引擎商业化加速：Inferact(vLLM) $800M，RadixArk(SGLang) $400M
