@@ -51,11 +51,17 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - vLLM 与 DeepLearning.AI 联合推出「Fast & Efficient LLM Inference」课程（2026-06）
 - 关联 [[推理引擎格局-vLLM-SGLang]]
 
+## OSDI 2026 开幕（2026-07-16 归档）
+整理自 [[inbox/2026-07-13-系统顶会-OSDI2026开幕]]
+- 7/13-15 西雅图，接收率目标≥20%（历史~16.6%），取消 author response
+- **ValScope**（厦大）：数据库逻辑 Bug 检测，国内系统研究向顶会突破
+- 与 MLSys 社区交叉增多，ML 系统方向占比持续上升
+
 ## 信号
 - 端侧 AI 从「能不能跑」进入「跑得好不好」阶段
 - 存储效率成为端侧推理新瓶颈，动态重算思路值得关注
 - 向量检索 + 端侧推理 = 隐私保护的本地 RAG 成为可能
-- OSDI'26 新增 Operational Systems 赛道，[[inbox/2026-06-17-OSDI26-ML系统论文]] 同系列
+- OSDI'26 新增 Operational Systems 赛道
 
 ## NSDI 2026：LLM 训练与服务系统（2026-06-27 归档）
 整理自 [[inbox/2026-06-27-系统顶会-NSDI2026-LLM训练与服务系统]]
@@ -65,8 +71,8 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - **EROICA**：集群级在线性能诊断
 - 趋势：系统-算法协同（co-design）成为训练扩容主流路径
 
-## MLSys 2026 总结与三大趋势（2026-07-08 归档）
-整理自 [[inbox/2026-07-08-系统顶会-MLSys2026总结]]
+## MLSys 2026 总结与三大趋势（2026-07-16 归档）
+整理自 [[inbox/2026-07-08-系统顶会-MLSys2026总结]]、[[inbox/2026-07-13-MLSys2026三大趋势]]
 - **Agent 写系统代码**：新手用 AI Agent 写出接近 hackathon 顶级的 kernel；Lidong Zhou 呼吁系统社区为 Agent 作为代码主要作者做准备
 - **LLM Serving 爆发**：6 个 session（翻倍），FlashAgents、Cascade (MoE 投机解码)、HiSpec、LMCache
 - **稀疏计算成标配**：非结构化稀疏、动态稀疏注意力用于超长上下文训练和推理
