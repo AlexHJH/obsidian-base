@@ -100,3 +100,11 @@
 - ACP（OpenAI×Stripe）：结账流标准化；MPP（Stripe×Tempo）：sessions 模型 + 流式微支付
 - x402（Coinbase）：加密支付标准；Adyen Agentic（2026-06-16）：商户一次集成覆盖全 agent 商业
 - 与上方 [[#Agent 协议生态 2026：四大协议分层]] 互补：从「Agent 互操作」延伸至「Agent 自主交易」
+
+## 2026 H1 框架评选共识：LangGraph 登顶（2026-07-12 归档）
+整理自 [[inbox/2026-07-12-Agent-框架格局2026]]
+- Airbyte/Firecrawl/Let's Data Science 等多家独立评测一致确认 LangGraph 为生产最成熟框架
+- LangGraph 生产可靠性最高但上手 7-14 天；CrewAI 最快 1-2 天原型验证
+- MCP 成为 Agent 互操作标准，LangGraph 原生支持
+- 八大框架：LangGraph / CrewAI / AutoGen 2.0 / OpenAI SDK / Anthropic SDK / Google ADK / LlamaIndex / Intuz
+- 趋势：从「快速原型」全面转向「生产级可靠性与合规」

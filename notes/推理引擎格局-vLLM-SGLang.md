@@ -89,6 +89,13 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - B200 上比 EAGLE-3 快 1.69×，一行配置 `parallel_drafting: true` 即可启用
 - 已为 GPT-OSS 120B/20B 和 Qwen3-Coder 30B 提供预训练 head；SGLang issue #23171 跟进中
 
+## vLLM Semantic Router V2 与 Model Runner V2（2026-07 归档）
+整理自 [[inbox/2026-07-12-推理-vLLM2026四大更新]]
+- Semantic Router 从 v0.1 请求路由进化为 v0.2"系统大脑"，支持多模型动态编排
+- P-EAGLE：K=7 时达峰值性能（EAGLE-3 在 K=3 封顶），HumanEval 3.94 vs 3.03
+- Model Runner V2 底层架构大重构，vLLM 从推理引擎向推理基础设施平台演进
+- 这波更新标志 vLLM 站稳大模型推理基座位置，开始向上层编排延伸
+
 ## SGLang vs vLLM 性能差距拉大（2026-07 归档）
 整理自 [[inbox/2026-07-05-推理-SGLang-vLLM性能对比与投机解码]], [[inbox/2026-07-09-推理-SGLang-vLLM性能差距]]
 - 社区实测 Qwen3.5-35B-A3B 模型在相同硬件上 SGLang 比 vLLM 快 3.1–5.3×（Fish Audio 实测）
