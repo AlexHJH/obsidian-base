@@ -108,3 +108,10 @@
 - MCP 成为 Agent 互操作标准，LangGraph 原生支持
 - 八大框架：LangGraph / CrewAI / AutoGen 2.0 / OpenAI SDK / Anthropic SDK / Google ADK / LlamaIndex / Intuz
 - 趋势：从「快速原型」全面转向「生产级可靠性与合规」
+
+## MCP/A2A/ACP 协议栈分层共识（2026-07-14 归档）
+整理自 [[inbox/2026-07-14-Agent-协议栈MCP-A2A-ACP]]
+- MCP（已捐给 Linux Foundation）：Agent↔工具 "USB-C" 标准化接口，JSON-RPC 2.0 over HTTPS
+- A2A（Google, 150+ 组织生产）：Agent↔Agent 协作，Agent Card 发现 + Task 生命周期管理
+- ACP（IBM）：代理式架构，含 Agent Client / Server / Agent 三角色，负责注册发现
+- 三者类似 HTTP/WebSocket/gRPC 的分层共存，行业共识：多协议共存，非互斥替代

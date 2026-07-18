@@ -115,3 +115,9 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - Agent 工作流每次 50-200 次 LLM 调用，推理成本被指数级放大
 - 异构计算（CPU-GPU 显存交换）在探索中，混合场景性能可能下降 28%
 - 推理引擎商业化加速：Inferact(vLLM) $800M，RadixArk(SGLang) $400M
+
+## TGI 进入维护模式 + 投机解码 Red Hat 深度解析（2026-07-14 归档）
+整理自 [[inbox/2026-07-14-推理-投机解码生产落地与引擎选型2026]]
+- HuggingFace TGI 2025.12 进入维护模式，官方推荐新项目选 vLLM 或 SGLang
+- Red Hat 深度解析投机解码：用小模型（0.5-2B）生成候选 token，大模型并行验证，代码/结构化输出场景 3×+ 加速
+- vLLM vs SGLang (Llama 3.1 8B, H100)：SGLang ~16,200 tok/s vs vLLM ~12,500 tok/s，prefix-heavy 场景 SGLang 吞吐领先约 30%
