@@ -59,6 +59,13 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 控制平面（如 GPUStack）把推理从「项目级资产」升级为「平台级资产」
 - 关联 [[AI-Agent-2026格局]]（Agent 长程任务推高推理复杂度）
 
+## 投机解码生产落地综述（2026-07-18 归档）
+整理自 [[inbox/2026-07-18-推理-投机解码生产落地vLLM-SGLang]]
+- vLLM 支持 EAGLE/MTP/draft model/ngram 多种投机方法，EAGLE/MTP 收益最高
+- SGLang RadixAttention 在 Agent 长程任务中投机+缓存双重收益
+- 低 QPS 内存瓶颈场景收益最大，高 QPS 算力瓶颈收益递减
+- llama.cpp 也支持投机解码，本地部署可用小 draft 模型加速
+
 ## EAGLE-3 自推测解码（2026-06-25 归档）
 整理自 [[inbox/2026-06-25-推理-EAGLE3自推测解码]]
 - EAGLE-3 用目标模型自身内部状态做 self-speculation，省去独立 draft 模型显存

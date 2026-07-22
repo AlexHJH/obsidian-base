@@ -101,6 +101,13 @@
 - x402（Coinbase）：加密支付标准；Adyen Agentic（2026-06-16）：商户一次集成覆盖全 agent 商业
 - 与上方 [[#Agent 协议生态 2026：四大协议分层]] 互补：从「Agent 互操作」延伸至「Agent 自主交易」
 
+## 2026 框架格局：从百花齐放到三足鼎立（2026-07-18 归档）
+整理自 [[inbox/2026-07-18-Agent-2026框架格局大 consolidation]]
+- 三股势力成型：模型厂商 SDK（Claude/OpenAI/Google）vs 编排框架（LangGraph）vs 轻量工具库（Pydantic AI）
+- Microsoft Agent Framework 1.0 GA（4/3）合并 AutoGen+Semantic Kernel，统一 .NET/Python
+- Claude Agent SDK 6/15 独立计费，`query()` 为入口 + 子 Agent 分层生成
+- Pydantic AI V2（6/23）harness-first 重构，主打结构化输出和类型安全
+
 ## 2026 H1 框架评选共识：LangGraph 登顶（2026-07-12 归档）
 整理自 [[inbox/2026-07-12-Agent-框架格局2026]]
 - Airbyte/Firecrawl/Let's Data Science 等多家独立评测一致确认 LangGraph 为生产最成熟框架
