@@ -8,7 +8,7 @@
 PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通过 XNNPACK delegate + Arm SME2 实现 3.9× 端到端加速，支持 INT8/FP16 量化和算子级剖析，已成为 PyTorch 端侧部署标准。
 
 ## LEANN: 最佳研究论文
-低存储向量索引，通过即时重计算 embedding + 压缩邻近图，将索引体积缩小 50×（仅占原始数据 ~5%），保持 SOTA 精度。使端侧 RAG 在个人设备上可行，GitHub 11K stars。
+低存储向量索引，通过即时重计算 embedding + 压缩邻近图，将索引体积缩小 50×（仅占原始数据 ~5%），top-3 召回仍达 90%，延迟与标准索引可比。使端侧 RAG 在个人设备上可行，GitHub 11K stars。作者来自 UC Berkeley Sky Lab（Ion Stoica、Matei Zaharia、Joseph Gonzalez 等）。核心价值：让私有数据 RAG 摆脱云端依赖。
 
 ## OpenTela: 去中心化 HPC 集群统一 LLM 推理 (OSDI'26)
 整理自 [[inbox/2026-06-16-OpenTela-OSDI26]]

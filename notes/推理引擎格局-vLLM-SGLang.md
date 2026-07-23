@@ -103,16 +103,13 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - Model Runner V2 底层架构大重构，vLLM 从推理引擎向推理基础设施平台演进
 - 这波更新标志 vLLM 站稳大模型推理基座位置，开始向上层编排延伸
 
-## SGLang vs vLLM 性能差距拉大（2026-07 归档）
-整理自 [[inbox/2026-07-05-推理-SGLang-vLLM性能对比与投机解码]], [[inbox/2026-07-09-推理-SGLang-vLLM性能差距]]
-- 社区实测 Qwen3.5-35B-A3B 模型在相同硬件上 SGLang 比 vLLM 快 3.1–5.3×（Fish Audio 实测）
-- H100 平台 p99 TTFT：SGLang 13.1ms vs vLLM 23.6ms，RadixAttention 在 prefix-heavy 场景优势显著
-- TensorRT-LLM 在 Blackwell 上 gpt-oss-120b 达 5.8× 吞吐（投机解码加持）
-- vLLM V1 重构后多硬件兼容性仍领先，社区规模约 3× SGLang
-- Inferact（vLLM）估值 $800M，RadixArk（SGLang）估值 $400M，推理引擎成 AI 基础设施主战场
-- Google Research 发布投机解码综述，确认不损质量前提下可提速 2-3×
-- BentoML 推出 llm-optimizer，支持跨框架（vLLM/SGLang）统一基准测试
-- 趋势：从「选引擎」到「多引擎控制平面」——GPUStack 等统一编排层兴起
+## 最新选型：vLLM vs SGLang（2026-07 归档）
+整理自 [[inbox/2026-07-19-大模型推理-vLLM-SGLang-2026选型对比]]
+- vLLM 周安装量突破 200 万，v0.19.0 版本 200+ 贡献者；TGI 已进入维护模式
+- H100 上 Llama 3.1 8B：SGLang ~16,200 tok/s vs vLLM ~12,500 tok/s（+29%）
+- SGLang RadixAttention 在 RAG/Agent/多轮对话场景优势显著
+- vLLM 多硬件兼容性仍领先，社区规模约 3× SGLang
+- GIE v1.5.0 RC1：支持 EPD 分离式推理调度
 
 ## LLM 推理优化三层体系（2026-07 归档）
 整理自 [[inbox/2026-07-10-推理-LLM推理优化全景2026]]（2026-07-14 归档）
