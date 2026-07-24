@@ -108,6 +108,14 @@
 - Claude Agent SDK 6/15 独立计费，`query()` 为入口 + 子 Agent 分层生成
 - Pydantic AI V2（6/23）harness-first 重构，主打结构化输出和类型安全
 
+## Personal Agent 峰会与安全三态模型（2026-07-24 归档）
+整理自 [[inbox/2026-07-20-Agent-2026框架格局与Personal-Agent峰会]]
+- 7/21 Personal AI Agents Summit 汇聚 OpenAI/Google/Anthropic/Perplexity，聚焦个人 Agent 安全与生产落地
+- Anthropic 提出三态安全模型：block（直接拒绝）/ allow（放行）/ triage（人工审核），每种策略过度使用均有失败模式
+- OpenAI 成立 Deployment Company，派遣 Forward Deployed Engineers 嵌入客户现场加速落地
+- 生产团队趋势：多框架组合——LangGraph 做编排 + AgentCore 做部署 + Strands 做轻量 Agent
+- 关联 [[#Agent 协议生态]]（MCP + A2A 跨厂商标准支撑）
+
 ## 2026 H1 框架评选共识：LangGraph 登顶（2026-07-12 归档）
 整理自 [[inbox/2026-07-12-Agent-框架格局2026]]
 - Airbyte/Firecrawl/Let's Data Science 等多家独立评测一致确认 LangGraph 为生产最成熟框架
