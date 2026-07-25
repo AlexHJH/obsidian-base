@@ -124,6 +124,13 @@
 - 八大框架：LangGraph / CrewAI / AutoGen 2.0 / OpenAI SDK / Anthropic SDK / Google ADK / LlamaIndex / Intuz
 - 趋势：从「快速原型」全面转向「生产级可靠性与合规」
 
+## 企业 Agent 部署现状：85% 试点仅 5% 上生产（2026-07-25 归档）
+整理自 [[inbox/2026-07-22-Agent-企业部署现状与混合控制面]]
+- VentureBeat 调研 101 家企业：85% 试点 Agent 但仅 5% 上生产，多数「Agent」实际是 Chatbot 包装器
+- Anthropic Claude 是企业首选平台，51% 预计年底采用混合控制面（provider native + 外部编排）
+- 供应商锁定是最大担忧（35%），实时 token 成本控制仍是盲区
+- Amazon AGI 实验室提出「实习生」管理框架：consistency/robustness/predictability/safety 四维可靠性
+
 ## MCP/A2A/ACP 协议栈分层共识（2026-07-14 归档）
 整理自 [[inbox/2026-07-14-Agent-协议栈MCP-A2A-ACP]]
 - MCP（已捐给 Linux Foundation）：Agent↔工具 "USB-C" 标准化接口，JSON-RPC 2.0 over HTTPS

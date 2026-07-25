@@ -64,6 +64,13 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 效果：MFU 提升最高 1.7×，训练 step 方差从 20% 降至 1%，MTTF 显著增加
 - 能检测传统诊断工具无法捕获的 fail-slow 行为
 
+## FlashAttention-4: 面向 Blackwell 非对称硬件扩展（2026-07-25 归档）
+整理自 [[inbox/2026-07-22-MLSys-FlashAttention4-Blackwell]]
+- Together AI / Dao-AILab 在 MLSys 2026 发布，针对 Blackwell GPU 非对称硬件扩展（Tensor Core 翻倍但共享内存/指数单元未同步升级）
+- B200 BF16 达 1613 TFLOPs/s（71% 利用率），比 cuDNN 9.13 快 1.3×，比 Triton 快 2.7×
+- 全异步 MMA + 更大 tile，软件模拟指数 + 条件 softmax 缩放，削减非 matmul 操作占比
+- 揭示 Blackwell 新瓶颈：shared memory 带宽和指数单元成新制约
+
 ## 信号
 - 端侧 AI 从「能不能跑」进入「跑得好不好」阶段
 - 存储效率成为端侧推理新瓶颈，动态重算思路值得关注
