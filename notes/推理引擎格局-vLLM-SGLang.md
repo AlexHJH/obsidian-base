@@ -28,12 +28,13 @@
 - LMDeploy（双后端）
 
 ## Prefill-Decode 分离架构（2026）
-Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满 HBM 带宽）硬件需求相反，混跑同一 GPU 互相 stall。分离架构将两者拆到不同实例/集群，可获约 2 倍吞吐提升。
-- **vLLM 实现**：双实例（prefiller + decoder），用 connector 传输 KV cache
+Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满 HBM 带宽）硬件需求相反，混跑同一 GPU 互相 stall。分离架构将两者拆到不同实例/集群，可获约 2 倍吞吐提升。2026 年 PD 分离已成为推理基建新范式。
+- **vLLM 实现**：双实例（prefiller + decoder），用 connector 传输 KV cache；vLLM v1 支持 Chunked Prefill + Disaggregated Serving，兼容 OpenAI SDK
+- **SGLang 实现**：PD 分离通过 mini_lb 路由调度，KV Cache 跨节点 RDMA 传输
 - **Prefill-as-a-Service**：1 个 prefiller 服务多 decoder，跨集群进一步优化
 - **核心挑战**：KV cache 跨节点传输开销；2026 年 NIXL（NVIDIA）+ UCX/GDS 成标准后端
-- **落地**：Meta、Perplexity 已生产部署；vLLM 仍 experimental，SGLang 跟进
-- 整理自 [[inbox/2026-06-18-推理分离-Prefill-Decode-Disaggregation]]
+- **落地**：Meta、Perplexity 已生产部署；腾讯云/阿里云 ACK 提供官方 PD 分离部署指南，解决 Agent 时代高并发推理瓶颈
+- 整理自 [[inbox/2026-06-18-推理分离-Prefill-Decode-Disaggregation]], [[inbox/2026-07-21-大模型推理-PD分离架构成为2026推理基建新范式]]
 补充整理自 [[inbox/2026-06-23-推理分离架构18月回顾-DisaggInference]]（2026-06-26 归档，UCSD Hao AI Lab 18 个月回顾）
 - DistServe 提出 18 个月后，几乎所有生产级框架（NVIDIA Dynamo、vLLM、SGLang、LMCache、Mooncake、llm-d）均已采用分离架构
 - **NIXL**（NVIDIA Inference Transfer Library）成 2026 KV cache 跨 GPU 传输标准，支持 RDMA 线速传输
