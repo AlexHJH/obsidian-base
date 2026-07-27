@@ -131,6 +131,13 @@
 - 供应商锁定是最大担忧（35%），实时 token 成本控制仍是盲区
 - Amazon AGI 实验室提出「实习生」管理框架：consistency/robustness/predictability/safety 四维可靠性
 
+## Vercel AI SDK 7 与 Q2 框架发布潮（2026-07-24 归档）
+整理自 [[inbox/2026-07-24-Agent-Q2框架迭代狂潮]]
+- 2026 Q2（4-7月）是 Agent 框架史上最密集迭代季：Pydantic AI V2 与 LlamaIndex Workflows 1.0 在 48 小时内先后 stable
+- Vercel AI SDK 7 推出三种 Agent 抽象：ToolLoopAgent / HarnessAgent / WorkflowAgent
+- MCP 2026-07-28 spec 重写为无状态协议层，进一步简化工具接入
+- 关联 [[#MCP/A2A/ACP 协议栈分层共识]]
+
 ## MCP/A2A/ACP 协议栈分层共识（2026-07-14 归档）
 整理自 [[inbox/2026-07-14-Agent-协议栈MCP-A2A-ACP]]
 - MCP（已捐给 Linux Foundation）：Agent↔工具 "USB-C" 标准化接口，JSON-RPC 2.0 over HTTPS
