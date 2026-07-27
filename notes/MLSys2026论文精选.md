@@ -52,9 +52,11 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 关联 [[推理引擎格局-vLLM-SGLang]]
 
 ## OSDI 2026 开幕（2026-07-16 归档）
-整理自 [[inbox/2026-07-13-系统顶会-OSDI2026开幕]]
-- 7/13-15 西雅图，接收率目标≥20%（历史~16.6%），取消 author response
+整理自 [[inbox/2026-07-13-系统顶会-OSDI2026开幕]]、[[inbox/2026-07-23-MLSys-OSDI2026回顾]]
+- 7/13-15 西雅图，第20届 OSDI，接收率目标≥20%（历史~16.6%），取消 author response
 - **ValScope**（厦大）：数据库逻辑 Bug 检测，国内系统研究向顶会突破
+- **μShell** 获 Distinguished Artifact Award：基于微内核的 FPGA Shell 架构
+- 新增 Operational Systems Track，鼓励工业界运维系统实践投稿
 - 与 MLSys 社区交叉增多，ML 系统方向占比持续上升
 
 ## Guard：大规模训练 Straggler 检测

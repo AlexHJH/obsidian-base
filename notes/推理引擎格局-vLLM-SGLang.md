@@ -1,14 +1,14 @@
 # 推理引擎格局：vLLM vs SGLang
 
 - 整理自: [[inbox/2026-06-15-vLLM-SGLang推理引擎格局]], [[inbox/2026-06-17-vLLM-SGLang商业化-推理引擎]]
- 整理自: [[inbox/2026-06-15-vLLM-SGLang推理引擎格局]], [[inbox/2026-06-17-vLLM-SGLang商业化-推理引擎]], [[inbox/2026-06-23-推理分离架构18月回顾-DisaggInference]]
+ 整理自: [[inbox/2026-06-15-vLLM-SGLang推理引擎格局]], [[inbox/2026-06-17-vLLM-SGLang商业化-推理引擎]], [[inbox/2026-06-23-推理分离架构18月回顾-DisaggInference]]、[[inbox/2026-07-23-大模型推理-DeepSeek推理引擎开源与格局演变]]
 - 标签: #推理引擎 #vLLM #SGLang #开源 #大模型部署
 
 ## 商业化（2026）
 两引擎相继公司化，推理引擎成 AI 基础设施主战场：
 - **Inferact (vLLM)**：a16z 领投 $150M 种子轮
 - **RadixArk (SGLang)**：Accel 领投，$400M 估值
-- DeepSeek 推理引擎基于 vLLM 早期分支魔改，将核心优化回馈社区（优先并入 vLLM/SGLang）
+- DeepSeek 推理引擎基于 vLLM 早期分支魔改，将核心优化（PD 分离、EPLB 专家负载均衡、DualPipe 双流水线）贡献回馈社区（优先并入 vLLM/SGLang），实现 Day-0 SOTA 支持
 - 选型：DeepSeek 模型 + 对话/RAG 场景 → SGLang（prefix-heavy 吞吐领先最高 6.4×）；多硬件 + 批处理 → vLLM（贡献者约 3× 于 SGLang）
 
 ## 社区起源
