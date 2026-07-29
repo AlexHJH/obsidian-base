@@ -121,6 +121,13 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 异构计算（CPU-GPU 显存交换）在探索中，混合场景性能可能下降 28%
 - 推理引擎商业化加速：Inferact(vLLM) $800M，RadixArk(SGLang) $400M
 
+## SGLang vs vLLM 2026 最新格局（2026-07-25 归档）
+整理自 [[inbox/2026-07-25-大模型推理-SGLang-vs-vLLM-2026格局]]
+- H100 上 SGLang 吞吐领先 vLLM 29%（16,200 vs 12,500 tok/s），DeepSeek V3 快 3.1×
+- RadixAttention 在 RAG/多轮对话场景优势达 6.4×
+- DeepSeek V4 Flash/Pro 通过 SGLang Day-0 支持，DSpark 投机解码进一步加速
+- 选型建议：默认 vLLM（生态广），高并发/DeepSeek/对话场景切 SGLang
+
 ## TGI 进入维护模式 + 投机解码 Red Hat 深度解析（2026-07-14 归档）
 整理自 [[inbox/2026-07-14-推理-投机解码生产落地与引擎选型2026]]
 - HuggingFace TGI 2025.12 进入维护模式，官方推荐新项目选 vLLM 或 SGLang
