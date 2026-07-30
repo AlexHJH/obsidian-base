@@ -87,6 +87,14 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - **EROICA**：集群级在线性能诊断
 - 趋势：系统-算法协同（co-design）成为训练扩容主流路径
 
+## MLSys 2026 论文速览补充（2026-07-30 归档）
+整理自 [[inbox/2026-07-26-MLSys-OSDI2026回顾]]
+- **SHIP**：SRAM-based 推理管线；**PRISM**：投机解码 draft model
+- **FlashAgents**：多 agent 流式 prefill 重叠；**SuperInfer**：superchip 调度
+- **OpenHands SDK** 亮相；**Hippocampus**（agent 记忆模块）；**AgenticCache**（具身 agent 异步规划）
+- OSDI'26 新增 Operational Systems track，接收率目标 ≥20%；μShell 获 Distinguished Artifact Award（微内核 FPGA Shell 架构）
+- LLM serving 从 3 个 session 扩至 6 个，成绝对主角
+
 ## MLSys 2026 总结与三大趋势（2026-07-16 归档）
 整理自 [[inbox/2026-07-08-系统顶会-MLSys2026总结]]、[[inbox/2026-07-13-MLSys2026三大趋势]]
 - **Agent 写系统代码**：新手用 AI Agent 写出接近 hackathon 顶级的 kernel；Lidong Zhou 呼吁系统社区为 Agent 作为代码主要作者做准备

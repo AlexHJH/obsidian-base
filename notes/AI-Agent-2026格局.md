@@ -138,6 +138,14 @@
 - MCP 2026-07-28 spec 重写为无状态协议层，进一步简化工具接入
 - 关联 [[#MCP/A2A/ACP 协议栈分层共识]]
 
+## 2026 H1 框架格局：大一统趋势（2026-07-30 归档）
+整理自 [[inbox/2026-07-26-Agent-2026年中框架格局]]（Morphllm 综述）
+- 2026 H1 框架进入「大一统」时代：LangGraph 巩固状态图路线，微软合并 AutoGen+SK，Anthropic 引入子代理独立计费
+- LangGraph 1.0 月下载 39.2M，per-node timeouts + durable streaming
+- Claude Agent SDK 6月推出 hierarchical subagent spawning，6/15 独立计费
+- Microsoft Agent Framework 1.0 4/3 GA；CrewAI 1.14 可插拔后端
+- Pydantic AI V2 & LlamaIndex Workflows 1.0 6月下旬同日发版
+
 ## MCP/A2A/ACP 协议栈分层共识（2026-07-14 归档）
 整理自 [[inbox/2026-07-14-Agent-协议栈MCP-A2A-ACP]]
 - MCP（已捐给 Linux Foundation）：Agent↔工具 "USB-C" 标准化接口，JSON-RPC 2.0 over HTTPS
