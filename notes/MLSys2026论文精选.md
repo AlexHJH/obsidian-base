@@ -101,3 +101,11 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - **LLM Serving 爆发**：6 个 session（翻倍），FlashAgents、Cascade (MoE 投机解码)、HiSpec、LMCache
 - **稀疏计算成标配**：非结构化稀疏、动态稀疏注意力用于超长上下文训练和推理
 - 关联 [[AI-Agent-2026格局]]、[[推理引擎格局-vLLM-SGLang]]
+
+## KV Cache 外移专题与 Modular 三大趋势（2026-08-09 归档）
+整理自 [[inbox/2026-07-31-MLSys-STAR-KV-ICML2026]]、[[inbox/2026-07-31-MLSys-CXL-KV-Cache]]、[[inbox/2026-07-29-MLSys-2026三大趋势]]
+- **STAR-KV**（Dnotitia，ICML 2026 Spotlight）：结构化稀疏 + 自适应缓存淘汰实现最高 20× KV Cache 压缩，长上下文质量近无损
+- **CXL 内存池化**（TrendForce）：KV Cache 随上下文线性增长、单机 HBM 成瓶颈，CXL 跨节点共享内存池成关键方案，多家厂商已出原型
+- **Modular 三趋势**：Agent 写系统代码成现实（KernelPro 等已达 hackathon 顶级）；异构硬件（GPU/NPU/MPU）成推理标配；KV Cache 向 DRAM/SSD/分布式多层外移，Netpreme 推专用 Memory Processing Unit（宣称 XPU 内存扩展 100×）
+- MLSys 2026 竞赛 Track：Trainium2/3 MoE Kernel、Google Graph Scheduling、NVIDIA FlashInfer AI Kernel Generation
+- 关联 [[推理引擎格局-vLLM-SGLang#KV Cache 瓶颈与 TurboQuant 4-bit 量化]]、[[AI编译器2026格局#Triton DSL 性能评估 & KernelPro LLM 优化]]

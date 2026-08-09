@@ -152,3 +152,11 @@
 - A2A（Google, 150+ 组织生产）：Agent↔Agent 协作，Agent Card 发现 + Task 生命周期管理
 - ACP（IBM）：代理式架构，含 Agent Client / Server / Agent 三角色，负责注册发现
 - 三者类似 HTTP/WebSocket/gRPC 的分层共存，行业共识：多协议共存，非互斥替代
+
+## Q2 框架三门槛与企业落地五大趋势（2026-08-09 归档）
+整理自 [[inbox/2026-07-30-Agent-框架Q2格局三大门槛]]、[[inbox/2026-07-28-Agent-框架Q2格局]]、[[inbox/2026-07-30-Agent-企业落地五大趋势]]
+- **选型三门槛**：持久化状态+HITL 一等公民、原生 MCP、原生 A2A；MCP 规范 2026-07-28 定稿，七大主流框架全部原生支持
+- Microsoft Agent Framework 1.0（4/3）合并 Semantic Kernel + AutoGen，目前唯一同时原生支持 MCP+A2A（.NET+Python）；LangGraph 1.0 per-node timeout/DeltaChannel；Google ADK 2.0 五语言 graph engine；Claude Agent SDK 层级 subagent
+- **企业落地五大趋势**：岗位级部署、多 Agent 协作架构（规划→执行→验证→汇总）、AgentOps 运维刚需（监控/审计/权限/异常四件套）、个人 Agent 普及、行业垂直 Agent 爆发
+- 案例：头部保险公司 Agent 理赔初审单日 2000→15000 件、准确率 97.3%、人力降 60%
+- 关联 [[#2026 Q2 生产级框架排名]]、[[#2026 H1 框架格局：大一统趋势]]

@@ -137,3 +137,10 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - HuggingFace TGI 2025.12 进入维护模式，官方推荐新项目选 vLLM 或 SGLang
 - Red Hat 深度解析投机解码：用小模型（0.5-2B）生成候选 token，大模型并行验证，代码/结构化输出场景 3×+ 加速
 - vLLM vs SGLang (Llama 3.1 8B, H100)：SGLang ~16,200 tok/s vs vLLM ~12,500 tok/s，prefix-heavy 场景 SGLang 吞吐领先约 30%
+
+## 推理成本优化四步法与网关层（2026-08-09 归档）
+整理自 [[inbox/2026-07-30-大模型推理-推理成本优化四步法]]、[[inbox/2026-07-30-大模型推理-PD分离与vLLM收敛]]、[[inbox/2026-07-28-大模型推理-推理网关路由2026]]
+- **降本四步法**：连续批处理（GPU 利用率 45%→85%+）→ vLLM PagedAttention（显存利用率 42%→83%）→ 动态稀疏化+早退机制（计算量 -30%）→ Serverless 弹性扩缩容；百万 Token 成本 $30 → $5
+- **信通院综述**：PD 分离已成主流；vLLM 在通用引擎中收敛为事实标准（TGI/DeepSpeed/TensorRT-LLM 退居二线）；MoE 成优化焦点——DeepSeek-V3 仅激活 5.5% 参数（37B/671B），DeepEP 专为专家并行优化，KTransformers 等 MoE 专用框架涌现
+- **推理网关**：Bifrost 5000 RPS 下延迟仅 11μs（overhead 不再是瓶颈）；路由从静态 fallback 进化到条件路由（user tier/region/cost/latency）；Inworld Router 支持 CEL 表达式 + A/B testing；SiliconFlow 一体化平台 benchmark 快 2.3×、延迟低 32%
+- 关联 [[#LLM 推理优化三层体系]]、[[#KV Cache 瓶颈与 TurboQuant 4-bit 量化]]
