@@ -160,3 +160,10 @@
 - **企业落地五大趋势**：岗位级部署、多 Agent 协作架构（规划→执行→验证→汇总）、AgentOps 运维刚需（监控/审计/权限/异常四件套）、个人 Agent 普及、行业垂直 Agent 爆发
 - 案例：头部保险公司 Agent 理赔初审单日 2000→15000 件、准确率 97.3%、人力降 60%
 - 关联 [[#2026 Q2 生产级框架排名]]、[[#2026 H1 框架格局：大一统趋势]]
+
+## 2026 年中格局：LangGraph 居首，微软合并生态（2026-08-12 归档）
+整理自 [[inbox/2026-08-09-AI-Agent-框架格局2026]]
+- Alice Labs 基于 100+ 生产实现评测 10 大框架：LangGraph 1.x 居首（约 3450 万月 PyPI 下载），微软 Agent Framework 1.0（合并 Semantic Kernel 与 AutoGen）紧随其后；MCP 已成标配（10 家全支持），A2A 获 150+ 组织采纳
+- LangGraph 8 月更新：node caching、deferred nodes（fan-in 屏障）、模型 pre/post hooks（上下文裁剪/护栏/PII 脱敏）、content-block 流式 API
+- 选型按技术栈：Azure→MSAF、AWS→Bedrock AgentCore、TS 优先→Mastra、Python 状态图→LangGraph；OpenAI Agents SDK 3 月 GA，Claude Agent SDK 子代理层级加深至 5 层
+- 关联 [[#2026 Q2 生产级框架排名]]、[[#Q2 框架三门槛与企业落地五大趋势]]

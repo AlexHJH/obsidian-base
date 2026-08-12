@@ -144,3 +144,10 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - **信通院综述**：PD 分离已成主流；vLLM 在通用引擎中收敛为事实标准（TGI/DeepSpeed/TensorRT-LLM 退居二线）；MoE 成优化焦点——DeepSeek-V3 仅激活 5.5% 参数（37B/671B），DeepEP 专为专家并行优化，KTransformers 等 MoE 专用框架涌现
 - **推理网关**：Bifrost 5000 RPS 下延迟仅 11μs（overhead 不再是瓶颈）；路由从静态 fallback 进化到条件路由（user tier/region/cost/latency）；Inworld Router 支持 CEL 表达式 + A/B testing；SiliconFlow 一体化平台 benchmark 快 2.3×、延迟低 32%
 - 关联 [[#LLM 推理优化三层体系]]、[[#KV Cache 瓶颈与 TurboQuant 4-bit 量化]]
+
+## vLLM 首届大会 + 前缀缓存决定选型（2026-08-12 归档）
+整理自 [[inbox/2026-08-09-大模型推理-vLLM首届大会]]、[[inbox/2026-08-09-大模型推理-SGLang-vs-vLLM]]
+- vLLM Conference 8/24-26 落地 Ray Summit；硬件支持扩至 Apple Silicon、昇腾 NPU、Neuron、TPU、Gaudi、昆仑芯、寒武纪 MLU，适配 CUDA 13.0；模型跟进 DeepSeek V4、Qwen3.6、GLM 5.2、Kimi K3、Llama 4 等
+- 独立 prompt 场景两引擎接近（H100/Llama 3.3 70B 吞吐 +3.8%）；高前缀复用场景（Agent 系统提示/工具定义）SGLang RadixAttention 比 vLLM 页粒度缓存快约 29%（16200 vs 12500 tok/s）
+- 选型估算：前缀命中率 = 重复前缀 token / 总输入 token，命中率高选 SGLang，否则 vLLM（生态广、首发适配快）
+- vLLM 生态组件：AIBrix（K8s）、LLM Compressor（量化）、Speculators（投机解码）、vLLM Omni；赞助方含 a16z、Sequoia、NVIDIA、AMD、AWS、阿里云
