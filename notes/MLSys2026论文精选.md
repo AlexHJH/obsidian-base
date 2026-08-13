@@ -109,3 +109,18 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - **Modular 三趋势**：Agent 写系统代码成现实（KernelPro 等已达 hackathon 顶级）；异构硬件（GPU/NPU/MPU）成推理标配；KV Cache 向 DRAM/SSD/分布式多层外移，Netpreme 推专用 Memory Processing Unit（宣称 XPU 内存扩展 100×）
 - MLSys 2026 竞赛 Track：Trainium2/3 MoE Kernel、Google Graph Scheduling、NVIDIA FlashInfer AI Kernel Generation
 - 关联 [[推理引擎格局-vLLM-SGLang#KV Cache 瓶颈与 TurboQuant 4-bit 量化]]、[[AI编译器2026格局#Triton DSL 性能评估 & KernelPro LLM 优化]]
+
+## LMetric：乘法打分简化 LLM 请求调度（OSDI'26，2026-08-13 归档）
+整理自 [[inbox/2026-08-10-MLSys顶会-OSDI26推理论文]]
+- 上交 IPADS × 阿里：两个指标简单相乘（KV 感知的 prefill token 数 × 负载感知的实例 batch size）做跨实例请求路由，免超参调优
+- 相比 vLLM-v1 与生产调度器，TTFT 最高降 92%/39%，TPOT 降 24%/51%，已在阿里生产环境上线验证
+- 关键洞察：乘法打分等价线性组合、超参在比较中抵消；论文给出乘法失效的数学条件（arXiv 2603.15202）
+- 关联 [[推理引擎格局-vLLM-SGLang]]
+
+## MLSys 2026 落幕：Agentic 系统与 Kernel 工程化主线（2026-08-13 归档）
+整理自 [[inbox/2026-08-10-MLSys顶会-MLSys2026大会趋势]]
+- 主线：Agentic AI 的系统支撑 + Kernel 工程化；缓存管理/投机解码/RAG/Agent 记忆论文密集（AgenticCache、Hippocampus）
+- 推理优化：MAC-Attention、BLASST（注意力稀疏化）、TokenWeave（计算-通信重叠）
+- FlashAttention-4 迁至 CuTe-DSL/Python 便于扩展（详见上方 [[#FlashAttention-4: 面向 Blackwell 非对称硬件扩展]]）
+- 竞赛转向 kernel 生成：AWS Trainium MoE 挑战赛、NVIDIA FlashInfer AI Kernel 生成赛
+- 关联 [[AI-Agent-2026格局]]、[[推理引擎格局-vLLM-SGLang]]

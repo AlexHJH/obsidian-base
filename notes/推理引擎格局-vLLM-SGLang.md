@@ -151,3 +151,10 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 独立 prompt 场景两引擎接近（H100/Llama 3.3 70B 吞吐 +3.8%）；高前缀复用场景（Agent 系统提示/工具定义）SGLang RadixAttention 比 vLLM 页粒度缓存快约 29%（16200 vs 12500 tok/s）
 - 选型估算：前缀命中率 = 重复前缀 token / 总输入 token，命中率高选 SGLang，否则 vLLM（生态广、首发适配快）
 - vLLM 生态组件：AIBrix（K8s）、LLM Compressor（量化）、Speculators（投机解码）、vLLM Omni；赞助方含 a16z、Sequoia、NVIDIA、AMD、AWS、阿里云
+
+## vLLM 25K TPS/GPU：Qwen3.5 分离式推理登顶（2026-08-13 归档）
+整理自 [[inbox/2026-08-10-大模型推理-vLLM25K-TPS]]
+- 8/6 vLLM 官方博客：GB200 NVL72 用分离式 serving 跑 Qwen3.5-397B-A17B-NVFP4，达每 GPU 25K tokens/s 总吞吐
+- 核心优化：FlashInfer Blackwell GDN prefill kernel（比旧 FLA/Triton 快 1.02–5.78×，prefill 端到端 +13%、TTFT -12%）+ NIXL 混合缓存传输（同时传 attention KV 与 Mamba SSM 状态）
+- 异步调度修复 + 复现配方公开（--async-scheduling），GSM8K 精度 88%；首届 vLLM Conference 8/24-26 落地 Ray Summit
+- 关联 [[#Prefill-Decode 分离架构（2026）]]、[[#vLLM 首届大会 + 前缀缓存决定选型]]
