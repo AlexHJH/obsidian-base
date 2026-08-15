@@ -124,3 +124,11 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - FlashAttention-4 迁至 CuTe-DSL/Python 便于扩展（详见上方 [[#FlashAttention-4: 面向 Blackwell 非对称硬件扩展]]）
 - 竞赛转向 kernel 生成：AWS Trainium MoE 挑战赛、NVIDIA FlashInfer AI Kernel 生成赛
 - 关联 [[AI-Agent-2026格局]]、[[推理引擎格局-vLLM-SGLang]]
+
+## Strata：长上下文 LLM 分层缓存框架（OSDI'26，2026-08-15 归档）
+整理自 [[inbox/2026-08-12-MLSys顶会-OSDI26-Strata分层缓存]]
+- Stanford/NVIDIA 联合提出，面向长上下文 LLM 服务的分层上下文缓存
+- 诊断三痛点：KV 碎片化小传输浪费带宽、缓存加载阻塞 prefill、调度器忽视加载延迟致「延迟命中」
+- 方案：GPU 辅助 I/O（解耦 GPU 与主机布局、大块高效传输）+ 缓存感知调度（平衡 batch 隐藏加载延迟）
+- 已集成 SGLang 上线生产，吞吐最高达 vLLM-LMCache 5×、TensorRT-LLM 3.75×
+- 关联 [[推理引擎格局-vLLM-SGLang]]、[[HBF-NAND-AI推理内存2026]]

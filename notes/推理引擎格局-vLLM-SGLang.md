@@ -158,3 +158,10 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 核心优化：FlashInfer Blackwell GDN prefill kernel（比旧 FLA/Triton 快 1.02–5.78×，prefill 端到端 +13%、TTFT -12%）+ NIXL 混合缓存传输（同时传 attention KV 与 Mamba SSM 状态）
 - 异步调度修复 + 复现配方公开（--async-scheduling），GSM8K 精度 88%；首届 vLLM Conference 8/24-26 落地 Ray Summit
 - 关联 [[#Prefill-Decode 分离架构（2026）]]、[[#vLLM 首届大会 + 前缀缓存决定选型]]
+
+## DeepSeek-V4-Flash 正式版公测（2026-08-15 归档）
+整理自 [[inbox/2026-08-12-大模型推理-DeepSeek-V4-Flash正式版]]
+- 7/31 V4-Flash-0731 上线：仅 130 亿激活参数，Agent 能力反超 V4-Pro-Preview（DeepSWE 7.3→54.4、Cybergym 翻倍至 76.7），接近 Claude Opus 4.8
+- 周调用量全球第一（7.22 万亿 token，环比 +13%），缓存命中价低至 0.02 元/百万 tokens；结构尺寸与 preview 一致、仅重做后训练，原生支持 Responses API 并适配 Codex
+- 推理侧：MoE 专家权重与 CSA indexer QK 路径引入 MXFP4 量化感知训练，真 FP4 权重推理，国产芯片可稳定部署
+- 关联 [[#SGLang vs vLLM 2026 最新格局]]（DeepSeek V4 Day-0 支持）
