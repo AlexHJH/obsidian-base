@@ -42,6 +42,12 @@
 - 单单元最高 512GB / 1.638 TB/s，仿真显示权重读取性能距"无限容量 HBM"仅差 2.2%
 - FMS 2026 同场：SK hynix 首秀第 10 代 375 层 4D NAND（每瓦性能 2.5×）；Samsung 主推 zHBM，自 2020 年代初已布局 HBF 专利
 
+## Google DeepMind 站台 HBF（2026-08-13 归档）
+整理自 [[inbox/2026-08-13-HBF-谷歌DeepMind站台]]
+- FMS 2026（8/6）圆桌「用 HBF 打破内存墙」：Google DeepMind 资深工程师马晓宇为 HBF 背书——LLM 推理数据量激增，需高容量+高带宽+高能效的新内存层级；Google 与 Tenstorrent 已加入 HBF 联盟
+- 读中心模型：HBF 主「读」、HBM 管热工作区，联用规避 NAND 写耐久短板（SanDisk VP 现场回应）
+- 马晓宇 & Patterson 的 IEEE Computer 论文：HBF 用于冻结权重（~512GB vs HBM4 48GB），推理瓶颈在内存/互联而非算力
+
 ## 来源
 
 - SanDisk 官方博客（2025）：Scaling Beyond the Wall
