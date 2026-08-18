@@ -132,3 +132,15 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 方案：GPU 辅助 I/O（解耦 GPU 与主机布局、大块高效传输）+ 缓存感知调度（平衡 batch 隐藏加载延迟）
 - 已集成 SGLang 上线生产，吞吐最高达 vLLM-LMCache 5×、TensorRT-LLM 3.75×
 - 关联 [[推理引擎格局-vLLM-SGLang]]、[[HBF-NAND-AI推理内存2026]]
+
+## OpGuard：位对齐调试生产级 LLM 训练（OSDI'26，2026-08-18 归档）
+整理自 [[inbox/2026-08-14-MLSys顶会-OpGuard位对齐调试]]
+- UMich OrderLab × ByteDance Seed 提出"位对齐"（bitwise alignment）作 LLM 训练正确性 oracle 与调试原语：跨异构训练栈找语义稳定算子边界并打轻量指纹，定位两轮执行首个位不一致的 tensor 作调试枢轴
+- 已部署字节预训练/后训练，诊断 20+ 生产问题（kernel 竞态、静默数据损坏），调试时间从数天缩至数分钟
+- 无需"黄金基线"即可比较，通过控制良性非确定性让首个不匹配点成为强错误证据
+
+## Kairox：在线神经元均衡的 GPU-CPU 混合 LLM 推理（OSDI'26，2026-08-18 归档）
+整理自 [[inbox/2026-08-14-MLSys顶会-Kairox在线神经元均衡]]
+- SYSU × 鹏城实验室 × EPFL：自适应 GPU-CPU 混合推理，用在线神经元均衡按激活模式动态在 GPU/CPU 间重分布 FFN 神经元，缓解静态"热/冷"划分无法适配运行时激活变化的问题
+- Live Pipeline 预取神经元（预测下一层激活模式）+ Temporal Activation Momentum 缓存策略优先保留持续活跃神经元
+- 相比静态划分，动态重分布提升混合推理吞吐；关联 [[推理引擎格局-vLLM-SGLang]]
