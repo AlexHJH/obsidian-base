@@ -144,3 +144,10 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - SYSU × 鹏城实验室 × EPFL：自适应 GPU-CPU 混合推理，用在线神经元均衡按激活模式动态在 GPU/CPU 间重分布 FFN 神经元，缓解静态"热/冷"划分无法适配运行时激活变化的问题
 - Live Pipeline 预取神经元（预测下一层激活模式）+ Temporal Activation Momentum 缓存策略优先保留持续活跃神经元
 - 相比静态划分，动态重分布提升混合推理吞吐；关联 [[推理引擎格局-vLLM-SGLang]]
+
+## OSDI'26 最佳论文：DynaRL + ValScope（2026-08-19 归档）
+整理自 [[inbox/2026-08-16-MLSys顶会-OSDI26最佳论文]]
+- OSDI'26（西雅图 7/13-15）最佳论文双揭晓：DynaRL（大规模 RL 训练弹性调度）与 ValScope（DBMS 逻辑 Bug 检测）同获 Best Paper
+- DynaRL：首个面向大规模 RL 训练的弹性调度系统，用动态超图建模整条 RL pipeline，跨组件实时迁移算力/显存/通信，数学推理与 Agentic RL 负载吞吐最高 1.98×（PKU/Infinigence-AI/中科院等）
+- ValScope：价值语义感知蜕变测试，在 6 款数据库（MySQL/OceanBase/TiDB 等）发现 67 个未知逻辑 Bug、57 个确认、48 个可追溯至 2020 年前（最长潜伏 20 年）；厦大首篇 OSDI
+- 关联 [[推理引擎格局-vLLM-SGLang]]

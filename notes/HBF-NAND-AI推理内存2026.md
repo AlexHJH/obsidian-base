@@ -48,6 +48,12 @@
 - 读中心模型：HBF 主「读」、HBM 管热工作区，联用规避 NAND 写耐久短板（SanDisk VP 现场回应）
 - 马晓宇 & Patterson 的 IEEE Computer 论文：HBF 用于冻结权重（~512GB vs HBM4 48GB），推理瓶颈在内存/互联而非算力
 
+## FMS 2026 规格补充：8/16 层堆叠 + 三档带宽 + 分层内存（2026-08-19 归档）
+整理自 [[inbox/2026-08-16-HBF-FMS技术规格分层内存]]
+- 补充 [[#OCP 首版技术规范发布（2026-08-11 归档）]] 配置细节：8 层与 16 层 NAND 堆叠两种规格，最大 512GB，带宽分三档（0.4–3.0 TB/s），以 UCIe 连接 CPU/GPU
+- SK 海力士副社长金千成提出「分层内存(Tiered Memory)」：代理式 AI 时代需整合互补存储器协同优化；定位 HBM 与 SSD 之间新层级，覆盖快速数据湖/模型存储/RAG/KV cache
+- 规范为 OCP 开放标准（非私有），联盟已有 Google、Tenstorrent，加速生态规模化落地
+
 ## 来源
 
 - SanDisk 官方博客（2025）：Scaling Beyond the Wall
