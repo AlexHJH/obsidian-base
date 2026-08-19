@@ -181,3 +181,10 @@
 - 恢复独立后数据存美国+新加坡；Manus 称正筹备「再次拓展通用 Agent 能力边界」的新功能
 - 背景：2025-03 定位「全球首款通用 AI Agent」，与阿里通义合作，2025 底 ARR 破 1 亿美元；7 月以来更新 Branch/Auto-Publish/PPT/Plan Mode 四项功能
 - 中金观点：2026 通用 Agent 仍是应用主入口之争，ChatBot → Agent 升级
+
+## Claude Platform 8 月治理能力 + Managed Agents 三大功能（2026-08-15 归档）
+整理自 [[inbox/2026-08-15-AI-Agent-Claude合规与推理挂钩]]、[[inbox/2026-08-15-AI-Agent-Claude-Dreaming-Outcomes]]
+- **Inference hooks**（8/5 Beta）：每个受管控 prompt 在推理前等待组织 AI 安全服务器 allow/deny 判定，失败处理可配置、每次拒绝记录进合规活动摘要
+- **Compliance API**（8/11 Beta）：导出 Cowork/Claude Code 会话逐字记录（本机 `sessions/local` + 远程）；同步退役 Claude Opus 4.1、统一升级 Opus 5
+- **Managed Agents 三功能**：Dreaming（研究预览）空闲时回顾会话、自动提炼模式写入记忆库；Outcomes（公测）独立 Grader 按 rubric 客观评估、任务成功率 +5~10pp；Multi-Agent Orchestration 多代理协调
+- 定位：直击 Agent 的记忆固化、客观评估、企业合规三大落地短板
