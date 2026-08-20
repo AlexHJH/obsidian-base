@@ -188,3 +188,10 @@
 - **Compliance API**（8/11 Beta）：导出 Cowork/Claude Code 会话逐字记录（本机 `sessions/local` + 远程）；同步退役 Claude Opus 4.1、统一升级 Opus 5
 - **Managed Agents 三功能**：Dreaming（研究预览）空闲时回顾会话、自动提炼模式写入记忆库；Outcomes（公测）独立 Grader 按 rubric 客观评估、任务成功率 +5~10pp；Multi-Agent Orchestration 多代理协调
 - 定位：直击 Agent 的记忆固化、客观评估、企业合规三大落地短板
+
+## Claude 推理钩子 (Inference Hooks) 上线 Enterprise Beta（2026-08-17 归档）
+整理自 [[inbox/2026-08-17-AI-Agent-Claude推理钩子]]
+- 8/5 Anthropic 为 Claude Enterprise 推「推理钩子」Beta：每个受管控提示在推理继续前等待组织 AI 安全服务器 allow/deny 裁定（覆盖 claude.ai/Cowork/Claude Code）
+- 请求经签名、失败处理可配置、每次拒绝写入合规活动信息流；安全审核从「事后审计」进到「推理前置拦截」
+- 呼应 Anthropic 三态安全模型（block/allow/triage），把推理本身变成可挂载安全策略的扩展点；同批停用 Claude Opus 4.1、建议升级 Opus 5
+- 关联 [[#Claude Platform 8 月治理能力 + Managed Agents 三大功能]]（Inference hooks 细节已收录）
