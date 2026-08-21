@@ -151,3 +151,11 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - DynaRL：首个面向大规模 RL 训练的弹性调度系统，用动态超图建模整条 RL pipeline，跨组件实时迁移算力/显存/通信，数学推理与 Agentic RL 负载吞吐最高 1.98×（PKU/Infinigence-AI/中科院等）
 - ValScope：价值语义感知蜕变测试，在 6 款数据库（MySQL/OceanBase/TiDB 等）发现 67 个未知逻辑 Bug、57 个确认、48 个可追溯至 2020 年前（最长潜伏 20 年）；厦大首篇 OSDI
 - 关联 [[推理引擎格局-vLLM-SGLang]]
+
+## Modular：MLSys 2026 三大趋势与最佳论文（2026-08-21 归档）
+整理自 [[inbox/2026-08-18-MLSys顶会-MLSys2026趋势与最佳论文]]
+- 三大趋势：LLM 推理异构硬件、KV cache 精细管理、「系统智能」
+- **SuperInfer**：现有 offload 框架仅用 GH200 NVLink-C2C 900GB/s 带宽的 <5%，瓶颈在软件栈而非硬件
+- 最佳论文聚焦 RAG 推理（**TeleRAG**，lookahead retrieval）与 MoE 训练内存墙（**MoEBlaze**）
+- Lidong Zhou 提出「System Intelligence」：AI agent 已成底层代码主要作者（证明通过率 2%→91.3%）
+- 关联 [[AI-Agent-2026格局]]、[[#MLSys 2026 总结与三大趋势]]

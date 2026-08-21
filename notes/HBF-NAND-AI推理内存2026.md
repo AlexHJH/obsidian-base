@@ -54,6 +54,12 @@
 - SK 海力士副社长金千成提出「分层内存(Tiered Memory)」：代理式 AI 时代需整合互补存储器协同优化；定位 HBM 与 SSD 之间新层级，覆盖快速数据湖/模型存储/RAG/KV cache
 - 规范为 OCP 开放标准（非私有），联盟已有 Google、Tenstorrent，加速生态规模化落地
 
+## Kioxia 送样第 9 代 BiCS 1Tb TLC：HBF 容量底座升级（2026-08-21 归档）
+整理自 [[inbox/2026-08-18-HBF-Kioxia第9代BiCS-1Tb-TLC送样]]
+- 7/30 Kioxia 送样第 9 代 BiCS FLASH 1Tb TLC，采用 CBA（CMOS 直接键合阵列）+ OPS 双轴工艺，面向 AI PC/手机等低中容量高性能场景
+- 双轴策略：第 9 代走「低成本高投资效率」、第 10 代走「高层堆叠超大容量」；更高密度单 die 为 HBF（8/16 层 NAND 堆叠）容量提升提供底座
+- FMS 2026 同期：UFS 5.0（10 GB/s 顺序读）与 NX1 数据中心 NVMe SSD（支持液冷），瞄准 AI/hyperscale
+
 ## 来源
 
 - SanDisk 官方博客（2025）：Scaling Beyond the Wall
