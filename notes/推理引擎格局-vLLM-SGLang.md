@@ -184,3 +184,10 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 架构：92 层、隐藏维度 8192、每层 512 专家（激活 10 路由 + 1 共享），原生 256K 上下文可扩至 1M，多步 MTP 训练
 - 开源版为纯文本 + 强制思考模式；云端 Max 才有视觉/非思考模式/内置工具；已通过阿里云真武 M890 超节点对外服务
 - 关联 [[#阿里云灵骏真武 M890 超节点：十万亿参数 MoE 推理]]
+
+## vLLM Decode Context Parallelism (DCP)（2026-08-23 归档）
+整理自 [[inbox/2026-08-19-大模型推理-vLLM解码上下文并行DCP]]
+- vLLM 原生支持 Decode Context Parallelism：KV Cache 沿序列维度分片到各 GPU（每卡只存 1/N），破解长上下文下张量并行按 attention head 切分导致的 KV 冗余复制与 GQA/MLA 瓶颈
+- 相比标准 TP，长上下文 agent 负载吞吐最高提升 3×；8×B200 跑 Kimi K2.6 达 6,091 tok/s/GPU（并发 512、KV 利用率 82%）
+- attention 后立即重配 GPU 摊薄 FFN 权重加载，随上下文长度优雅扩展而非退化；NVIDIA TensorRT-LLM 同方向推 Helix（context+tensor）并行
+- 关联 [[#Prefill-Decode 分离架构（2026）]]、[[#vLLM 25K TPS/GPU：Qwen3.5 分离式推理登顶]]

@@ -195,3 +195,12 @@
 - 请求经签名、失败处理可配置、每次拒绝写入合规活动信息流；安全审核从「事后审计」进到「推理前置拦截」
 - 呼应 Anthropic 三态安全模型（block/allow/triage），把推理本身变成可挂载安全策略的扩展点；同批停用 Claude Opus 4.1、建议升级 Opus 5
 - 关联 [[#Claude Platform 8 月治理能力 + Managed Agents 三大功能]]（Inference hooks 细节已收录）
+
+## OWASP Agentic Applications Top 10（2026-08-23 归档）
+整理自 [[inbox/2026-08-19-AI-Agent-OWASP-Agentic-Top10安全]]
+- OWASP GenAI 安全项目发布《Top 10 for Agentic Applications 2026》（ASI01–ASI10），经 100+ 专家评审，首次为自主 Agent 十大安全风险建立标准化框架
+- 核心风险：目标劫持(ASI01)、Agentic 供应链漏洞(ASI04)、RAG 数据投毒(ASI06)、工具滥用、记忆投毒、失控 Agent
+- MCP 成最大攻击面：MCPoison(CVE-2025-54136)、CurXecute 等 60 天 30+ CVE；82% 实现存在路径穿越、仅 8.5% 用 OAuth
+- 落地缺口：Cisco 2026 调研 83% 企业已部署 Agent，仅 29% 自认具备足够防护；Tenet「agentjacking」2388 家机构可注入、85% 执行率
+- 配套生态：Invariant Labs mcp-scan 扫描器、OWASP MCP Top 10、CoSAI MCP Gateway 零信任网关
+- 关联 [[#MCP 协议]]、[[#EU AI Act 高风险条款生效 + MCP 无状态化]]
