@@ -60,6 +60,12 @@
 - 双轴策略：第 9 代走「低成本高投资效率」、第 10 代走「高层堆叠超大容量」；更高密度单 die 为 HBF（8/16 层 NAND 堆叠）容量提升提供底座
 - FMS 2026 同期：UFS 5.0（10 GB/s 顺序读）与 NX1 数据中心 NVMe SSD（支持液冷），瞄准 AI/hyperscale
 
+## SanDisk 完成首颗 HBF 芯片流片，推理产品样品推迟至 2027（2026-08-24 归档）
+整理自 [[inbox/2026-08-20-HBF-SanDisk首颗HBF芯片流片]]
+- 8/13 Investor Day 披露已完成首颗 HBF die 流片（tape-out），路线图显示首个 HBF 推理产品样品定于 2027，标志 HBF 从规范走向硅片落地
+- 时间线右移：2025.8 首样品目标 2026 H2 → 2026.8 投资者日更新为「推理产品样品 2027」，新一代存储平台整体延后
+- 与 SK hynix 联盟主导标准化，Google/Tenstorrent 已入盟；定位 HBM 与 SSD 之间的推理专用内存层级
+
 ## 来源
 
 - SanDisk 官方博客（2025）：Scaling Beyond the Wall

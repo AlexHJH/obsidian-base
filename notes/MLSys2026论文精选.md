@@ -159,3 +159,11 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 最佳论文聚焦 RAG 推理（**TeleRAG**，lookahead retrieval）与 MoE 训练内存墙（**MoEBlaze**）
 - Lidong Zhou 提出「System Intelligence」：AI agent 已成底层代码主要作者（证明通过率 2%→91.3%）
 - 关联 [[AI-Agent-2026格局]]、[[#MLSys 2026 总结与三大趋势]]
+
+## SOSP 2026 录用论文：AI/LLM 系统成主角（2026-08-24 归档）
+整理自 [[inbox/2026-08-20-MLSys顶会-SOSP2026录用论文]]
+- 第 32 届 SOSP 2026（9/29-30 布拉格）接收率 15.9%（62/390），AI/LLM 系统方向占大量篇幅
+- TensorDex (UVA/Harvard)：张量中心 AI 模型存储系统；TensorHub：LLM RL 训练弹性权重传输
+- CrystalLLM (阿里/上交/哈佛/浙大)：用少量 GPU 忠实模拟大规模 LLM 训练
+- Linux AGX (UCR)：面向物理 AI 与机器人系统的 Linux GPU 公平调度扩展
+- 推理服务：AWS SystemX 全球规模推理、北大/京东 Multi-LLM Serving、LMTracer 细粒度性能剖析
