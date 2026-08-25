@@ -191,3 +191,10 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 相比标准 TP，长上下文 agent 负载吞吐最高提升 3×；8×B200 跑 Kimi K2.6 达 6,091 tok/s/GPU（并发 512、KV 利用率 82%）
 - attention 后立即重配 GPU 摊薄 FFN 权重加载，随上下文长度优雅扩展而非退化；NVIDIA TensorRT-LLM 同方向推 Helix（context+tensor）并行
 - 关联 [[#Prefill-Decode 分离架构（2026）]]、[[#vLLM 25K TPS/GPU：Qwen3.5 分离式推理登顶]]
+
+## EAGLE 3.1：修复注意力漂移的投机解码（2026-08-25 归档）
+整理自 [[inbox/2026-08-21-大模型推理-EAGLE3.1投机解码]]
+- EAGLE 团队 + vLLM + TorchSpec 联合发布 EAGLE 3.1，解决投机解码在长上下文/模板变化下的退化与「注意力漂移」不稳定现象
+- 两项架构改动（FC 归一化 + post-norm 隐状态反馈）稳定草稿模型，长上下文接受长度最高达 EAGLE 3 的 2 倍
+- Kimi-K2.6-NVFP4 基准：并发 1 时吞吐 2.03×、C=16 时 1.66×
+- 关联 [[#EAGLE-3 自推测解码]]、[[#投机解码生产落地综述]]

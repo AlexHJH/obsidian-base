@@ -204,3 +204,10 @@
 - 落地缺口：Cisco 2026 调研 83% 企业已部署 Agent，仅 29% 自认具备足够防护；Tenet「agentjacking」2388 家机构可注入、85% 执行率
 - 配套生态：Invariant Labs mcp-scan 扫描器、OWASP MCP Top 10、CoSAI MCP Gateway 零信任网关
 - 关联 [[#MCP 协议]]、[[#EU AI Act 高风险条款生效 + MCP 无状态化]]
+
+## Mastra：TypeScript 优先 Agent 框架（2026-08-25 归档）
+整理自 [[inbox/2026-08-21-AI-Agent-Mastra框架动态]]
+- Gatsby 团队打造，2026-01 发布 1.0，完成 $13M 种子轮 + $22M A 轮，转 Apache 2.0 许可，月下载量超百万
+- 8 月连发：AI SDK v7 支持、内置工具、Coding Agent Helper、细粒度鉴权
+- 从框架向平台演进（Mastra Factory / Agent Builder / Observability），Memory Gateway 提供即插即用持久记忆端点
+- 关联 [[#2026 年中格局：LangGraph 居首]]（TS 优先选型 Mastra 呼应）
