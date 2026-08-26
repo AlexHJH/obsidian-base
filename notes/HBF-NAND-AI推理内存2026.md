@@ -66,6 +66,13 @@
 - 时间线右移：2025.8 首样品目标 2026 H2 → 2026.8 投资者日更新为「推理产品样品 2027」，新一代存储平台整体延后
 - 与 SK hynix 联盟主导标准化，Google/Tenstorrent 已入盟；定位 HBM 与 SSD 之间的推理专用内存层级
 
+## HBF 或成 prefill 芯片 GDDR 替代（2026-08-26 归档）
+整理自 [[inbox/2026-08-22-HBF-推理内存分析与GDDR替代]]
+- 深度分析（Viks Newsletter）梳理 HBF 作为 HBM 与 SSD 之间新层级的定位：容量 8–16× HBM、尚未量产，SanDisk 样品预计 2026 H2、首个推理结果 2027
+- 关键新视角：Rubin CPX 证明 prefill 阶段对内存带宽要求较低 → HBF 有望成为 prefill 计算芯片中 GDDR 的替代
+- 开放式问题：HBF 能否与 HBM2e 竞争（作为最先进系统 vs HBM4 的低成本替代）；混合架构——替代 GPU 海岸线上的 HBM 还是与之协同——待验证
+- 关联 [[#LLM 推理应用]]
+
 ## 来源
 
 - SanDisk 官方博客（2025）：Scaling Beyond the Wall

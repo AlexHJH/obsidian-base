@@ -167,3 +167,11 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - CrystalLLM (阿里/上交/哈佛/浙大)：用少量 GPU 忠实模拟大规模 LLM 训练
 - Linux AGX (UCR)：面向物理 AI 与机器人系统的 Linux GPU 公平调度扩展
 - 推理服务：AWS SystemX 全球规模推理、北大/京东 Multi-LLM Serving、LMTracer 细粒度性能剖析
+
+## OSDI'26 最佳论文补充：LLM 预训练数据管线（USTC × 字节 Seed，2026-08-26 归档）
+整理自 [[inbox/2026-08-22-MLSys顶会-OSDI2026最佳论文]]
+- 中科大李诚团队联合字节 Seed 凭「Teaching The Old Dog New Tricks: Building Efficient Data Pipelines for Large-Scale LLM Pre-training」获 Jay Lepreau 最佳论文奖（Operational Systems 赛道）
+- 基于 3 万余真实训练任务数据，首次系统揭示 LLM 预训练数据管线三大瓶颈：伴生评测引发跨数据中心流量、启动阶段初始化 I/O 风暴、多模态数据变换 CPU 密集
+- 三项优化：预测性 checkpoint 复制、主动热文件复制、存储侧数据变换卸载
+- 同期最佳论文另有 DynaRL、ValScope（见 [[#OSDI'26 最佳论文：DynaRL + ValScope（2026-08-19 归档）]]）、布朗大学 Semisolates；OpGuard 获最佳论文提名
+- 信号：数据管线成为继算力/通信之后的大模型训练新优化焦点
