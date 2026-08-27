@@ -211,3 +211,10 @@
 - 8 月连发：AI SDK v7 支持、内置工具、Coding Agent Helper、细粒度鉴权
 - 从框架向平台演进（Mastra Factory / Agent Builder / Observability），Memory Gateway 提供即插即用持久记忆端点
 - 关联 [[#2026 年中格局：LangGraph 居首]]（TS 优先选型 Mastra 呼应）
+
+## 五大框架 2026 收敛：图执行 + 人工审批成共同架构（2026-08-23 归档）
+整理自 [[inbox/2026-08-23-AI-Agent-五大框架收敛]]
+- LangGraph 1.0、微软 Agent Framework 1.0、Google ADK 2.0、Pydantic AI V2、Amazon Bedrock AgentCore 五大框架相继达生产成熟度，独立收敛到「步骤图 + 运行时强制人工审批」架构
+- 五大框架全部原生支持图式执行、human-in-the-loop 审批与 MCP 工具接入
+- 微软 Agent Framework 1.0（4月）统一 Semantic Kernel + AutoGen（转维护模式）；ADK 2.0 从层级 executor 转向图式 Workflow Runtime；Pydantic AI V2（6/23 stable）以「capabilities」可组合单元重构
+- 真正的信号不是单个发布，而是架构收敛本身；关联 [[#2026 H1 框架格局：大一统趋势]]

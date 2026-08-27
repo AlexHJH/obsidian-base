@@ -198,3 +198,10 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 两项架构改动（FC 归一化 + post-norm 隐状态反馈）稳定草稿模型，长上下文接受长度最高达 EAGLE 3 的 2 倍
 - Kimi-K2.6-NVFP4 基准：并发 1 时吞吐 2.03×、C=16 时 1.66×
 - 关联 [[#EAGLE-3 自推测解码]]、[[#投机解码生产落地综述]]
+
+## NVIDIA Nemotron 3.5 Lightning：面向 Agent 的快速 worker 模型（2026-08-23 归档）
+整理自 [[inbox/2026-08-23-大模型推理-Nemotron3.5-Lightning]]
+- NVIDIA 8/11 发布 Nemotron 3.5 Lightning（30B 总参/3B 激活 MoE，NVFP4 量化、OpenMDW 1.1 许可），定位长程 Agent 的快速 worker 模型，vLLM Day-0 支持
+- 内置多 token 预测（MTP）+ DFlash + DSpark 投机解码默认开启，Thoughtworks 2091 次实测（H200/B200）吞吐 1.46–1.96×
+- 定位长程 Agent/子 Agent worker：执行工具调用、校验输出等「执行类」工作，省前沿模型成本；成本 $0.477 → $0.250/百万输出 token
+- 关联 [[#投机解码生产落地综述]]
