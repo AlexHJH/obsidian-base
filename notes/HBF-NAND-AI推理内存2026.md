@@ -82,3 +82,9 @@
 - Kioxia 新闻稿（2025-08-20）：5TB 64GB/s 原型
 - SemiWiki / Blocks & Files：SK Hynix HBM+HBF hybrid（H³ 论文）
 - Samsung FMS 2026 新闻稿：zHBM / V10 BV-NAND
+
+## HBF 联盟董事会扩容：Jim Keller 加入（2026-08-28 归档）
+整理自 [[inbox/2026-08-24-HBF-JimKeller加入联盟董事会]]
+- FMS 2026 复盘：Jim Keller（Tenstorrent CEO）加入 HBF 联盟董事会，与 David Patterson（伯克利）、Raja Koduri（Oxmiq Labs）并列，联盟已含 Google、Tenstorrent
+- SK hynix 分层内存框架命名：G0.5（3D 堆叠 DRAM）/ G1.5（HBF）/ G2.5（CXL 内存池），按需组合优化 xPU（呼应 [[#FMS 2026 规格补充：8/16 层堆叠 + 三档带宽 + 分层内存（2026-08-19 归档）]]）
+- 路线图右移：FMS 发布 0.7 版规范 → 完整规范 2027 初 → 样品 2028 初；SanDisk 展示 BiCS8/BiCS10 NAND
