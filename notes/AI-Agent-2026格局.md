@@ -218,3 +218,10 @@
 - 五大框架全部原生支持图式执行、human-in-the-loop 审批与 MCP 工具接入
 - 微软 Agent Framework 1.0（4月）统一 Semantic Kernel + AutoGen（转维护模式）；ADK 2.0 从层级 executor 转向图式 Workflow Runtime；Pydantic AI V2（6/23 stable）以「capabilities」可组合单元重构
 - 真正的信号不是单个发布，而是架构收敛本身；关联 [[#2026 H1 框架格局：大一统趋势]]
+
+## Alice Labs 2026 年 8 月框架排名：LangGraph 与 Claude SDK 并列居首（2026-08-29 归档）
+整理自 [[inbox/2026-08-25-AI-Agent-AliceLabs-8月框架排名]]
+- Alice Labs 基于 100+ 生产部署发布 8 月排名，四维「Production Score」打分：LangGraph 1.x 与 Claude Agent SDK 并列 9/10 居首
+- 微软 Agent Framework 1.0 预览 Agent Harness + Hosted Agents + CodeAct（BUILD 2026）；Claude Agent SDK 子代理层级扩至 5 层、200 spawn 上限
+- LangGraph 8 月发布 node caching、deferred nodes、pre/post hooks、content-block streaming
+- 四维评分：持久状态+HITL、MCP+A2A 覆盖、可观测性、首发部署时间；关联 [[#2026 年中格局：LangGraph 居首]]

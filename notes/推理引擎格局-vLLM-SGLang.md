@@ -205,3 +205,10 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 内置多 token 预测（MTP）+ DFlash + DSpark 投机解码默认开启，Thoughtworks 2091 次实测（H200/B200）吞吐 1.46–1.96×
 - 定位长程 Agent/子 Agent worker：执行工具调用、校验输出等「执行类」工作，省前沿模型成本；成本 $0.477 → $0.250/百万输出 token
 - 关联 [[#投机解码生产落地综述]]
+
+## vLLM 首届大会：State of vLLM 2026 路线图（2026-08-29 归档）
+整理自 [[inbox/2026-08-25-大模型推理-vLLM首届大会-State-of-vLLM]]
+- 首届 vLLM Conference 8/24–26 与 Ray Summit 同场（旧金山），Woosuk Kwon 主讲 State of vLLM 2026
+- 路线图：Flat Model / Model Runner V2 迁移、多级 KV offload（显存→CPU→SSD）分离式 serving、投机解码冲 1000+ TPS + 量化 KV 压缩
+- NVIDIA 专场：FlashInfer kernel + Dynamo 分布式全栈优化 DeepSeek/MiniMax；Intel 专场：MXFP8/MXFP4 亚 8-bit + prefill/decode 解耦到专用节点
+- 四大赛道：硬件后端、agentic serving、训练、生产推理
