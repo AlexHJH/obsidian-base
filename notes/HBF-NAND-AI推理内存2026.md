@@ -88,3 +88,9 @@
 - FMS 2026 复盘：Jim Keller（Tenstorrent CEO）加入 HBF 联盟董事会，与 David Patterson（伯克利）、Raja Koduri（Oxmiq Labs）并列，联盟已含 Google、Tenstorrent
 - SK hynix 分层内存框架命名：G0.5（3D 堆叠 DRAM）/ G1.5（HBF）/ G2.5（CXL 内存池），按需组合优化 xPU（呼应 [[#FMS 2026 规格补充：8/16 层堆叠 + 三档带宽 + 分层内存（2026-08-19 归档）]]）
 - 路线图右移：FMS 发布 0.7 版规范 → 完整规范 2027 初 → 样品 2028 初；SanDisk 展示 BiCS8/BiCS10 NAND
+
+## SanDisk 搭建 HBF 试点产线：供应链成形（2026-08-30 归档）
+整理自 [[inbox/2026-08-26-HBF-SanDisk试点产线供应链成形]]
+- TrendForce 援引 ETNews：SanDisk 为 HBF 原型产线搭建供应链，日本或为首选产地，试点产线 2H26 完成、年底投产，商业化 2027，较原路线图提前约半年
+- 韩国 JK Materials 完成 HBF 用高性能 KrF 聚合物（堆叠数百层 NAND 的关键材料）
+- 复用 HBM 制程生态（TSV、键合），HBM 设备/材料厂商在 HBF 中延续技术优势

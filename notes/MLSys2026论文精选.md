@@ -181,3 +181,9 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - **Model2Kernel**（PSU×北大×中科院）：首个实用 CUDA 内核内存安全自动验证系统，模型感知动态分析 + CUDA 符号执行，在 vLLM/HuggingFace 内核发现 353 个未知 bug、仅 9 个误报
 - **LLM-42**（微软研究院）：用「解码-验证-回滚」的 verified speculation 实现确定性 LLM 推理，基于 SGLang，仅 is_deterministic 请求触发验证，无需重写 GPU 内核
 - 确定性机制：固定 shape 重放验证 + 回滚不一致 token；关联 [[推理引擎格局-vLLM-SGLang]]、[[#SOSP 2026 录用论文：AI/LLM 系统成主角（2026-08-24 归档）]]
+
+## SOSP 2026 录用全集公开 + MLSys 2027 CFP（2026-08-30 归档）
+整理自 [[inbox/2026-08-26-MLSys顶会-SOSP2026录用全集与MLSys2027CFP]]
+- SOSP 2026（9/29–10/2 布拉格）完整录用名单公开，camera-ready 8/28 截止；新见论文：ProbeFS（上交 DNA 文件系统）、QProf（Google 仓库级成本剖析）、RPCShield（微服务级联故障）、Welder（控制面活性验证）、XTRA（CXL 缓存一致性 + 事务并发）、M2K（CUDA kernel 验证）
+- AI/LLM 系统方向延续主力（CrystalLLM、TensorDex、Linux AGX、LMTracer 等，见 [[#SOSP 2026 录用论文：AI/LLM 系统成主角（2026-08-24 归档）]]）
+- MLSys 2027 CFP 已上线：投稿 10/31 截止、2027 年 5 月举办；工业 Track 继续，Artifact Evaluation 对标 ASPLOS/CGO/PLDI
