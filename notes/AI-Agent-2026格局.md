@@ -225,3 +225,4 @@
 - 微软 Agent Framework 1.0 预览 Agent Harness + Hosted Agents + CodeAct（BUILD 2026）；Claude Agent SDK 子代理层级扩至 5 层、200 spawn 上限
 - LangGraph 8 月发布 node caching、deferred nodes、pre/post hooks、content-block streaming
 - 四维评分：持久状态+HITL、MCP+A2A 覆盖、可观测性、首发部署时间；关联 [[#2026 年中格局：LangGraph 居首]]
+- 互操作优先场景选型：微软 MSAF（MCP+A2A 双原生）、Google ADK 2.0、Claude SDK + A2A shim（整理自 [[inbox/2026-08-27-AI-Agent-微软Agent-Harness与Claude-SDK层级扩展]]）

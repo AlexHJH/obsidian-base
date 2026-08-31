@@ -64,6 +64,12 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 控制平面（如 GPUStack）把推理从「项目级资产」升级为「平台级资产」
 - 关联 [[AI-Agent-2026格局]]（Agent 长程任务推高推理复杂度）
 
+## llm-d：Kubernetes 原生分布式推理控制平面（2026-08-31 归档）
+整理自 [[inbox/2026-08-27-大模型推理-llm-d-K8s分布式推理]]
+- Google/NVIDIA/IBM Research/CoreWeave 共创的开源 K8s 原生分布式 LLM 推理框架，作为 vLLM/SGLang 之上的集群级控制平面（基于 Envoy/vLLM/KServe），vLLM 首届大会 Day2 由 Red Hat 主讲，Red Hat AI Inference 开放第三方 K8s 早期访问
+- 收益：输出吞吐 3×、TTFT 快 2×、tokens/s 最高 +70%；Google Vertex 上 TTFT/ITL 降 40%
+- 支持 disaggregated serving、prompt 感知路由、专家并行，Helm 一键部署到 OpenShift
+
 ## 投机解码生产落地综述（2026-07-18 归档）
 整理自 [[inbox/2026-07-18-推理-投机解码生产落地vLLM-SGLang]]
 - vLLM 支持 EAGLE/MTP/draft model/ngram 多种投机方法，EAGLE/MTP 收益最高
