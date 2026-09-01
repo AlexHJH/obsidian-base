@@ -94,3 +94,11 @@
 - TrendForce 援引 ETNews：SanDisk 为 HBF 原型产线搭建供应链，日本或为首选产地，试点产线 2H26 完成、年底投产，商业化 2027，较原路线图提前约半年
 - 韩国 JK Materials 完成 HBF 用高性能 KrF 聚合物（堆叠数百层 NAND 的关键材料）
 - 复用 HBM 制程生态（TSV、键合），HBM 设备/材料厂商在 HBF 中延续技术优势
+
+## Hot Chips 2026：HBF 带宽 vs 容量之辩（2026-09-01 归档）
+整理自 [[inbox/2026-08-28-HBF-HotChips带宽与容量之辩]]
+- Tom's Hardware：HBF 以 NAND 堆叠提供 ~14× HBM 容量、但带宽仅 0.6×，解决的是容量瓶颈而非带宽瓶颈
+- OCP 开放标准三档：Grade1 256GB/384GB/s、Grade2 512GB/1.536TB/s、Grade3 512GB/3.072TB/s（UCIe 2.0）
+- 带宽敏感负载下大容量无法弥补带宽缺口，仅适合带宽不敏感的大容量推理场景
+- 375 层 4D NAND、能效 2.5×；SK hynix 提 HBM+HBF 混合架构加速 LLM 推理
+- 关联 [[#LLM 推理应用]]、[[#OCP 首版技术规范发布（2026-08-11 归档）]]

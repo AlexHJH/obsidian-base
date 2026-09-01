@@ -187,3 +187,12 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - SOSP 2026（9/29–10/2 布拉格）完整录用名单公开，camera-ready 8/28 截止；新见论文：ProbeFS（上交 DNA 文件系统）、QProf（Google 仓库级成本剖析）、RPCShield（微服务级联故障）、Welder（控制面活性验证）、XTRA（CXL 缓存一致性 + 事务并发）、M2K（CUDA kernel 验证）
 - AI/LLM 系统方向延续主力（CrystalLLM、TensorDex、Linux AGX、LMTracer 等，见 [[#SOSP 2026 录用论文：AI/LLM 系统成主角（2026-08-24 归档）]]）
 - MLSys 2027 CFP 已上线：投稿 10/31 截止、2027 年 5 月举办；工业 Track 继续，Artifact Evaluation 对标 ASPLOS/CGO/PLDI
+
+## SOSP 2026 录用全集：AI 系统与编译器新论文（2026-09-01 归档）
+整理自 [[inbox/2026-08-28-MLSys顶会-SOSP2026完整录用名单-AI系统论文]]
+- 第 32 届 SOSP（9/29–10/2 布拉格）62 篇录用论文完整名单公开，camera-ready 8/28 截止
+- Guiding Agentic GPU Kernel Optimization（HKUST×Stanford）：数据流不变量引导 LLM 做 GPU 内核优化，编译器与 Agent 深度结合
+- Wavel + MeshRT（爱丁堡×微软）：面向晶圆级加速器的编译系统与运行时，编译期治理低延迟高吞吐推理
+- Taming Dynamism on GPUs（上交）：跨 SM 内核融合 + JIT 归约；Democratizing MoE（USC×DeepMind）：免屏障专家并行解码
+- ACDC（上交×阿里）：离线 LLM 推理剖析优化；TuxBot（哥大×IBM）：LLM 语义感知 OS 在线调优
+- 关联 [[#SOSP 2026 录用全集公开 + MLSys 2027 CFP（2026-08-30 归档）]]、[[AI编译器2026格局]]
