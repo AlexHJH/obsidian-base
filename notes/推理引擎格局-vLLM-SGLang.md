@@ -218,3 +218,9 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 路线图：Flat Model / Model Runner V2 迁移、多级 KV offload（显存→CPU→SSD）分离式 serving、投机解码冲 1000+ TPS + 量化 KV 压缩
 - NVIDIA 专场：FlashInfer kernel + Dynamo 分布式全栈优化 DeepSeek/MiniMax；Intel 专场：MXFP8/MXFP4 亚 8-bit + prefill/decode 解耦到专用节点
 - 四大赛道：硬件后端、agentic serving、训练、生产推理
+
+## PARS：排序学习近似 SJF 缓解头阻塞（2026-09-02 归档）
+整理自 [[inbox/2026-08-29-大模型推理-PARS排序调度降HOL阻塞]]
+- ISC High Performance 2026 论文：用 pairwise learning-to-rank（margin ranking loss）预测请求输出长度相对排序，近似最短作业优先(SJF)，缓解 FCFS 头阻塞(HOL)
+- 精确预测长度不可行但预测排序可行；无缝集成 vLLM，后台约 1GB 开销，跨多 LLM 与真实数据显著降延迟（含 reasoning 负载）
+- Cross-Model PARS 验证跨模型泛化

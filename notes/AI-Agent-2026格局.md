@@ -226,3 +226,9 @@
 - LangGraph 8 月发布 node caching、deferred nodes、pre/post hooks、content-block streaming
 - 四维评分：持久状态+HITL、MCP+A2A 覆盖、可观测性、首发部署时间；关联 [[#2026 年中格局：LangGraph 居首]]
 - 互操作优先场景选型：微软 MSAF（MCP+A2A 双原生）、Google ADK 2.0、Claude SDK + A2A shim（整理自 [[inbox/2026-08-27-AI-Agent-微软Agent-Harness与Claude-SDK层级扩展]]）
+
+## Anthropic Agent 工具全线 GA：computer use / 浏览器工具 / Skills（2026-09-02 归档）
+整理自 [[inbox/2026-08-29-AI-Agent-Anthropic-Agent工具GA]]
+- 8/19 Anthropic 一次性将 computer use、浏览器工具 browser_toolset_20260801、Files API、Agent Skills API 移出 beta 生产可用，Agent 工具栈进入「生产级」
+- browser use 读页面无障碍树/表单/标签页，computer use 控虚拟桌面；Files API 支持上传引用+过期；Agent Skills 预置 pptx/xlsx/docx/pdf 四类技能
+- 关联 [[#MCP 协议]]、[[#OWASP Agentic Applications Top 10]]
