@@ -102,3 +102,10 @@
 - 带宽敏感负载下大容量无法弥补带宽缺口，仅适合带宽不敏感的大容量推理场景
 - 375 层 4D NAND、能效 2.5×；SK hynix 提 HBM+HBF 混合架构加速 LLM 推理
 - 关联 [[#LLM 推理应用]]、[[#OCP 首版技术规范发布（2026-08-11 归档）]]
+
+## NVIDIA 发布 NVHBM：内存控制器塞进 HBM 底座（2026-09-03 归档）
+整理自 [[inbox/2026-08-30-HBF-NVIDIA-NVHBM定制HBM]]
+- 8/26 NVIDIA 扩展 NVLink Fusion 推出 NVHBM：自研内存控制器集成进 HBM base die，替代「控制器在 XPU die」架构，面向半定制 XPU（Amazon Annapurna Labs 首个合作）
+- 宣称较 HBM4E 带宽 +30%、功耗 -15%，主芯片省 25% die 面积用于计算；预计 2028 Feynman 代 GPU 率先采用
+- 定位非 HBM 替代品，而是 NVLink Fusion 半定制客户的新「构建块」；与 HBF 互补——NVHBM 压榨带宽/能效、HBF 主打容量
+- 关联 [[AI芯片推理硬件2026全景]]
