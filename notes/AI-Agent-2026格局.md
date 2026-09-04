@@ -232,3 +232,10 @@
 - 8/19 Anthropic 一次性将 computer use、浏览器工具 browser_toolset_20260801、Files API、Agent Skills API 移出 beta 生产可用，Agent 工具栈进入「生产级」
 - browser use 读页面无障碍树/表单/标签页，computer use 控虚拟桌面；Files API 支持上传引用+过期；Agent Skills 预置 pptx/xlsx/docx/pdf 四类技能
 - 关联 [[#MCP 协议]]、[[#OWASP Agentic Applications Top 10]]
+
+## Claude Finance + Claude Code 编排化（2026-09-04 归档）
+整理自 [[inbox/2026-08-31-AI-Agent-Claude-Finance金融Agent与编排平台]]
+- Anthropic 8 月下旬发布 Claude Finance：10 个预制金融工作流 Agent（pitch builder、会议准备、市场研究、月末关账等），三种部署方式（Cowork/Claude Code 插件、托管 Agent）
+- Claude Code 新增 /goal 定义跨会话目标 + Agent View 统一监控多会话，从对话工具转向多会话编排平台；另增 restricted mode、跨会话消息、企业额度
+- Opus 4.8 Dynamic Workflows：单会话并行规划数百子 Agent，支撑万行级代码库迁移
+- 关联 [[#Claude Platform 8 月治理能力 + Managed Agents 三大功能]]

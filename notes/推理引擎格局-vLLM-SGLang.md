@@ -224,3 +224,11 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - ISC High Performance 2026 论文：用 pairwise learning-to-rank（margin ranking loss）预测请求输出长度相对排序，近似最短作业优先(SJF)，缓解 FCFS 头阻塞(HOL)
 - 精确预测长度不可行但预测排序可行；无缝集成 vLLM，后台约 1GB 开销，跨多 LLM 与真实数据显著降延迟（含 reasoning 负载）
 - Cross-Model PARS 验证跨模型泛化
+
+## vLLM Q3 2026 路线图：冲刺 1000 TPS + Agent 前缀缓存（2026-09-04 归档）
+整理自 [[inbox/2026-08-31-大模型推理-vLLM-Q3路线图]]
+- `--performance-mode inferactivity` 把 1000 TPS 变成通用目标，补齐 DFlash/DFlare/DSpark 三种 draft 架构；动态投机解码降低验证开销
+- 长上下文：滑动窗口/稀疏/混合线性 draft + 量化 KV cache，多种上下文并行
+- Agent 前缀缓存：Session-ID/Correlation-ID hints，支持预取/驱逐/选择性 offload
+- 支持 KV Events（Mooncake 等 P2P 分布式 KV cache）；AMD 侧补 DSpark + Quark
+- 关联 [[#vLLM 首届大会：State of vLLM 2026 路线图]]
