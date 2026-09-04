@@ -232,3 +232,10 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - Agent 前缀缓存：Session-ID/Correlation-ID hints，支持预取/驱逐/选择性 offload
 - 支持 KV Events（Mooncake 等 P2P 分布式 KV cache）；AMD 侧补 DSpark + Quark
 - 关联 [[#vLLM 首届大会：State of vLLM 2026 路线图]]
+
+## HeteroPanacea：Agentic 推理分离式服务仿真（2026-09-04 归档）
+整理自 [[inbox/2026-09-04-大模型推理-HeteroPanacea分离仿真]]
+- arXiv 2608.03741 提出分离式服务仿真框架，从①分离量化 ②自动片内/片间并行调度 ③PDAF（prefill-decode-attention-FFN）NPU 异构三个维度做系统级仿真，回答异构系统各组件「该配什么硬件」
+- 确认 PD 分离收益：相较传统 GPU 服务吞吐最高 +75%；4 路 PDAF 分离在自定义 NPU 假设下跨模型提升最稳定
+- 动因：Agentic 推理的 prefill/decode 行为差异大，单一同构 GPU 难支撑，Vera-Rubin（GPU+Groq LPU）等异构平台成趋势
+- 关联 [[#Prefill-Decode 分离架构（2026）]]、[[HBF-NAND-AI推理内存2026]]
