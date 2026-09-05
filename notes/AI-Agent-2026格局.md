@@ -239,3 +239,15 @@
 - Claude Code 新增 /goal 定义跨会话目标 + Agent View 统一监控多会话，从对话工具转向多会话编排平台；另增 restricted mode、跨会话消息、企业额度
 - Opus 4.8 Dynamic Workflows：单会话并行规划数百子 Agent，支撑万行级代码库迁移
 - 关联 [[#Claude Platform 8 月治理能力 + Managed Agents 三大功能]]
+
+## MCP 无状态规范 + 8/22 路线图：渐进发现与 Agent 鉴权（2026-09-05 归档）
+整理自 [[inbox/2026-09-02-AI-Agent-MCP无状态规范与路线图]]
+- MCP 7/28 发布史上最大规范修订（无状态核心、去掉握手与 Session），8/22 维护者发布新路线图，规划「渐进发现」「Agent 身份鉴权」等五大方向，面向企业级多智能体规模化部署
+- 7/28 规范：协议层无状态（可水平扩展），`server/discover` 前置能力发现、列表结果可缓存；Tasks 重做、MCP Apps/Tasks 转正、OAuth 收紧；MCP 服务超 10000+，OpenAI/Google/微软/AWS 均已接入
+- 8/22 路线图五大方向：agentic 消息原语、HTTP 原生传输统一、Agent 身份与企业安全、原语改进、SDK 开发体验
+- 关联 [[#MCP 协议]]、[[#MCP/A2A/ACP 协议栈分层共识]]
+
+## Claude 开发者平台 8/27 更新：Files/Skills SDK 对齐 + 双密钥（2026-09-05 归档）
+整理自 [[inbox/2026-09-02-AI-Agent-Claude开发者平台8月更新]]
+- 8/27 Claude 开发者平台 SDK 对 files/skills 行为对齐，统一 beta 与非 beta 形态（BetaSkill→BetaContainerSkill、技能删除行为调整）
+- Console 新增 personal keys 与 service account keys，便于 workspace 级访问与账户追踪；同期 Claude Code 新增受限模式、跨会话消息、企业用量配额

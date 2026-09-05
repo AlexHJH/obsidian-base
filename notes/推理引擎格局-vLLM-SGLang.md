@@ -239,3 +239,10 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 确认 PD 分离收益：相较传统 GPU 服务吞吐最高 +75%；4 路 PDAF 分离在自定义 NPU 假设下跨模型提升最稳定
 - 动因：Agentic 推理的 prefill/decode 行为差异大，单一同构 GPU 难支撑，Vera-Rubin（GPU+Groq LPU）等异构平台成趋势
 - 关联 [[#Prefill-Decode 分离架构（2026）]]、[[HBF-NAND-AI推理内存2026]]
+
+## NVIDIA Dynamo 1.0 GA：分离式推理框架量产（2026-09-05 归档）
+整理自 [[inbox/2026-09-02-大模型推理-NVIDIA-Dynamo-1.0量产]]
+- NVIDIA Dynamo 1.0（GTC 3/16 发布）将 prefill/decode 分离式 serving 推向量产：开源分布式推理框架，支持 vLLM/SGLang/TensorRT-LLM，GB200 NVL72 上最高 7× 吞吐
+- 分离式 serving：prefill/decode 拆到独立 worker 池，智能路由 + NIXL 跨节点 KV cache 传输；四大组件 Planner/智能路由器/分布式 KV cache 管理器/NIXL，7.9k stars，Google Cloud 已发布 recipe
+- SemiAnalysis InferenceX 基准：DeepSeek R1（FP4）吞吐最高 7×；Grove API 简化 K8s 部署与拓扑感知调度
+- 关联 [[#Prefill-Decode 分离架构（2026）]]
