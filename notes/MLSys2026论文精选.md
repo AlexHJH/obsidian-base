@@ -216,3 +216,10 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 三原则（只追关键同步点/关键路径/异常时详追）+ 动态回归 roofline 模型 + 相关性诊断定位根因
 - 追踪开销较替代方案降 97.8%，已在阿里生产落地，诊断 19 类根因数百次异常
 - 关联 [[推理引擎格局-vLLM-SGLang]]
+
+## ASPLOS 2026：PIM 存内计算 + KV Cache 卸载成 LLM 推理新焦点（2026-09-06 归档）
+整理自 [[inbox/2026-09-03-MLSys顶会-ASPLOS2026-PIM与KV-Cache卸载]]
+- REPA（SJTU）：可重构 PIM 联合加速 KV Cache 卸载与处理，co-design 数据搬移与计算
+- STARC（RPI/UMass/IBM）：token 选择性访问 + 重映射/聚类，正交于量化与淘汰式压缩
+- ZipServ（港科广/哈工深/港科）：硬件感知无损压缩降内存占用且不损精度
+- 趋势：PIM 与 KV Cache 卸载同频 HBF/CXL 内存外移；关联 [[HBF-NAND-AI推理内存2026]]、[[AI芯片推理硬件2026全景]]
