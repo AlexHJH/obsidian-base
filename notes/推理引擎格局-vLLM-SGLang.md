@@ -246,3 +246,10 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 分离式 serving：prefill/decode 拆到独立 worker 池，智能路由 + NIXL 跨节点 KV cache 传输；四大组件 Planner/智能路由器/分布式 KV cache 管理器/NIXL，7.9k stars，Google Cloud 已发布 recipe
 - SemiAnalysis InferenceX 基准：DeepSeek R1（FP4）吞吐最高 7×；Grove API 简化 K8s 部署与拓扑感知调度
 - 关联 [[#Prefill-Decode 分离架构（2026）]]
+
+## AgentSysBench：Agentic 负载与 LLM 推理的系统级差异（2026-09-08 归档）
+整理自 [[inbox/2026-09-04-大模型推理-AgentSysBench表征]]
+- arXiv 2608.15127 用 10 个代表性 Agent 应用 + 统一系统级插桩刻画 Agentic 负载与常规 LLM 推理的差异，给出 6 条区分性特征与 4 项可落地优化
+- 非 LLM 组件主导延迟（10 个应用里 5 个），会话沙箱内存峰值 28GB；辅助 LLM 调用与上下文开销成「控制面税」
+- 优化收益：任务感知服务降延迟 29–40%、通信感知放置最高 4.5×、状态卸载省内存 4.6×、工具结果缓存去 35.2% 冗余搜索
+- 关联 [[AI-Agent-2026格局]]、[[#Prefill-Decode 分离架构（2026）]]

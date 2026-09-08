@@ -251,3 +251,10 @@
 整理自 [[inbox/2026-09-02-AI-Agent-Claude开发者平台8月更新]]
 - 8/27 Claude 开发者平台 SDK 对 files/skills 行为对齐，统一 beta 与非 beta 形态（BetaSkill→BetaContainerSkill、技能删除行为调整）
 - Console 新增 personal keys 与 service account keys，便于 workspace 级访问与账户追踪；同期 Claude Code 新增受限模式、跨会话消息、企业用量配额
+
+## Cloudflare Agents Week：MCPv2 与统一 AI 控制平面（2026-09-08 归档）
+整理自 [[inbox/2026-09-04-AI-Agent-Cloudflare-AgentsWeek-MCPv2]]
+- Cloudflare 8 月 Agents Week 发布下一代 MCP（MCPv2）、Cloudflare AI Search 与统一 AI 控制平面，补齐 Agent 的工具/网络/身份/观测底座
+- MCPv2 简化 agentic 应用部署与横向扩展；WriteGuard 对 MCP Server 做细粒度控制、拦截高风险工具调用
+- Identity-aware AI Gateway（beta）+ User Insights 把 AI 活动归因到真实用户、标记内鬼风险；统一控制平面一个钱包/面板调任意模型，下一步 model-first routing
+- 关联 [[#MCP 无状态规范 + 8/22 路线图：渐进发现与 Agent 鉴权（2026-09-05 归档）]]（MCP 基建侧同向演进）
