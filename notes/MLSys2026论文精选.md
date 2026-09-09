@@ -223,3 +223,11 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - STARC（RPI/UMass/IBM）：token 选择性访问 + 重映射/聚类，正交于量化与淘汰式压缩
 - ZipServ（港科广/哈工深/港科）：硬件感知无损压缩降内存占用且不损精度
 - 趋势：PIM 与 KV Cache 卸载同频 HBF/CXL 内存外移；关联 [[HBF-NAND-AI推理内存2026]]、[[AI芯片推理硬件2026全景]]
+
+## MLSys 2026 推理服务新论文：调度与能效优化（2026-09-09 归档）
+整理自 [[inbox/2026-09-05-MLSys顶会-MLSys2026-serving新论文]]
+- 主线从「更快」转向「更省、更稳」：能耗感知调度、运行时量化层交换、prefill 长度感知调度成为新方向
+- MorphServe：运行时量化「层交换」+ KV cache 弹性缩放，负载感知降本
+- BEAM：SLO 约束下资源-功耗联合优化，能效优先的 LLM 推理
+- PLA-Serve：prefill 长度感知调度；BOute：异构 LLM/GPU 多目标贝叶斯寻优
+- 关联 [[推理引擎格局-vLLM-SGLang]]
