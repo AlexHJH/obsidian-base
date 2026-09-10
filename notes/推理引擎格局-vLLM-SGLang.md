@@ -77,6 +77,12 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 低 QPS 内存瓶颈场景收益最大，高 QPS 算力瓶颈收益递减
 - llama.cpp 也支持投机解码，本地部署可用小 draft 模型加速
 
+## DSpark：置信度驱动的投机解码（2026-09-06 归档）
+整理自 [[inbox/2026-09-06-大模型推理-SGLang-DSpark置信度投机解码]]
+- SGLang 发布 DSpark：分块半自回归起草，按 draft 自身置信度动态决定验证窗口大小，取代固定 draft 长度
+- DeepSeek-V4-Pro 于 TP8 B300（bs=1）达 383.7 tok/s、accept length ~5；用 `--speculative-algorithm DSPARK` 启用
+- 同期推 SGLang-Diffusion 实时视频生成；关联 [[#投机解码生产落地综述]]
+
 ## EAGLE-3 自推测解码（2026-06-25 归档）
 整理自 [[inbox/2026-06-25-推理-EAGLE3自推测解码]]
 - EAGLE-3 用目标模型自身内部状态做 self-speculation，省去独立 draft 模型显存

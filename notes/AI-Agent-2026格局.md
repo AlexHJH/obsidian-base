@@ -258,3 +258,10 @@
 - MCPv2 简化 agentic 应用部署与横向扩展；WriteGuard 对 MCP Server 做细粒度控制、拦截高风险工具调用
 - Identity-aware AI Gateway（beta）+ User Insights 把 AI 活动归因到真实用户、标记内鬼风险；统一控制平面一个钱包/面板调任意模型，下一步 model-first routing
 - 关联 [[#MCP 无状态规范 + 8/22 路线图：渐进发现与 Agent 鉴权（2026-09-05 归档）]]（MCP 基建侧同向演进）
+
+## A2A 并入 AAIF：两大协议统一治理（2026-09-06 归档）
+整理自 [[inbox/2026-09-06-AI-Agent-A2A-MCP-AAIF统一治理]]
+- 8/20 Google 把 A2A 正式移交 Linux Foundation 旗下 Agentic AI Foundation (AAIF)，与 Anthropic 的 MCP 归入同一中立治理，两大开放 Agent 标准首次统一
+- 分工互补：MCP 管 agent↔工具垂直集成，A2A 管 agent↔agent 水平通信；第三层 WebMCP 正在成型，MCP+A2A+WebMCP 三层协议栈成共识
+- 8 家白金赞助：AWS/Anthropic/Block/Bloomberg/Cloudflare/Google/Microsoft/OpenAI；成员从 3 月 49 家增至 250+
+- 关联 [[#MCP/A2A/ACP 协议栈分层共识]]
