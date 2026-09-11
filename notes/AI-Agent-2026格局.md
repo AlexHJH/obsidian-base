@@ -265,3 +265,11 @@
 - 分工互补：MCP 管 agent↔工具垂直集成，A2A 管 agent↔agent 水平通信；第三层 WebMCP 正在成型，MCP+A2A+WebMCP 三层协议栈成共识
 - 8 家白金赞助：AWS/Anthropic/Block/Bloomberg/Cloudflare/Google/Microsoft/OpenAI；成员从 3 月 49 家增至 250+
 - 关联 [[#MCP/A2A/ACP 协议栈分层共识]]
+
+## MCP 2026-07-28 规范细节：无状态协议核心落地（2026-09-11 归档）
+整理自 [[inbox/2026-09-08-AI-Agent-MCP无状态协议核心]]
+- 史上最大改版：从双向有状态转为 request/response 无状态——移除 initialize 握手与 Mcp-Session-Id，任何请求可落到任意实例（round-robin LB 即可，无需共享存储），换取可靠性与扩展性
+- 请求自描述：携带 _meta（协议版本/身份/能力），新增可选 server/discover RPC；MRTR 取代需长连接的 server 主动调用（sampling/elicitation）
+- 工程化配套：头路由（Mcp-Method / Mcp-Name）、列表结果可缓存（ttlMs/cacheScope）、授权硬化（RFC 9207 iss 校验，堵授权服务器混用漏洞）
+- 生态量级：Tasks 正式进入扩展框架；SDK 月下载近 5 亿，Python/TS 累计破 10 亿
+- 关联 [[#MCP 无状态规范 + 8/22 路线图：渐进发现与 Agent 鉴权（2026-09-05 归档）]]、[[#Cloudflare Agents Week：MCPv2 与统一 AI 控制平面（2026-09-08 归档）]]
