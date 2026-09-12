@@ -129,3 +129,11 @@
 - GPU IP 公司 OXMIQ Labs（Raja Koduri）建模 72-GPU 机架跑 Kimi-K2（1T 参数 FP4）：全 HBM 20.7TB/1584TB/s；全 HBF 容量 14×（294.9TB）但带宽降至 922TB/s；混合 89.3TB/279–1418TB/s
 - 结论：HBF 更适合超大但偏冷的数据集，多数负载无法替代 HBM；vLLM 需专门改造（显存分配/数据放置/预取/闪存寿命监控），需 HBF + 加速器 + 推理框架三方协同
 - HBF 按 SSD 式大块对齐 DMA 访问；与 [[#HBF 落地之痛：块级访问与软件栈挑战（2026-09-06 归档）]]、[[#论文：探索 HBF 用于现代 LLM 推理的机会与挑战（2026-09-01 归档）]]（arXiv 2608.13868 同源复核）互证
+
+## HBF 定位收敛：三档规格确认 +「HBM for the rack, HBF for the box」（2026-09-09 归档）
+整理自 [[inbox/2026-09-09-HBF-OXMIQ-HBM-for-rack-HBF-for-box]]
+- 三档规格收敛：Grade1 8-Hi 256/384GB、384GB/s（8GT/s UCIe）；Grade2 512GB、1.536TB/s（16GT/s）；Grade3 512GB、3.072TB/s（32GT/s UCIe 2.0）；读块 64B–4KB、写/页 4KB
+- 定位：容量瓶颈场景 HBF 让单卡承载整模型（1 GPU 顶 8 GPU HBM），但带宽瓶颈场景 HBM 的 token 成本更优 →「HBM for the rack, HBF for the box」
+- MoE 是天然适配点：Kimi-K3 1.56TB 权重中 1.45TB（93%）为专家权重（写一次、读少量）→ 专家放 HBF、热权重留 HBM
+- 纠正误读「廉价内存 ≠ 廉价 token」：并发与生成率上升后 HBF 低带宽成为瓶颈，全 HBM 机架每 token 成本反而更低
+- 关联 [[#Hot Chips 2026：OXMIQ 冷思考——HBF 是「容量点」而非 HBM 廉价版（2026-09-09 归档）]]

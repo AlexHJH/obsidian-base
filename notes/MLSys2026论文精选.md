@@ -231,3 +231,10 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - BEAM：SLO 约束下资源-功耗联合优化，能效优先的 LLM 推理
 - PLA-Serve：prefill 长度感知调度；BOute：异构 LLM/GPU 多目标贝叶斯寻优
 - 关联 [[推理引擎格局-vLLM-SGLang]]
+
+## SOSP 2026 完整录用：能耗感知调度与 Agent 原生文件系统（2026-09-09 归档）
+整理自 [[inbox/2026-09-09-MLSys顶会-SOSP2026完整录用AI系统新论文]]
+- 62 篇录用名单公开（9/29–10/2 布拉格），新增方向：能源感知调度、加密推理、Agent 原生文件系统、CXL 内存
+- Beyond Utilization（UT Austin）：推理 GPU 共享从「利用率」转向能耗感知调度；Cerium（CMU×NVIDIA）：TB 级加密推理多 GPU 框架；DiFlow（阿里×港科）：文生图扩散微服务编排
+- Don't Let AI Agents YOLO Your Files（Wisconsin×MSR）：Agent 原生文件系统；Borges（UT Austin×Anthropic）：CXL 内存/SSD 混合共享日志；AgileLog（UIUC）：数据流 Agent 可分叉共享日志
+- Morphable Kernels（清华）：GPU 多任务形态可塑内核；关联 [[#SOSP 2026 录用全集：AI 系统与编译器新论文（2026-09-01 归档）]]
