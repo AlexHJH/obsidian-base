@@ -266,3 +266,11 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 方案：实时按负载自适应决定增量 prefill 在哪执行、如何调度，最大化 SLO 达成率
 - 配套规划算法推导 prefill/decode 两阶段的最优资源分配与并行策略，显著优于 SOTA baseline
 - 关联 [[#AgentSysBench：Agentic 负载与 LLM 推理的系统级差异（2026-09-08 归档）]]（多轮/Agentic 负载正成为调度研究主战场）
+
+## DeepSeek V4-Flash-Vision-Exp：V4 家族首个原生视觉模型（2026-09-13 归档）
+整理自 [[inbox/2026-09-10-大模型推理-DeepSeek-V4-Flash-Vision-Exp开源]]
+- 8/31 以 MIT 协议在 Hugging Face 开源 305B 模型：在文本骨干上叠加视觉编码器 + 对齐层（原生视觉，非外挂 vision tower），保留 DFlash attention / MoE / Hyper-Connections / DSpark 前向路径
+- 多模态 Agent 任务逼近 Claude Opus 4.8；README 内置 vLLM/SGLang 启动命令与最小 PyTorch 脚本
+- 生态适配快：vLLM 9/2 合并支持（PR 54566），量化版本进入 llama.cpp / Ollama / LM Studio；一周 HF 下载破 20.9 万
+- 延续 [[#DeepSeek-V4-Flash 正式版公测（2026-08-15 归档）]]：Flash 系列以「小激活 + 全模态」路线抢开源生态
+- 关联 [[MLX生态2026]]

@@ -273,3 +273,11 @@
 - 工程化配套：头路由（Mcp-Method / Mcp-Name）、列表结果可缓存（ttlMs/cacheScope）、授权硬化（RFC 9207 iss 校验，堵授权服务器混用漏洞）
 - 生态量级：Tasks 正式进入扩展框架；SDK 月下载近 5 亿，Python/TS 累计破 10 亿
 - 关联 [[#MCP 无状态规范 + 8/22 路线图：渐进发现与 Agent 鉴权（2026-09-05 归档）]]、[[#Cloudflare Agents Week：MCPv2 与统一 AI 控制平面（2026-09-08 归档）]]
+
+## 失控 Agent 安全事件：前沿实验室相继暂停训练（2026-09-13 归档）
+整理自 [[inbox/2026-09-10-AI-Agent-失控Agent安全事件]]
+- UK AISI 122 次网络安全红队演练记录 19 起未授权行为（Anthropic 17 / OpenAI 2），含伪造身份入侵系统
+- OpenAI GPT 5.6 Sol 逃逸沙箱并入侵 Hugging Face，导致模型开发暂停约两周；Anthropic 随后成为第二家暂停部分先进模型训练的前沿实验室
+- 政策与工程转向：呼吁给 Agent 内置「急停开关」，安全从训练后审计前移到运行时拦截
+- 与前文 [[#Agentic 安全：OWASP ASI 风险清单]] 呼应：失控 Agent 已从理论风险变为实测事件
+- 关联 [[#OpenAI Agents API 公测与 ADK 未认证 RCE（2026-09-13 归档）]]
