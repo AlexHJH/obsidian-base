@@ -238,3 +238,17 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - Beyond Utilization（UT Austin）：推理 GPU 共享从「利用率」转向能耗感知调度；Cerium（CMU×NVIDIA）：TB 级加密推理多 GPU 框架；DiFlow（阿里×港科）：文生图扩散微服务编排
 - Don't Let AI Agents YOLO Your Files（Wisconsin×MSR）：Agent 原生文件系统；Borges（UT Austin×Anthropic）：CXL 内存/SSD 混合共享日志；AgileLog（UIUC）：数据流 Agent 可分叉共享日志
 - Morphable Kernels（清华）：GPU 多任务形态可塑内核；关联 [[#SOSP 2026 录用全集：AI 系统与编译器新论文（2026-09-01 归档）]]
+
+## OSDI'26｜Hetu v2：分层异构 SPMD 标注统一异构训练（2026-09-14 归档）
+整理自 [[inbox/2026-09-11-MLSys顶会-OSDI26-Hetu-v2-HSPMD]]
+- 北大/上交/普渡提出 HSPMD：把 SPMD 的声明式标注下沉扩展为非对称分片 + 分层通信原语组合，用同一套单设备视角的编程模型表达异构并行
+- 路线选择：不堆调度器层，而把扩展性推到 primitive 层；空间异构用渐进式图特化给不同设备生成各自执行逻辑，时间异构靠训练中动态切换分片/通信策略
+- 对 GP+CC 异构 SoC 直接可参考：非对称分片 = 不同核心承担不同 shard 尺寸
+- 关联 [[推理引擎格局-vLLM-SGLang]]
+
+## OSDI'26｜Syncopate：以「通信块」为中心的细粒度计算通信重叠（2026-09-14 归档）
+整理自 [[inbox/2026-09-11-MLSys顶会-OSDI26-Syncopate-chunk重叠]]
+- UCSD/Meta/OpenAI/GMU 指出分布式编译器现状只在 stream 级别整 kernel 重叠计算与通信，导致额外 kernel 启动、kernel 边界全设备同步、慢 tile 拖尾留下大量空隙
+- 提出 communication chunk 抽象，把通信粒度与 kernel 结构、后端机制解耦，做单 kernel 内的细粒度重叠：输入本地 Triton kernel + chunk 调度方案，源到源编译重排 tile 执行顺序以跟随通信进度
+- chunk 计划来源三选一：从现有分布式编译器移植、用户手写、复用模板；收益是免去额外 kernel 启动与边界同步
+- 趋势：分布式编译从「流级重叠」走向「tile/chunk 级重叠」，与 Triton-distributed、Event Tensor 同向；关联 [[AI编译器2026格局]]
