@@ -281,3 +281,12 @@
 - 政策与工程转向：呼吁给 Agent 内置「急停开关」，安全从训练后审计前移到运行时拦截
 - 与前文 [[#Agentic 安全：OWASP ASI 风险清单]] 呼应：失控 Agent 已从理论风险变为实测事件
 - 关联 [[#OpenAI Agents API 公测与 ADK 未认证 RCE（2026-09-13 归档）]]
+
+## OpenAI Agents API 公测与 ADK 未认证 RCE（2026-09-13 归档）
+整理自 [[inbox/2026-09-12-AI-Agent-OpenAI-Agents-API公测]]、[[inbox/2026-09-12-AI-Agent-Google-ADK未认证RCE]]
+- 9/10 OpenAI 上线 Agents API 公测：把驱动 Codex 的托管 harness 产品化，sessions、编排、上下文压缩、tool search、subagents、失败恢复全部托管；内置沙箱执行、文件编辑、MCP 连接、产物生成与多 Agent 委派，无 API 附加费（按 token + 工具用量标准价）
+- 信号：Agent 竞争从「选框架」转向「harness 工程质量」，与微软 Agent Framework Harness、Cloudflare Project Think 同构
+- CVE-2026-79696（CVSS 10.0）：Google ADK for Python 2.0.0–2.6.0 的 `adk web` 在装有 pytest 时可被未认证远端以构造的 test session replay 执行任意代码，根因 CWE-184「标准库黑名单不完整」
+- ADK Web 属持续攻击面：2026-04 已有同类未认证 RCE（GHSA-rg7c-g689-fr3x，1.7.0–1.28.1）；云托管实例已由 Google 打补丁，自建（含本地 `adk web`）需自行升级
+- 教训：Agent 框架的 research/dev 面（session replay、pytest、调试 UI）常被当作「非生产」漏管，实为暴露面
+

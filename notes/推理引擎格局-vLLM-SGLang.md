@@ -272,5 +272,15 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 8/31 以 MIT 协议在 Hugging Face 开源 305B 模型：在文本骨干上叠加视觉编码器 + 对齐层（原生视觉，非外挂 vision tower），保留 DFlash attention / MoE / Hyper-Connections / DSpark 前向路径
 - 多模态 Agent 任务逼近 Claude Opus 4.8；README 内置 vLLM/SGLang 启动命令与最小 PyTorch 脚本
 - 生态适配快：vLLM 9/2 合并支持（PR 54566），量化版本进入 llama.cpp / Ollama / LM Studio；一周 HF 下载破 20.9 万
+- 关联 [[#AMPD：多轮推理场景的 PD 分离自适应调度（ICML 2026，2026-09-11 归档）]]
 - 延续 [[#DeepSeek-V4-Flash 正式版公测（2026-08-15 归档）]]：Flash 系列以「小激活 + 全模态」路线抢开源生态
 - 关联 [[MLX生态2026]]
+
+## TensorRT-LLM 移除 TensorRT 后端 & vLLM 多级 KV 卸载（2026-09-15 归档）
+整理自 [[inbox/2026-09-12-大模型推理-TensorRT-LLM移除TensorRT后端]]、[[inbox/2026-09-12-大模型推理-vLLM多级KV-Cache卸载]]
+- TensorRT-LLM 1.2 把 PyTorch 定为唯一执行后端，AOT 编译的 TensorRT 后端彻底移除：`LLM(backend="tensorrt")` 直接抛 ValueError，trtllm-build/refit/prune CLI、各模型 convert_checkpoint.py、tensorrt pip 依赖一并删除（v1.3.0rc20 已预告这是最后支持该后端的版本）
+- 含义：NVIDIA 自家引擎转向即时执行 + 运行时 autotuning，与 vLLM/SGLang 的工程模型趋同，shape 特化 engine build 的收益让位于可维护性；1.2 同步新增单节点 DGX Spark 支持（beta）
+- vLLM 把原生 KV 卸载从「GPU→CPU DRAM」单跳扩为多级：新增 TieringManager 让主机内存从终点变中间层，二级层可选文件系统 / 对象存储（S3）/ KV Store / 远程节点，被淘汰 KV 重载而非重算
+- 跨 TP rank 统一：CPU DRAM 中的 KV 一律以 TP rank 1 的规范形式存放，支持跨 rank 卸载与共享；tier 可标 `locality: LOCAL|REMOTE`，llm-d 的 FS backend 已把 KV block 落成共享文件系统文件实现跨副本复用
+- 意义：长上下文 / Agent 多轮负载下，缓存容量与命中率取代算力成为吞吐主变量——与 [[#AgentSysBench：Agentic 负载与 LLM 推理的系统级差异（2026-09-08 归档）]] 的「控制面税」互为因果
+
