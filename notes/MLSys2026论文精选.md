@@ -252,3 +252,21 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 提出 communication chunk 抽象，把通信粒度与 kernel 结构、后端机制解耦，做单 kernel 内的细粒度重叠：输入本地 Triton kernel + chunk 调度方案，源到源编译重排 tile 执行顺序以跟随通信进度
 - chunk 计划来源三选一：从现有分布式编译器移植、用户手写、复用模板；收益是免去额外 kernel 启动与边界同步
 - 趋势：分布式编译从「流级重叠」走向「tile/chunk 级重叠」，与 Triton-distributed、Event Tensor 同向；关联 [[AI编译器2026格局]]
+- 关联 [[推理引擎格局-vLLM-SGLang]]
+
+## MLSys 2026 概况：Competition Track 与 2027 投稿窗口（2026-09-13 归档）
+整理自 [[inbox/2026-09-13-MLSys顶会-MLSys2026论文竞赛与2027投稿窗口]]
+- 第九届 MLSys（5/18–22，Bellevue WA）：General Chair Luis Ceze（UW/NVIDIA），Program Chair Zhihao Jia（CMU）；新增独立 Industry Track CFP，并首次设 Competition Track
+- 竞赛赛道暴露硬件厂商真实诉求：AWS Trainium2/3 MoE Kernel Challenge、Google Graph Scheduling Competition、NVIDIA FlashInfer AI Kernel Generation Contest（AI 生成 kernel 成正式比赛项目）
+- 产业论文示例：SAKURA ONE 用 800GbE + SONiC 构建开放以太网 AI HPC 集群，并分析单租户 LLM 开发环境下的负载动态
+- 2027 周期：投稿开放 10/10/26、截止 10/30/26、通知 2/28/27；2026 session 录像因硬盘运输丢失无法恢复
+- 关联 [[#MLSys 2027 CFP 与 OSDI'26 工业 Track（2026-09-11 归档）]]
+
+## OSDI'26 录用 136/681（20.0%）与调度侧反直觉结果（2026-09-13 归档）
+整理自 [[inbox/2026-09-13-MLSys顶会-OSDI26-20%录用率-LLM系统方向]]
+- 录用率 20.0%；规则变化：新增 Operational Systems 轨道（生产系统运维论文有独立席位）、取消 author response、用 conditional accept 取代 revise-and-resubmit
+- 长上下文 KV 管理：Strata（SGLang 内落地）、ECHO（原生稀疏注意力 KV 卸载 + 无损预取，2.1×）、No Buffer No Bottleneck（零拷贝 KV 卸载）三条路线并列
+- 调度反直觉：Simple Is Better（「乘法可能就够了」的请求调度）；Prism 用 GPU 显存 ballooning 做多 LLM 混合服务；成本导向的资源高效服务成为独立 session
+- 内存分层：OBASE 指出「热对象碎片化」——活跃页中最多 97% 字节是冷却不可回收的；用编译器-运行时的对象感知地址空间重排（指针插桩 + 无锁对象迁移）让未改动的 kswapd/TMO/TPP/Memtis 生效，页利用率 2–4×、内存占用最多降 70%、开销仅 2–5%
+- GPU 编译：Optimal Software Pipelining and Warp Specialization for Tensor Core GPUs（Stanford + NVIDIA）把 SWP 与 warp specialization 的组合求解自动化
+- 关联 [[#Strata：长上下文 LLM 分层缓存框架（OSDI'26，2026-08-15 归档）]]、[[推理引擎格局-vLLM-SGLang]]
