@@ -262,6 +262,23 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 2027 周期：投稿开放 10/10/26、截止 10/30/26、通知 2/28/27；2026 session 录像因硬盘运输丢失无法恢复
 - 关联 [[#MLSys 2027 CFP 与 OSDI'26 工业 Track（2026-09-11 归档）]]
 
+## OSDI'26 训练可靠性专场：SDC 表征与角色级容错（2026-09-17 归档）
+整理自 [[inbox/2026-09-17-MLSys顶会-OSDI26-SDC静默损坏与训练可靠性]]
+- 场次「Training Reliability and Silent Errors」四篇串成表征→检测→定位→恢复链路；核心结论：合成微基准漏掉 60%+ 缺陷设备，ECC/温度保护抓不到逻辑级 bit flip
+- **SDCs in the Wild**（SJTU+字节 Seed，Operational Systems）：表征生产集群捕获的 23 块 SDC 缺陷 GPU——不只出现在新卡（多因老化）、高度数据依赖且单元特定（通过通用压测的卡在特定训练输入下失败）；SDCHunter 改用「复现触发失败的确切负载+输入数据」诊断，字节部署缓解 40 起事件
+- **AEGIS**（清华+字节）：cSensor–cVerifier 两阶段解耦（轻量感知 + 确定性验证），3.5×10⁷ GPU 小时部署发现 18 起真实 SDC/13 块坏卡，开销 0.86%
+- **RobustRL**（浙大）：RL 后训练引入角色级故障隔离（trainer/rollout/管理角色为独立子任务），只恢复失败角色而非整任务重启；Detect-Restart-Reconnect + UCX 动态点对点通信替代静态集合通信；256 GPU/10% 故障注入下 ETTR >80%（ByteRobust 60%），端到端快 8.4–17.4%
+- 趋势：可靠性从「整任务重启」走向「角色/单元级隔离 + 用真实负载复现定位」；关联 [[AI芯片推理硬件2026全景]]
+
+## OSDI'26 RL 后训练系统集群：分离架构带来的新系统层（2026-09-17 归档）
+整理自 [[inbox/2026-09-17-MLSys顶会-OSDI26-RL后训练系统集群]]
+- 6 篇扎堆（Weave/RollArt/RLinf/DynaRL/Seer/RobustRL），共同前提是 rollout（带宽密集）与训练（算力密集）物理分离到各自集群；分离后的依赖气泡、硬件错配、长尾延迟成为与算法正交的独立议题
+- **Weave**（HKUST+阿里）：co-execution group 把集群切为隔离 locality domain，组间保守随机规划做放置、组内可证明最优轮转调度，residency 约束让巨型模型状态驻留主机内存实现 warm-start 切换；328 H20+328 H800 成本效率 1.84×/1.38×，100% SLO
+- **RollArt**（HKUST+通义）：阶段-硬件匹配（prefill→算力优化 GPU、decode→带宽优化 GPU、环境→CPU 集群），轨迹级解耦 rollout，stateless reward 卸载 serverless，staleness-bounded 异步权重同步；训练时间降 1.31–2.05×，阿里 3000+ GPU 训百亿级 MoE 供 Qoder
+- **Seer**（月之暗面+清华）：同 prompt 请求的输出长度/模式高度相似 → divided rollout + context-aware 调度 + 自适应分组投机解码；rollout 吞吐 2.04×，长尾延迟降 72–94%
+- **RLinf**（清华/无问芯穹）：M2Flow 把 RL 工作流在时空两维自动分解重组，端到端吞吐 1.07–2.43×
+- 关联 [[推理引擎格局-vLLM-SGLang]]
+
 ## OSDI'26 录用 136/681（20.0%）与调度侧反直觉结果（2026-09-13 归档）
 整理自 [[inbox/2026-09-13-MLSys顶会-OSDI26-20%录用率-LLM系统方向]]
 - 录用率 20.0%；规则变化：新增 Operational Systems 轨道（生产系统运维论文有独立席位）、取消 author response、用 conditional accept 取代 revise-and-resubmit
