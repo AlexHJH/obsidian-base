@@ -284,3 +284,19 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 跨 TP rank 统一：CPU DRAM 中的 KV 一律以 TP rank 1 的规范形式存放，支持跨 rank 卸载与共享；tier 可标 `locality: LOCAL|REMOTE`，llm-d 的 FS backend 已把 KV block 落成共享文件系统文件实现跨副本复用
 - 意义：长上下文 / Agent 多轮负载下，缓存容量与命中率取代算力成为吞吐主变量——与 [[#AgentSysBench：Agentic 负载与 LLM 推理的系统级差异（2026-09-08 归档）]] 的「控制面税」互为因果
 
+## vLLM v0.29.0：Model Runner V2 成为全模型默认执行路径（2026-09-17 归档）
+整理自 [[inbox/2026-09-14-大模型推理-vLLM-v0.29-MRV2全覆盖]]
+- 594 commits / 277 贡献者：MRV2 从池化模型扩展到所有模型的默认执行路径，数月执行引擎重构基本收口（MRV1 仅保留给少数 ROCm 与未支持特性）——默认路径切换比零散优化更能解释产能跃升
+- MRV2 补全：CUDA graph 显存剖析（KV cache 自动 sizing）、batch-sharded sampling（每步 logits 显存降 1/TP）、prompt embeds、extract_hidden_states 投机
+- 新模型批量接入：腾讯 Hy4-preview（770B/49B-active MoE + Gated DeepSeek Sparse Attention）、Qwen3.8-Flash-Next、Kimi K3 NVFP4、NemotronH-Omni-Reasoning-V3
+- K3/V4 调优：K3 latent tail 融合 MXFP4 top-k 终局约 -5% E2E 延迟；K3 Mamba 元数据合并为单次 Triton launch，kernel 提速 6.6–7.6×
+- 关联 [[#TensorRT-LLM 移除 TensorRT 后端 & vLLM 多级 KV 卸载（2026-09-15 归档）]]
+
+## KV Cache 的「互联网」：把网络与存储当一级推理资源（2026-09-17 归档）
+整理自 [[inbox/2026-09-14-大模型推理-KV-Cache的互联网]]
+- 立场（arXiv 2608.01526，Siddhant Ray / Nick Feamster / Junchen Jiang）：LLM 推理已变成跨云、跨数据中心的全局负载，KV 复用把问题从「算力-存储权衡」升级为「互联网级内容分发」，推理端只是 CDN 上的一个节点
+- 主张解耦计算与 KV 存储：模型侧指标（命中率/压缩率）+ 基础设施指标（带宽/延迟/价格）+ 应用指标（SLO/请求模式）联合决定 recompute / store / reuse
+- 割裂现状：Mooncake、LMCache、HiCache 等 KV 层与模型侧 KV 压缩进展互不相通，缺少跨边界抽象；测度、抽象与架构均待建设
+- 方向：把网络与存储从被动管道变成主动可调旋钮，与 [[#vLLM v0.29.0：Model Runner V2 成为全模型默认执行路径（2026-09-17 归档）]] 所属的引擎侧多级分层互为补充
+- 关联 [[HBF-NAND-AI推理内存2026]]
+

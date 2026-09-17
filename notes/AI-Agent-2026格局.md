@@ -290,3 +290,19 @@
 - ADK Web 属持续攻击面：2026-04 已有同类未认证 RCE（GHSA-rg7c-g689-fr3x，1.7.0–1.28.1）；云托管实例已由 Google 打补丁，自建（含本地 `adk web`）需自行升级
 - 教训：Agent 框架的 research/dev 面（session replay、pytest、调试 UI）常被当作「非生产」漏管，实为暴露面
 
+## DeepSeek Harness：把 Agent 循环本身做成插件（2026-09-17 归档）
+整理自 [[inbox/2026-09-14-AI-Agent-DeepSeek-Harness一切皆插件]]
+- DeepSeek 8/13 开源开发者预览版 dsh（MIT、TypeScript、基于 Cordis 元框架）：模型适配、工具、技能、会话、沙箱、存储、调度乃至 agent loop 皆可替换，没有需要打补丁的「特权内核」；支持把 Claude Code / Codex 当子进程驱动（ACP）
+- 增速：GitHub star 一月内达 22.25 万（发布首日约 2.75 万、两天 9.54 万），为开发者工具最快增速之一
+- 风险与定位：官方明示会持续引入破坏性变更（仓库 9/11 仍在推送）；沙箱、凭据与审计需自备，适合「用零件拼装 harness」或用一个 harness 统辖多个 harness
+- 生态含义：harness 从框架内置特性升级为独立层与竞争焦点（OpenAI Agents API、微软 Agent Framework Harness 同向）
+- 关联 [[#九款 Harness 横评：换壳的收益量级（2026-09-17 归档）]]
+
+## 九款 Harness 横评：换壳的收益量级（2026-09-17 归档）
+整理自 [[inbox/2026-09-14-AI-Agent-九款Harness横评]]
+- 定义与分层：harness = 除模型以外的全部代码、配置与执行逻辑；栈分四层（模型 → 跑单个 agent 的 harness → 编排多 agent 的框架 → 管理一队 harness 的平台），差异不在功能清单而在各自假定的前提
+- 内部六组件已收敛（Raschka）：仓库存活上下文、前缀缓存 + 可变后缀的 prompt、带校验与路径权限的工具、裁剪压缩、独立于全量 transcript 的会话记忆、有递归上限的只读子 agent
+- 换壳收益量级：Vercel 砍掉 80% 工具后成功率 80%→100%、token 减半、耗时 724s→141s；CORE-Bench 同模型换脚手架 42%→78%；LangChain 52.8%→66.5%
+- 选型与互通：按「假定」而非 feature grid 选（两家绑厂商 Claude Code/Codex，五家自托管 OpenCode/Qwen Code/dsh/Goose/OpenHands）；Agent Client Protocol 使各家可互相驱动，Linux 基金会 Agentic AI Foundation 收纳 MCP、AGENTS.md、Goose
+- 关联 [[#OpenAI Agents API 公测]]、[[AI-Agent-2026格局]]
+
