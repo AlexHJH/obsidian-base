@@ -169,3 +169,19 @@
 - 资本：8/21 科创板 IPO 获受理，拟募 330 亿元（刷科创板纪录，超长鑫 295 亿）；2026Q1 单季净利 333.79 亿元、毛利率 76.77%（周期红利多于护城河）
 - 冲出货第一的三个前提：武汉三期产能如期爬坡（20 万 → 50 万片/月）、企业级 SSD 打开客户、HBF 从论文变量产订单；行业背景：2026Q2 eSSD 已占全球 NAND 出货容量 48%（去年同期 26%）
 - 关联 [[#HBF 三条路线之争：开放标准 vs 三星 zHBM vs 铠侠 GP1（2026-09-13 归档）]]、[[AI芯片推理硬件2026全景]]
+
+## HAVEN：把 HBF 当 GPU 封装内向量检索容量层（arXiv 2603.01175，2026-09-15 归档）
+整理自 [[inbox/2026-09-15-HBF-HAVEN向量检索近存加速]]
+- 瓶颈：IVF-PQ 要高召回必须 rerank（取回全精度向量），十亿级向量库放不进 HBM 只能落 CPU DRAM/SSD，跨设备搬运吃掉延迟与吞吐
+- 设计：把 3D NAND 重构为分布式 subarray 并行结构、按功耗约束建模 HBF 带宽，并把 rerank queue 与检索单元放进 HBF 堆栈下方的 logic die
+- 结果：相较 GPU-DRAM / GPU-SSD 系统，rerank 吞吐最高 20×、延迟最高 40× 改善（十亿级数据集），使「带 rerank 的高召回」达到此前只有无 rerank 才有的吞吐
+- 作者：Po-Kai Hsu、Weihong Xu、Qunyou Liu、Tajana Rosing、Shimeng Yu（Georgia Tech）
+- 意义：HBF 价值不止放权重——算术强度低但容量敏感的检索类负载是另一条落点，与 MoE/冷数据定位互补
+
+## SanDisk 首颗 HBF 流片：2027 样品、2028 量产（2026-09-15 归档）
+整理自 [[inbox/2026-09-15-HBF-SanDisk首颗HBF流片]]
+- 8/13 Investor Day 披露已 tape out 首颗 HBF 产品：样品 2027 年、量产 2028 年
+- 高盛：HBF 结合 HBM 级读带宽与 8–16× 容量，模拟显示 4 颗 HBF GPU 的 token 产出 ≈ 8 颗 HBM GPU（即 HBF-only 架构用约一半 GPU 达到 HBM-only 产出），可缓解容量墙、减少 GPU 数量、降低推理基建成本
+- Mizuho 更保守：HBF 难直接取代 HBM，现实价值是支撑解耦式（disaggregated）推理架构；联盟成员含 Google、Meta、SK hynix、Tenstorrent，NVIDIA 尚未表态采用
+- 规格回顾：OCP 首版规范 8-Hi/16-Hi 堆叠、最高 512GB，Grade 1–3 带宽 0.4–3.0 TB/s（UCIe）
+- 商业侧：FY28–FY30 营收中高双位数增长、调整后毛利率维持约 80%（NBM 新模式）；已签 8 家客户（含 3 家美国超大规模云），覆盖 FY27 存储产出约 50%、FY28 约 2/3；定位与「HBM for the rack, HBF for the box」一致

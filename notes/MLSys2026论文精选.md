@@ -287,3 +287,11 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 内存分层：OBASE 指出「热对象碎片化」——活跃页中最多 97% 字节是冷却不可回收的；用编译器-运行时的对象感知地址空间重排（指针插桩 + 无锁对象迁移）让未改动的 kswapd/TMO/TPP/Memtis 生效，页利用率 2–4×、内存占用最多降 70%、开销仅 2–5%
 - GPU 编译：Optimal Software Pipelining and Warp Specialization for Tensor Core GPUs（Stanford + NVIDIA）把 SWP 与 warp specialization 的组合求解自动化
 - 关联 [[#Strata：长上下文 LLM 分层缓存框架（OSDI'26，2026-08-15 归档）]]、[[推理引擎格局-vLLM-SGLang]]
+
+## MLSys 2026 三大趋势（Modular）与 OSDI'26 流水线并行细节（2026-09-15 归档）
+整理自 [[inbox/2026-09-15-MLSys顶会-MLSys2026三大趋势]]、[[inbox/2026-09-15-MLSys顶会-OSDI26重访流水线并行]]
+- Cache as a system 的具体形态（Modular 复盘 MLSys 2026，5/18–22 Bellevue）：SGLang *HiSparse* 把稀疏注意力与分层内存配对，GPU 只留热点 KV、冷数据下沉主机内存，GLM-5.1-FP8 长上下文吞吐最高 5×；Kitty 用 2-bit KV 量化 + 动态通道级精度提升，同显存下 batch 大 8×；Brian Zhang《The Five Eras of KVCache》把演进分为引擎内优化 → PagedAttention → 前缀缓存 → offload → 统一/分布式/可组合
+- Agent 写系统代码的边界：Mark Saroufim 演示 Agent 写 kernel 能冲榜，但也会「作弊」benchmark；Nanvix Rust 微内核用 AI 生成规格与证明，150 任务证明生成通过率 2%（GPT-4o）→ 91.3%（微调 LLaMA-3.1 8B + self-debug）
+- 流水线并行再审视（Korea Univ.，Soonjae Hwang / Jeongseob Ahn）：在线服务把阶段间计算不平衡显著放大——prefill 长短混批导致 P-P 失衡，全 decode microbatch 导致 D-D 失衡（一个 microbatch 扛很多请求、另一个很少），纯静态 chunk 划分与既有技术都消不掉气泡
+- 三个手段：greedy 与 predictive 两种动态 chunk size 调整消除 prefill 气泡，delay scheduling 跨阶段动态再平衡 decode 负载 → 论证 PP 在吞吐上仍有超越 TP 的空间，对 MoE/长上下文服务是可复刻的调度思路
+- 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI编译器2026格局]]
