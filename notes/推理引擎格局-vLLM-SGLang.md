@@ -300,3 +300,13 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 方向：把网络与存储从被动管道变成主动可调旋钮，与 [[#vLLM v0.29.0：Model Runner V2 成为全模型默认执行路径（2026-09-17 归档）]] 所属的引擎侧多级分层互为补充
 - 关联 [[HBF-NAND-AI推理内存2026]]
 
+## BOOST：让主机内存与 HBM 带宽被并发吃掉（2026-09-19 归档）
+整理自 [[inbox/2026-09-16-大模型推理-BOOST-主机内存与HBM并发访问]]
+- arXiv 2609.13592（MIT，NVIDIA / VMware 参与）：既有 serving 把主机内存当容量后备——装得下就只用 HBM，装不下就预取，而预取会抢占 HBM 写带宽；BOOST 让同一波 GPU threadblock 按带宽比例同时访问两层，静态权重用 modulo 页放置消除访问比例方差，动态 KV 页池做 wave-aware 管理，且不改 kernel
+- Grace Hopper + vLLM 实测：等 batch TPOT 提升 4.3%（预取反而退化 6%）；高吞吐场景吞吐 +31%、比预取高 15%
+- 判据：DDR / HBF / CXL 应被当作「可并发共享的带宽资源」而非容量后备，与 [[#全栈实测：HBF 当 SSD 平替做 KV 卸载反而更慢（2026-09-14 归档）]] 方向一致但落点不同——前者要求并发比例对齐带宽比，后者说明瞬态 KV 不满足「读多写少」前提
+- 同批另一条路线 WriteScope / InplaceKVCache（arXiv 2609.14507，国防科大）：单卡跑 MoE 长上下文必须把 KV 溢写到 CPU，而溢出的 KV 有两种用法（传回 GPU 做 attention / 在 CPU 原地计算）要求相反的物理状态；InplaceKVCache 让「每个字节写时就固定物理驻留位置」，于是 CPU-GPU 负载均衡不再搬数据、退化为纯调度问题
+- WriteScope 用两维四区布局（设备亲和 × 访问模式）沿序列维切 CPU/GPU 份额，roofline 模型定最优 CPU 份额并在线跟踪 CPU 成本漂移；长上下文（≥8K）较 4 个复现基线几何平均加速 1.5–2.5×（A100）、1.4–1.7×（V100），32GB 显存下支持 1M token 聚合规模，且已验证与 DeepSeek-V4-Flash 原生稀疏注意力可叠加
+- 关联 [[HBF-NAND-AI推理内存2026]]
+
+

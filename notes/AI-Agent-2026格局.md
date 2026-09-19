@@ -306,3 +306,11 @@
 - 选型与互通：按「假定」而非 feature grid 选（两家绑厂商 Claude Code/Codex，五家自托管 OpenCode/Qwen Code/dsh/Goose/OpenHands）；Agent Client Protocol 使各家可互相驱动，Linux 基金会 Agentic AI Foundation 收纳 MCP、AGENTS.md、Goose
 - 关联 [[#OpenAI Agents API 公测]]、[[AI-Agent-2026格局]]
 
+## Harness 自优化与「Harness 效应」的对照验证（2026-09-19 归档）
+整理自 [[inbox/2026-09-16-AI-Agent-Ecdysis-运行时Harness训练]]、[[inbox/2026-09-16-AI-Agent-Harness还是模型-隔离对照实验]]
+- Ecdysis（arXiv 2609.11677）：自我演化 harness 的真正瓶颈不是搜索而是失败归因——单次失败可能来自模型缺陷，盯单次失败改代码会把 harness 过拟合到噪声；改为批级跨实例失败聚合 + 多角色协同精修「修改规格（spec）」而非直接改代码，harness 训练加速至多 1.84×、产出 harness 推理准确率 +18.56%
+- Harness 效应隔离实验（arXiv 2609.11987）：256 题私有防污染套件 + 同模型配对，厂商原生 harness 的平均优势并不存在——Opus 4.8 上 claude-agent-sdk 低 1.25pp、GPT-5.5 上 codex SDK 高 1.25pp，95% 置信区间均跨 0；成本上中性 harness 每解一题贵 1.2–1.6×
+- 度量方法：81 次撞时间墙的运行里有 22 次其实已产出通过补丁 → 完成率与正确率必须分开度量；分层结论（仓库类落后 9.0pp、竞赛类领先 23.7pp）是看过数据后选的，需设计性复现（该版还修正了 8 月稿的 usage 语义缺陷）
+- 与 [[#九款 Harness 横评：换壳的收益量级（2026-09-17 归档）]] 互补：换壳收益真实存在，但「原生配自家模型」不是解释，且归因粒度要落到批级
+
+
