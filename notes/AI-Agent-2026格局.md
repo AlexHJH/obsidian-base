@@ -313,4 +313,21 @@
 - 度量方法：81 次撞时间墙的运行里有 22 次其实已产出通过补丁 → 完成率与正确率必须分开度量；分层结论（仓库类落后 9.0pp、竞赛类领先 23.7pp）是看过数据后选的，需设计性复现（该版还修正了 8 月稿的 usage 语义缺陷）
 - 与 [[#九款 Harness 横评：换壳的收益量级（2026-09-17 归档）]] 互补：换壳收益真实存在，但「原生配自家模型」不是解释，且归因粒度要落到批级
 
+## Harness / runtime / AI employee 三层栈（2026-09-18 归档）
+整理自 [[inbox/2026-09-18-AI-Agent-2026年9月Harness榜单与三层栈]]
+- CellCog 月度榜单读法：harness 之上还有 agent runtime（编排多个 harness，如 OpenClaw）与 AI employee platform（跨会话的固定岗位），「哪个 harness 最好」只是中间层问题
+- 9 月排名：CellCog 自评第一（自曝利益冲突并给公开榜单逐条佐证）、Claude Code 纯编码深度第一（已上 Fable 5.1）、Codex CLI 云端自治、Cursor 编辑器内日常编码
+- 模型层头两天换血（Claude Fable 5.1 9/1、Gemini 3.8 Flash 与 Meta Muse Spark 1.3 9/2）→ 任何三周未更新的榜单已过期；harness 层变动又快于模型层
+- 选型路径：编码会话用 harness、编排多 agent 用 runtime、工作本身跨会话才上 employee platform
+- 关联 [[#微软 Agent Framework：Harness 成为一等公民（2026-09-18 归档）]]
+
+## 微软 Agent Framework：Harness 成为一等公民（2026-09-18 归档）
+整理自 [[inbox/2026-09-18-AI-Agent-微软MAF-BUILD2026-Harness与Hosted-Agents]]
+- MAF（.NET/Python 同构 SDK+运行时，2026-04-02 GA，AutoGen 与 Semantic Kernel 的收敛体）用一个方法把任意 chat client 升级为完整 harness，并提供 Foundry Hosted Agents 作为生产归宿
+- harness 内部六件套已成厂商标配：上下文压缩、文件记忆（FileMemoryProvider）、TodoProvider、AgentModeProvider（plan/execute）、AgentSkillsProvider、BackgroundAgentsProvider（子 agent 并行扇出）
+- 中间件：ToolApprovalAgent 敏感调用审批、OpenTelemetryAgent 按语义约定自动追踪、存储后端可插拔（FileMemoryStore → 任意 AgentFileStore）
+- Hosted Agents 自带身份、自动扩缩、托管会话状态、可观测与版本化，空闲可 scale-to-zero
+- 信号：竞争点从「抽象好不好用」转向「harness 工程模式是否开箱可用」
+- 关联 [[AI-Agent-2026格局]]
+
 

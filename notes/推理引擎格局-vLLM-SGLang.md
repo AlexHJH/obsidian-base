@@ -309,4 +309,20 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - WriteScope 用两维四区布局（设备亲和 × 访问模式）沿序列维切 CPU/GPU 份额，roofline 模型定最优 CPU 份额并在线跟踪 CPU 成本漂移；长上下文（≥8K）较 4 个复现基线几何平均加速 1.5–2.5×（A100）、1.4–1.7×（V100），32GB 显存下支持 1M token 聚合规模，且已验证与 DeepSeek-V4-Flash 原生稀疏注意力可叠加
 - 关联 [[HBF-NAND-AI推理内存2026]]
 
+## 负载感知的 Prefill 偏转（arXiv 2607.02043，2026-09-18 归档）
+整理自 [[inbox/2026-09-18-大模型推理-Prefill-Deflection负载感知调度]]
+- PD 分离的新不对称：突发重尾负载下 prefill 节点打满、decode 节点算力闲置；2P2D A100 生产式集群上 P95 TTFT 中真正的 prefill 执行只占 2–23%，其余全是排队与跨节点 KV 传输
+- 方案：decode 节点把排队请求的 prefill 以 chunked-prefill 步骤插进自己「在飞」的 decode 批，逐请求估算两条路径的 TTFT，只在 decode 路径确实改善尾延迟且不破坏 TBT SLO 时才偏转
+- 收益主源：被偏转请求的 prefill 就地运行，跨节点 GPU-GPU KV cache 传输被直接消除
+- 实测（vLLM + DeepSeek-V2-Lite + 生产 trace）：P95 TTFT 最高降 81%、SLO 达成率最高 +79%、路由开销亚毫秒级
+- 意义：「分离」不是硬约束，按瞬时负载动态搬运 prefill 比静态 P/D 配比更能守住尾延迟 SLO
+
+## KV Cache 作为 Agent 运行时（Yandex Research，2026-09-18 归档）
+整理自 [[inbox/2026-09-18-大模型推理-KV-Cache作为Agent运行时]]
+- 立场：交互能力有一大块是推理运行时问题，不必改权重——KV cache 是模型的「活动执行状态」，改 cache 结构即可实现训练时不存在的新交互协议
+- 技巧：利用 RoPE 相对位置性质 ρ(q,i_q)ρ(k,i_k)ᵀ=ρ(q,i_q−i_k)kᵀ，cache block 只按 block-local 坐标存一份，查询时对当前 query 施加 block 专属旋转 → 同一物理块在不同流里呈现不同逻辑偏移
+- Hogwild! Inference：并发运行同模型多实例并写共享注意力内存，worker 实时看到彼此的部分生成；AsyncReasoning 拆输入/私有思考/公开输出三流，首个非思考 token 时间最高降 80×
+- 抽象落点：流=进程、cache block=共享内存、attention view=地址映射、模式切换=调度事件、工具更新=中断；已在 Doom 上用免训练 Qwen3.5 验证
+- 关联 [[AI-Agent-2026格局]]
+
 
