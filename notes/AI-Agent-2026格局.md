@@ -330,4 +330,15 @@
 - 信号：竞争点从「抽象好不好用」转向「harness 工程模式是否开箱可用」
 - 关联 [[AI-Agent-2026格局]]
 
+## OpenAI Agents API：Codex harness 被产品化（2026-09-19 归档）
+整理自 [[inbox/2026-09-19-AI-Agent-OpenAI-Agents-API产品化harness]]
+- 2026-09-10 公测，定位「用 Codex harness 构建并运行云端 agent，由 OpenAI 全托管」——harness 从「自己写、跟着模型换代重写」变成一次 API 调用，环境仍由你选，账单上没有 harness 这一行
+- 四个核心对象：agent（模型/instructions/tools/MCP servers）、environment、session、events；入口 `client.beta.agents.sessions.create`，会话可 resume
+- 托管 harness 七件事：执行代码与编辑文件、按目录加载 skills、接 MCP/自定义函数/内置工具、会话中途 steer、**自动 compaction**、subagent 并行（各自独立 context）、断点续跑
+- 两个值得抄的省 token 机制：**tool search** 按需加载工具定义（降 token 且保留 prompt cache）、**programmatic tool calling**（并行调用、链式组合、在代码里过滤结果）
+- 环境三选：OpenAI 托管 sandbox（与 Codex/ChatGPT 同源，按容器费率计费）、自托管、9 家 partner（Blaxel/Cloudflare/Daytona/DigitalOcean/E2B/Modal/Oracle/Runloop/Vercel）
+- 计价：API 本身不收费，只按模型 token、工具、托管容器时间计费；harness 随每次模型发布版本化，底层是开源 Codex harness 而由 OpenAI 运营
+- 护城河边界：compaction / tool search / subagent 独立 context 正是长任务「上下文耐久性」的三个现成手段，但**验收与 quarantine 这类契约托管 harness 不给**，仍要自己搭
+- 关联 [[推理引擎格局-vLLM-SGLang]]、[[MLSys2026论文精选]]
+
 

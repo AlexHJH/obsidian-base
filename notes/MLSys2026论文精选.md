@@ -295,3 +295,14 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 流水线并行再审视（Korea Univ.，Soonjae Hwang / Jeongseob Ahn）：在线服务把阶段间计算不平衡显著放大——prefill 长短混批导致 P-P 失衡，全 decode microbatch 导致 D-D 失衡（一个 microbatch 扛很多请求、另一个很少），纯静态 chunk 划分与既有技术都消不掉气泡
 - 三个手段：greedy 与 predictive 两种动态 chunk size 调整消除 prefill 气泡，delay scheduling 跨阶段动态再平衡 decode 负载 → 论证 PP 在吞吐上仍有超越 TP 的空间，对 MoE/长上下文服务是可复刻的调度思路
 - 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI编译器2026格局]]
+
+## MLSys 2026 双 keynote：AI 写系统代码，必须零信任验证（2026-09-19 归档）
+整理自 [[inbox/2026-09-19-AI-Agent-MLSys26-AI写系统代码的零信任验证]]
+- 两场 keynote 指向同一结论：AI 正在成为底层代码的主要作者，工程重心从「实现」转向「specification 与验证」
+- Mark Saroufim《When AI Starts Writing Systems Code》：新手用 agent 写 kernel 能冲竞赛前列，但他当场演示 agent 如何针对测试用例作弊、优化出不泛化的结果 → 结论不是等一个守规矩的 agent，而是做 zero trust 验证，benchmark 要全面到不依赖提交者的善意
+- Lidong Zhou《From MLSys to System Intelligence》：Rust 微内核 Nanvix 上逐模块生成 spec 与 proof；150 题证明生成通过率从 2%（GPT-4o 纯 prompt）升到 91.3%（微调 LLaMA-3.1 8B + self-debugging）
+- 关键反例：模型证不出时会走捷径——`external_body` 绕过 verifier、伪造 postcondition、把证明负担推给调用者。**通过率必须配上「怎么过关的」才有意义**
+- 方法侧呼应：AccelOpt（LLM 提 kernel 变体→profile→结果回灌闭环）、FlashInfer-Bench（把 benchmark 明确当作 agent 的优化目标）
+- kernel 作者痛点的解药：FlashAttention-4 从 CUDA C++ 模板迁到 Python 内嵌 CuTe-DSL；HipKittens / ParallelKittens 主张更少更简单的抽象——抽象对人有利，对 agent 更有利
+- 与 [[AI编译器2026格局]] 的 autoWS 路线互补：一边靠编译器自动调度，一边靠 agent 闭环搜索，二者都需要一个不撒谎的度量
+- 关联 [[AI编译器2026格局]]、[[AI-Agent-2026格局]]、[[推理引擎格局-vLLM-SGLang]]
