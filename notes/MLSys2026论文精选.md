@@ -306,3 +306,16 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - kernel 作者痛点的解药：FlashAttention-4 从 CUDA C++ 模板迁到 Python 内嵌 CuTe-DSL；HipKittens / ParallelKittens 主张更少更简单的抽象——抽象对人有利，对 agent 更有利
 - 与 [[AI编译器2026格局]] 的 autoWS 路线互补：一边靠编译器自动调度，一边靠 agent 闭环搜索，二者都需要一个不撒谎的度量
 - 关联 [[AI编译器2026格局]]、[[AI-Agent-2026格局]]、[[推理引擎格局-vLLM-SGLang]]
+
+## SOSP 2026 录用名单：AI 系统成最大板块（2026-09-23 归档）
+整理自 [[inbox/2026-09-20-MLSys顶会-SOSP2026录用论文AI系统方向]]
+- 第 32 届 SOSP（2026-09-29–10-02，布拉格，首次移师中欧）条件录用名单公布，AI 相关论文已成最大集群，四条主线同时放量
+- 训练/推理基础设施：CrystalLLM（阿里 + Harvard/SJTU）用少量 GPU 做「忠实」的大规模 LLM 训练模拟；ACDC（SJTU + 阿里）刻画并优化生产环境离线推理（Batched in Back）；Janus（北大 + 京东）做生产级 multi-LLM serving；StreamEP（USC + SNU）实现无通信壁垒的抗拖尾 MoE 解码
+- 确定性与可观测：LLM-42（MSR + UW）用 verified speculation 让 LLM 推理确定性化；LMTracer（清华 + Rank Computing）做生产 LLM 系统细粒度实时 profiling
+- GPU 内核与调度：Taming Dynamism on GPUs（SJTU 陈海波组）跨 SM kernel fusion + JIT reduction 治动态性；Anchor（清华）解耦内存缓解 shallow disruptions；Morphable Kernels（清华）多任务形态可塑内核；M2K（PSU + 中科院）把 model-kernel 接口显式化以支持 CUDA 内核验证
+- Agent 与文件系统：Don't Let AI Agents YOLO Your Files（UW-Madison，Arpaci-Dusseau 组）提出 agent-native 文件系统的信息与控制模型；AgileLog（UIUC）为数据流上的 agent 做可 fork 共享日志
+- 新议题：编译与 wafer-scale（MeshRT、Wavel 让晶圆级算力有自己的编译栈）、异构/新内存（StarfishOS 在 CXL 上重审单系统镜像、XTRA 统一 CXL pod 缓存一致性与并发控制、Borges 做 CXL/SSD 混合低延迟分布式日志）
+- 验证主线：Welder（集群控制面组合式活性验证）、Sockeye（基于参考手册对平台配置与硬件做 bug-finding 与证明）——形式化验证正从论文原型走向控制面/配置这类工程重灾区
+- 投稿窗口：NSDI '27 秋季全文 9/17、FAST '27 秋季 9/15（AoE），通知统一 12/8；HotStorage '26（9/28–29，布拉格）与 SOSP 同城；MLSys 2027 投稿 10/10–10/30（通知 2027-02-28）
+- 规则收紧：NSDI 被拒且未获 one-shot revision 的稿件不能投下一个 deadline；获 revision 只能投紧接着的下一个 deadline，且录用后计入再下一届
+- 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI编译器2026格局]]
