@@ -222,3 +222,13 @@
 - 结果：6 个校准点与实测器件完全一致、零危险发射；未改动的 vLLM 0.15.1 服务 Qwen3-30B-A3B 输出 token 与基线一致；快路径 2s vs 详细参考路径 44s（20.8×）
 - 意义：补上 H3 / FLINT / FlashAccel 一类 HBF 研究缺的公共评估底座，出样前即可度量容量与放置取舍
 - 关联 [[推理引擎格局-vLLM-SGLang]]
+
+## H³ 分层结构与 Hot Chips 可用性边界复核（2026-09-21 归档）
+整理自 [[inbox/2026-09-21-HBF-SKhynix-H3-HBM与HBF同interposer分层]]、[[inbox/2026-09-21-HBF-HotChips2026-OXMIQ-HBF可用性边界]]
+- H³ 结构复核（SK hynix，IEEE 论文）：HBM 与 HBF 同挂一个 interposer，各带 base die 与控制器、D2D 互联；权重与共享预计算 KV 放 HBF、新生成 KV 放 HBM，靠预取/流水补偿 μs 级延迟，避免把 KV 甩到本地 NVMe（Nvidia ICMSP 路线）的 PCIe 往返
+- 容量动因量化：Llama 4 支持千万级序列时 KV 可达 5.4 TB，「需要几十块 GPU 只为存这些值」；HBF 容量约 16× HBM、带宽相当，代价是延迟高约三个数量级、写寿命约 10 万次擦写、功耗最高约 4× HBM → 只做读密集场景（CAG 只读 cache-augmented generation 天然契合）
+- OXMIQ 边界复核：HBF 是「高容量内存」而非「廉价 HBM」，只在容量受限时占优；三档规格中仅 Grade 3（512GB / 3.072 TB/s UCIe 2.0）可对标 HBM4E 且上市时间未知
+- 成本结论「HBM for the rack, HBF for the box」：72-GPU 机架跑 Kimi-K2（1T FP4）时全 HBF 让单卡装一个模型实例（72 实例/机架 vs 9 实例），省的是「装模型的卡」而非 token 成本；并发与生成率上升后全 HBM 机架单 token 成本更低
+- 工程前提：HBF 需 64KB 读 / 1MB 写才能打满带宽，vLLM 需专门支持（显存分配、预取、闪存寿命监控），是硬件厂 + 加速器厂 + 推理框架的三方工程
+- 与既有归档判断一致（[[#Hot Chips 2026：OXMIQ 冷思考——HBF 是「容量点」而非 HBM 廉价版（2026-09-09 归档）]]、[[#HBF 定位收敛：三档规格确认 +「HBM for the rack, HBF for the box」（2026-09-09 归档）]]）：本次为原文级复核，未引入新结论
+- 关联 [[推理引擎格局-vLLM-SGLang]]

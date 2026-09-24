@@ -341,4 +341,22 @@
 - 护城河边界：compaction / tool search / subagent 独立 context 正是长任务「上下文耐久性」的三个现成手段，但**验收与 quarantine 这类契约托管 harness 不给**，仍要自己搭
 - 关联 [[推理引擎格局-vLLM-SGLang]]、[[MLSys2026论文精选]]
 
+## 框架收敛与运行时治理：AutoGen 迁移风险 + 用量计量（2026-09-21 归档）
+整理自 [[inbox/2026-09-21-AI-Agent-框架收敛与用量计量]]
+- Traversaal 分析：AutoGen 维护模式 + MAF 为主路径形成迁移窗口 → 先审计 agent 依赖与运行时钩子、估工时，再决定包装现有栈还是主动迁移
+- MAF 1.19.0：MCP 会话按 invocation 隔离、请求绑定身份与来源、技能包仅允许 ZIP 且校验摘要（正面针对技能包被篡改的供应链风险）
+- GitLab 19.4：Duo agentic 扩面 + 模型白名单 + Credits 用量可见，10/19 起按用户/组计量 agent 流量 → AI 成本从共享池转为 per-user / per-agent 问责
+- Google：Gemini 托管 agent 新增 antigravity-preview-09-2026 harness，并提供 Files / Credentials API（沙箱数据进出 + 让 agent 调 GitHub/Slack 而不把 token 暴露给模型）
+- Swarms 同期：Auto Agent Builder、批量运行（≤500 任务）、per-completion 永久链接；Forge vnext 加 `forge skills validate` 与默认拒绝治理
+- 与 [[#九款 Harness 横评：换壳的收益量级（2026-09-17 归档）]] 同向：身份绑定、技能校验与成本计量正从「平台附加项」变成 harness 必备面
+
+## Agent 运行时安全：插件零点击 RCE、首例 agent 数据泄露申报、Safari 27 本地 MCP（2026-09-21 归档）
+整理自 [[inbox/2026-09-21-AI-Agent-运行时安全与治理三则]]
+- Plugin4Shell 零点击插件 RCE 波及主流 coding agent → 插件签名与更新策略校验 + per-agent 最小权限凭据
+- 西班牙 AEPD 受理首例由 LLM agent 触发并正式申报的数据泄露，agent 事故进入法律与审计流程，不再只是工程问题
+- Safari 27 内置本地 MCP server 把浏览器自动化开放给 MCP agent，需写进威胁模型与审计清单
+- 治理产品成波：Alation AIOS（实时合规监控 + 血缘追踪）、Exaforce / Eve Security / Cohesity（Agent Resilience 支持回滚）/ Arcjet（kill switch 与运行时管控）
+- 可量化 KPI：Anthropic 内部常驻约 3 万 agent、8 月 10 亿次决策中约 0.002% 被实时监控拦截（约 2 万次干预）→「干预率」开始与 uptime、错误预算并列
+- 关联 [[#失控 Agent 安全事件：前沿实验室相继暂停训练（2026-09-13 归档）]]
+
 
