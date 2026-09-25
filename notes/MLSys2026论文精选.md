@@ -319,3 +319,23 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 投稿窗口：NSDI '27 秋季全文 9/17、FAST '27 秋季 9/15（AoE），通知统一 12/8；HotStorage '26（9/28–29，布拉格）与 SOSP 同城；MLSys 2027 投稿 10/10–10/30（通知 2027-02-28）
 - 规则收紧：NSDI 被拒且未获 one-shot revision 的稿件不能投下一个 deadline；获 revision 只能投紧接着的下一个 deadline，且录用后计入再下一届
 - 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI编译器2026格局]]
+
+## Ave（SOSP'26）：用数据流不变量当编译期护栏，管住 agent 优化 GPU 内核（2026-09-25 归档）
+整理自 [[inbox/2026-09-22-MLSys顶会-SOSP26-Ave数据流不变量守护Agent优化GPU内核]]（arXiv 2604.18616，录用名单见 [[#SOSP 2026 录用名单：AI 系统成最大板块（2026-09-23 归档）]]）
+- 问题定位：LLM agent 已能写出「正确」的 kernel，卡点是测不出「违反了哪条全局约束」——单元测试与 profile 只给稀疏的端到端反馈
+- 方案：tag 函数给数据打符号标签，编译器沿数据流与控制流传播，在使用点用断言校验，SMT 求解器给出具体反例，运行期零开销（分析流敏感、路径不敏感）
+- 三个角色分工：ICRL 规划器从 GPU 优化知识库挑优化项 → lowering agent 实现并实例化所需不变量 → 编译器静态校验，违反时返回反例而非只报失败
+- DSL 为 tile 级 Pythonic 文风，暴露硬件指令与编译器策略（shared memory staging、软件流水、指令调度），隐藏复杂内存布局——兼顾「LLM 可学」与表达力
+- 实测（AMD MI300X，GEMM/flash attention/MoE，合计占 LLM 推理 GPU 时间 90%）：GPT-5.6 Sol 下达手工优化库有效吞吐的 89–99%，几何均值比未受约束的 agentic 基线高 1.62–1176×；KernelBench 200 题 Level 1 100%、Level 2 88% 三次内产出有效 kernel
+- 与 [[#MLSys 2026 双 keynote：AI 写系统代码，必须零信任验证（2026-09-19 归档）]] 同向：不指望 agent 守规矩，而是让约束可被机器独立判定
+- 关联 [[AI编译器2026格局]]、[[AI-Agent-2026格局]]
+
+## Weave：MoE megakernel 内做细粒度动态 SM 调度（arXiv 2609.21483，2026-09-25 归档）
+整理自 [[inbox/2026-09-22-MLSys顶会-Weave-MoE-megakernel动态SM调度]]
+- 动机：专家并行下 MoE 层是带昂贵 dispatch/combine 通信的分布式计算，现有 overlap 把 SM 静态切成通信组/计算组，但最优切分随每层路由结果与各 GPU 状态变化——固定策略不是浪费 NVLink 带宽就是浪费算力
+- 关键观察：路由一旦算完，本层通信量与计算量即已知 → 可「预测后调度」而非拍脑袋静态划分；Weave 在常驻 megakernel 内按层、按 GPU 运行时重切 SM
+- 两个调度器：空间调度器按通信/计算吞吐比把 SM 切成两类 worker；时间调度器协调两组以最小化 SM 空闲（消 MoE 数据依赖导致的 bubble）
+- 4×H100 SXM 上六种主流 MoE 模型：MoE 层几何均值加速 2.89×，端到端 1.33×（对比五个 SOTA 基线）
+- 佐证 [[AI编译器2026格局]] 的 megakernel 议程：任务/角色能在 kernel 内被调度，正要求 kernel 本身暴露可缝进大程序的 IR 结构（对照 [[#OSDI'26 GPU 编译器与内核专场：mega-kernel / CUDA Graph / 虚拟张量（2026-09-17 归档）]]）
+- 注意与 [[#OSDI'26 RL 后训练系统集群：分离架构带来的新系统层（2026-09-17 归档）]] 中的同名 Weave（HKUST+阿里，集群级 co-execution group）为不同工作
+- 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI编译器2026格局]]
