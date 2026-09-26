@@ -232,3 +232,12 @@
 - 工程前提：HBF 需 64KB 读 / 1MB 写才能打满带宽，vLLM 需专门支持（显存分配、预取、闪存寿命监控），是硬件厂 + 加速器厂 + 推理框架的三方工程
 - 与既有归档判断一致（[[#Hot Chips 2026：OXMIQ 冷思考——HBF 是「容量点」而非 HBM 廉价版（2026-09-09 归档）]]、[[#HBF 定位收敛：三档规格确认 +「HBM for the rack, HBF for the box」（2026-09-09 归档）]]）：本次为原文级复核，未引入新结论
 - 关联 [[推理引擎格局-vLLM-SGLang]]
+
+## SK 海力士「New Spectrum」+ 美光近 GPU NAND：分层共识、路线分歧（2026-09-26 归档）
+整理自 [[inbox/2026-09-23-HBF-SKhynix-AI-Infra-Summit三元分层]]、[[inbox/2026-09-23-HBF-美光近GPU-NAND换密度保带宽]]
+- SK 海力士 AI Infra Summit 2026（9/15–17 圣克拉拉，约 6000 人、较上届翻倍）叙事从「某颗器件更快」转为**按负载维度做内存放置**：HBF 补长上下文容量、PIM/AiMX 补 decode 带宽、SALT-KV 决定 KV 落在哪一层
+- SALT-KV（Semantic-Aware Lifecycle Tiering for KV Cache）：按上下文语义切分 KV cache，综合评估「复用价值 vs 存储成本」在 GPU 显存 / CPU DRAM / eSSD 间放置，现场用配自研 eSSD 的服务器实时演示层间迁移——KV 分层从硬件规范落到运行时可观测的软件方案
+- HBF 侧仍只有结构模型，无公开平台支持与量产 benchmark；商业闸门依旧是「公开规范 + 平台适配 + 生产数据」
+- 美光在研「近 GPU NAND」（DigiTimes 报道）：高耐久 NAND 模块布置到离 GPU 更近处（GPU 封装内或 PCB 上），让 GPU 直接访问数百 GB NAND 池，工作方式类比 HBM/GDDR7；与 TLC/QLC 追密度相反，主动降低存储密度换取 I/O 速度与读延迟，定位显存与普通存储之间的高速缓冲层
+- 路线分歧：闪迪/SK 海力士的 HBF 走 OCP 开放标准 + UCIe（最高 512GB、约 0.4–3.0 TB/s），美光走自研器件 + 近封装集成且未加入 HBF 联盟；与三星 zNAND-O/zHBM、铠侠 GP1 并列 →「HBM 之后必有分层」已是全行业共识，分歧在接口形态与是否开放
+- 待观察：美光耐久性指标未公开、是否真进封装而非仅板载、与 HBM 的地址空间如何统一（决定软件栈改造量）

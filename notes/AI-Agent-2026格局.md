@@ -350,6 +350,14 @@
 - Swarms 同期：Auto Agent Builder、批量运行（≤500 任务）、per-completion 永久链接；Forge vnext 加 `forge skills validate` 与默认拒绝治理
 - 与 [[#九款 Harness 横评：换壳的收益量级（2026-09-17 归档）]] 同向：身份绑定、技能校验与成本计量正从「平台附加项」变成 harness 必备面
 
+## Agent 控制面上移：WSO2 Agent Manager 1.0 GA 与 Anthropic 硬件标准（2026-09-26 归档）
+整理自 [[inbox/2026-09-23-AI-Agent-WSO2-Agent-Manager与框架收敛]]、[[inbox/2026-09-23-AI-Agent-Anthropic-Model-Hardware-Standard]]
+- WSO2 Agent Manager 1.0 GA（Apache 2.0，9 月）把企业 agent 的发现、身份委派、策略护栏与可观测性做成**跨框架/模型/部署形态的统一控制面**：联邦式管理（cloud/on-prem/hybrid 单一控制面）、每步动作可认证授权审计、集中护栏与评估、生命周期管理；自托管（K8s/Helm）或 SaaS，明确打反锁定牌
+- 同期 AutoGen 降为维护模式（只收 bug 与安全补丁，新特性全进 2026-04 GA 的 MAF），存量团队进入迁移窗口——印证 [[#框架收敛与运行时治理：AutoGen 迁移风险 + 用量计量（2026-09-21 归档）]]
+- 选型结论：竞争重心从「编排框架」上移到「控制面 + 身份 + 审计」，应把控制面与框架解耦，避免被单一框架绑定
+- Anthropic Model Hardware Standard（MHS，8 月底）是「模型 ↔ 硬件」的**接口标准**而非编排框架：把设备能力抽象成模型可安全调用的统一驱动面，首批场景是实验自动化（新药研发、量子计算激光标定）而非消费级机器人，官方称充分测试后开源
+- 战略读法：与 MCP 之于工具层同一套逻辑——前沿实验室开始抢占 agent 的**物理执行层**标准；待观察授权与安全边界（谁能允许 agent 动硬件）及硬件厂商是否跟进采纳
+
 ## Agent 运行时安全：插件零点击 RCE、首例 agent 数据泄露申报、Safari 27 本地 MCP（2026-09-21 归档）
 整理自 [[inbox/2026-09-21-AI-Agent-运行时安全与治理三则]]
 - Plugin4Shell 零点击插件 RCE 波及主流 coding agent → 插件签名与更新策略校验 + per-agent 最小权限凭据

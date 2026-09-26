@@ -345,4 +345,13 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 与 [[#负载感知的 Prefill 偏转（arXiv 2607.02043，2026-09-18 归档）]] 同向：静态 P/D 划分正在被运行时闭环调度取代
 - 关联 [[MLSys2026论文精选]]、[[AI编译器2026格局]]
 
+## KVServe 与 vLLM v0.30 Fast Start：KV 压缩与权重驻留都变成运行时决策（2026-09-26 归档）
+整理自 [[inbox/2026-09-23-大模型推理-KVServe服务感知KV压缩]]、[[inbox/2026-09-23-大模型推理-vLLM-v0.30-Fast-Start权重缓存]]
+- KVServe（SIGCOMM 2026，arXiv 2605.13734，中科院大学 + 计算所 + 上交）：解耦推理把 KV 从 GPU 内部状态变成跨网络与存储边界的显式载荷——KV 传输最多占作业完成时间（JCT）的 60%（32K 请求跑 Qwen3-235B、64 节点 prefill 集群时 KV 出口带宽需求达 2.1Tbps）→ 主张压缩不是写死配置，而应随服务状态动态选择策略
+- 三段式设计：统一压缩策略空间（含新组件与跨方法重组）→ 离线 profiling 生成 profile → 在线 Service-Aware Controller（延迟模型 + 轻量 bandit）在约束下选 profile 并纠正 offline-online 失配；已集成 vLLM，PD 分离下 JCT 最高 9.13× 加速（≤5Gbps 受限带宽下 9.2×），KV 解耦 + 远程前缀缓存下 TTFT 最高降 32.8×，且始终守住严格 SLO
+- 关键设计价值：带宽充裕时自动识别「省下的通信抵不上算力成本」而绕过压缩——静态方法的典型翻车点；精度上 MixHQ 量化器 + 贝叶斯搜索在最高 10× 压缩下相对精度保持 99% 以上
+- vLLM v0.30.0（762 commits / 315 贡献者）：Fast Start 用常驻的 per-GPU weight-cache 守护进程把已量化、已按 TP 切分的权重留在显存，重启的 engine 经 CUDA IPC 直接映射，省掉一次完整权重加载（大 MoE 上是分钟级差距）——优化的是重启成本而非稳态吞吐，覆盖引擎升级、崩溃恢复、弹性扩缩容
+- 破坏性变更：scale-out 端点需显式加 `--enable-scale-out`，否则该路径不生效，升级前要过配置审计；同版本还含 watermarking、Model Runner V2 延续、HiSparse 与 Kimi K3 相关改动
+- 主线收敛：一处优化**权重常驻**（Fast Start）、一处优化**KV 载荷的跨层传输**（KVServe / [[HBF-NAND-AI推理内存2026]] 的 SALT-KV），与 [[#MICRO 2026 · DOPS：PD 分离不够，异构推理要按算子动态调度（2026-09-21 归档）]] 的「静态划分让位运行时闭环」同向
+
 
