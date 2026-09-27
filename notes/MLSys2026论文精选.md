@@ -339,3 +339,11 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 佐证 [[AI编译器2026格局]] 的 megakernel 议程：任务/角色能在 kernel 内被调度，正要求 kernel 本身暴露可缝进大程序的 IR 结构（对照 [[#OSDI'26 GPU 编译器与内核专场：mega-kernel / CUDA Graph / 虚拟张量（2026-09-17 归档）]]）
 - 注意与 [[#OSDI'26 RL 后训练系统集群：分离架构带来的新系统层（2026-09-17 归档）]] 中的同名 Weave（HKUST+阿里，集群级 co-execution group）为不同工作
 - 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI编译器2026格局]]
+
+## EcoServe（OSDI'26）：普通以太网集群靠「时间维 PD 分离」抢回 goodput（2026-09-24 归档）
+整理自 [[inbox/2026-09-24-MLSys顶会-OSDI26-EcoServe部分分离]]、[[inbox/2026-09-24-MLSys顶会-顶会日历NeurIPS放榜与SOSP开幕]]
+- 中山大学杜江溯组 PaDG：不在实例间搬 KV cache，而在单实例内按时间维交替执行 prefill/decode（省跨实例 KV 传输），再用「宏实例」滚动激活多实例错峰、自适应路由把请求送到当前适合 prefill 的实例
+- 32-GPU L20 + 以太网：P90 goodput 比 vLLM/Sarathi/DistServe/MoonCake 高 1.96×/1.99×/2.51×/2.40×；1→4 实例吞吐 4.96×/5.47×
+- 边界条件：H100 + NVLink/IB 上收益收窄到 1.34×/1.25×/1.75×/1.24×——互连变快后分离架构的收益只剩「减少负载不均衡与调度开销」
+- 投稿窗口（9/24 起）：SOSP 2026 9/29–10/2 布拉格（9/29 workshop/tutorial，HotStorage '26 同城 9/28–29）；MLSys 2027 10/10 开放、10/30 20:00 UTC 截稿；ASPLOS 2027 Sept cycle 已截（response 12/1–4、通知 12/21/26）；EuroSys 2027 Fall 全文 9/24 截稿、通知 2027-01-29、会议拉巴特 4/19–23
+- 关联 [[#OSDI'26 录用 136/681（20.0%）与调度侧反直觉结果（2026-09-13 归档）]]、[[推理引擎格局-vLLM-SGLang]]
