@@ -354,4 +354,13 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 破坏性变更：scale-out 端点需显式加 `--enable-scale-out`，否则该路径不生效，升级前要过配置审计；同版本还含 watermarking、Model Runner V2 延续、HiSparse 与 Kimi K3 相关改动
 - 主线收敛：一处优化**权重常驻**（Fast Start）、一处优化**KV 载荷的跨层传输**（KVServe / [[HBF-NAND-AI推理内存2026]] 的 SALT-KV），与 [[#MICRO 2026 · DOPS：PD 分离不够，异构推理要按算子动态调度（2026-09-21 归档）]] 的「静态划分让位运行时闭环」同向
 
+## KV Cache 卸载落地实测：ODCC 全场景测评与华为 OceanStor M900（2026-09-25 归档）
+整理自 [[inbox/2026-09-25-大模型推理-KVCache卸载ODCC全场景测评]]、[[inbox/2026-09-25-大模型推理-华为OceanStor-M900上下文存储]]
+- ODCC AI 存储实验室（联合 NVIDIA / XSKY MeshFusion / 大普微）测评：KV Cache 卸载到 SSD 池后，长序列场景 TTFT 从数十秒降到百毫秒级，TPS 提升约 10–32×（Cache 命中时 7 万–11 万 tokens/s）；数据路径基于 BlueField-3 DPU + JBOF，绕开 host CPU/内存直达显存，形态对齐 NVIDIA CMX
+- 两个反直觉数据：EC 4+2:1 纠删码与单副本性能基本持平（打破「EC 必然拖慢」的旧认知，可放心换容量利用率）；Spectrum-X 下集群 EC 顺序读 272.1 GiB/s，达三存储节点物理极限的 97.4%——网络不是瓶颈
+- 真门槛在语义不在带宽：KV 张量带位置信息、移动即失效，缓存层必须介入调度决策，故障还可能表现为静默错误（呼应 [[MLSys2026论文精选]] 的静默失败线）
+- 华为 OceanStor M900 Context Memory Storage（全联接 9/17）：为 SuperPoD 提供 PB 级、TB/s 级全共享内存空间，在片上内存 / DRAM / SSD 之间做 KV Cache 分层与调度，灵衢一跳直连，定位 L3.5 层；官方叙事是 AI 基础设施从「算力为中心」转向算力/网络/存储深度协同
+- 与 [[HBF-NAND-AI推理内存2026]] 的 SALT-KV、[[#KVServe 与 vLLM v0.30 Fast Start：KV 压缩与权重驻留都变成运行时决策（2026-09-26 归档）]] 同线：KV 分层从硬件规范落到运行时可观测、可调度的软件方案
+- 关联 [[HBF-NAND-AI推理内存2026]]、[[MLSys2026论文精选]]、[[AI芯片推理硬件2026全景]]
+
 
