@@ -347,3 +347,20 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 边界条件：H100 + NVLink/IB 上收益收窄到 1.34×/1.25×/1.75×/1.24×——互连变快后分离架构的收益只剩「减少负载不均衡与调度开销」
 - 投稿窗口（9/24 起）：SOSP 2026 9/29–10/2 布拉格（9/29 workshop/tutorial，HotStorage '26 同城 9/28–29）；MLSys 2027 10/10 开放、10/30 20:00 UTC 截稿；ASPLOS 2027 Sept cycle 已截（response 12/1–4、通知 12/21/26）；EuroSys 2027 Fall 全文 9/24 截稿、通知 2027-01-29、会议拉巴特 4/19–23
 - 关联 [[#OSDI'26 录用 136/681（20.0%）与调度侧反直觉结果（2026-09-13 归档）]]、[[推理引擎格局-vLLM-SGLang]]
+
+## SOSP 2026 工作坊侧：AgenticOS 把「agent 的 OS 层」单独立题（2026-09-26 归档）
+整理自 [[inbox/2026-09-26-MLSys顶会-SOSP2026开幕与AgenticOS议程]]
+- SOSP 2026（9/29–10/2 布拉格）同城同期挂三个工作坊：HotStorage '26（9/28–29）、PACMI 2026、AgenticOS 2026（9/29 下午）
+- AgenticOS 征稿范围＝agent 系统的原语、隔离模型、调度技术与可观测性，收 position paper 与经验报告，目标是为 agent 系统定义专属操作系统抽象
+- Bindschaedler 的 keynote 主张：OS 在这里有活干——agent 需要一个「限制它能做什么、同时不拖慢它该做什么」的底座；随会公开两篇 PDF《The Irreversibility Budget》《Don't Trust the Code, Check Its Effects》
+- 同作者组另投两篇（AgenticOS 与 Jinhao Hu / Ashvin Goel；与 Bardia Mohammadi，主题 Externalization Barriers）与一篇 PACMI
+- 分工对照：录用主线仍是 LLM 训练/推理基础设施与确定性，工作坊侧把「agent 作为一等 OS 负载」独立出来——验收契约、效果核查类问题开始有系统会议落点
+- 待回补：workshop 论文会期放出后可核对结论（对应上文「zero trust 验证」一脉）
+- 关联 [[AI-Agent-2026格局]]
+
+## EcoServe 之后：投稿窗口与时间线（2026-09-26 归档）
+整理自 [[inbox/2026-09-26-MLSys顶会-SOSP2026开幕与AgenticOS议程]]（会议日历部分）
+- 进行中：SOSP 2026 9/29–10/2 布拉格（9/29 为 workshop/tutorial 日，HotStorage '26 9/28–29 同城）
+- 待截稿：MLSys 2027（10/10 开放、10/30 20:00 UTC 截稿）；ASPLOS 2027 Sept cycle 已截（response 12/1–4、通知 12/21/26）；EuroSys 2027 Fall 全文 9/24 已截（通知 2027-01-29、会议拉巴特 4/19–23）
+- 读法：9 月下旬是系统会议的空窗期，主要动作在 10 月（MLSys 2027 截稿）——10 月上旬前应回看 SOSP/AgenticOS 放出材料
+- 关联 [[推理引擎格局-vLLM-SGLang]]
