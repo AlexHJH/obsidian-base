@@ -375,4 +375,14 @@
 - 值得抄的四个工程面（对 [[LongLoop Console]] 的直接参照）：会话级运行时沙箱强隔离、长周期任务可中断可恢复、凭据隔离托管、模型/工具/技能/记忆统一资产化 + 调用链/工具链/决策链全链路追踪
 - 关联 [[#多云 Agent 控制面与用量计量（2026-09-21 归档）]]、[[推理引擎格局-vLLM-SGLang]]
 
+## Harness 设计空间被论文化：Dive into Claude Code 与 OpenClaw 的状态语义（2026-09-27 归档）
+整理自 [[inbox/2026-09-27-AI-Agent-ClaudeCode设计空间论文]]、[[inbox/2026-09-27-AI-Agent-OpenClaw任务完成与结果送达分离]]
+- Dive into Claude Code（arXiv 2604.14228，VILA-Lab/MBZUAI）：只靠公开 TypeScript 产物（v2.1.88）反向拆解，核心循环仅是 while(调模型 → 跑工具)，复杂度全在循环外围——七种权限模式 + ML 分类器、五层 compaction 管线、四种扩展机制（MCP/plugins/skills/hooks）、worktree 隔离子 agent、append-oriented 会话存储
+- 方法论：5 个人类价值 → 13 条设计原则 → 具体实现，用「为什么这样实现」替代功能罗列；deny-first 的依据是用户会批准约 93% 的权限提示
+- 对照结论：同一批设计问题在不同部署语境答案不同——Claude Code 是绑定单仓库会话的 CLI harness（逐动作安全分级 + 文件系统记忆），OpenClaw 是多渠道常驻控制平面（边界式访问控制 + 结构化长期记忆）；上下文持久性成新瓶颈，harness 将成「模型第 100 步开始不听话」的检测与回灌训练工具
+- OpenClaw 2026.9.5/9.6：把「任务完成」与「结果送达」拆成两个事实——Running/Queued/waiting/Finished 只描述执行，成功与投递各自独立表达，活动不可见不等于失败；A2A 切换模型后必须回传 fallback 模型的实际答案
+- 歧义不猜：含糊的 task id 宁可不命中，也不冒「结果投递到错误任务」的风险；取消语义绑定当前控制权与所选执行，已接受的 stop 可继续报告清理进度
+- 直接可抄（对应 [[LongLoop Console]] 的防虚假完成）：状态字段分维表达 + 投递确认独立于执行完成
+- 关联 [[MLSys2026论文精选]]、[[推理引擎格局-vLLM-SGLang]]
+
 

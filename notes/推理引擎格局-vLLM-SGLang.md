@@ -363,4 +363,12 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 与 [[HBF-NAND-AI推理内存2026]] 的 SALT-KV、[[#KVServe 与 vLLM v0.30 Fast Start：KV 压缩与权重驻留都变成运行时决策（2026-09-26 归档）]] 同线：KV 分层从硬件规范落到运行时可观测、可调度的软件方案
 - 关联 [[HBF-NAND-AI推理内存2026]]、[[MLSys2026论文精选]]、[[AI芯片推理硬件2026全景]]
 
+## Agentic 服务的 KV 预测式管理与混合注意力三视图缓存（2026-09-27 归档）
+整理自 [[inbox/2026-09-27-大模型推理-Agent服务KV缓存CacheScout]]、[[inbox/2026-09-27-大模型推理-SGLang-DeepSeekV4百万上下文优化]]
+- CacheScout（arXiv 2608.14624，UCSC/UW/芝大）：针对 LLM 自主决策、执行路径事先不可知的 agentic 工作流，在线学习 Agent 之间转移概率，据此决定 KV 的保留/淘汰与预取；与 KVFlow 的分界在后者要求静态执行图 → KV 管理从「按前缀命中率」转向「按未来执行概率」
+- ShadowRadix（SGLang，DeepSeek V4 Day-0 支持）：V4 注意力从单一 MLA 变为三种异构并存——SWA（滑窗 128）/ CSA（4:1 压缩 + TopK 稀疏）/ HCA（128:1 高压缩），各自 KV 生命周期与索引逻辑不同，压缩机制还引入跨 token 依赖
+- 实现路径：在 RadixTree 上扩虚拟地址表，每 token 一个虚拟位置，除以 4 / 除以 128 映射到三张 Shadow 页表；SWA 用 Tombstone 自动回收滑窗外过期 KV，压缩支路因压缩比固定无需淘汰；两个 Ring Buffer 维护 Compressor 中间状态
+- 读法：混合注意力模型的缓存管理已从「分页」变成「多视图地址翻译 + 依赖追踪」，与 [[HBF-NAND-AI推理内存2026]] 的分层放置、[[AI-Agent-2026格局]] 的执行路径预测同向
+- 关联 [[MLSys2026论文精选]]、[[AI编译器2026格局]]
+
 
