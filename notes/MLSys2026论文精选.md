@@ -364,3 +364,14 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 待截稿：MLSys 2027（10/10 开放、10/30 20:00 UTC 截稿）；ASPLOS 2027 Sept cycle 已截（response 12/1–4、通知 12/21/26）；EuroSys 2027 Fall 全文 9/24 已截（通知 2027-01-29、会议拉巴特 4/19–23）
 - 读法：9 月下旬是系统会议的空窗期，主要动作在 10 月（MLSys 2027 截稿）——10 月上旬前应回看 SOSP/AgenticOS 放出材料
 - 关联 [[推理引擎格局-vLLM-SGLang]]
+
+## OSDI '26 与 SOSP 2025 回看：静默故障/可靠性已成会议主线（2026-09-28 归档）
+整理自 2026-09-28 采集（OSDI '26 接收率与 LLM 推理系统；SOSP 2025 论文回看）
+- OSDI '26（第 20 届，7/13–15 西雅图）接收 136/681 ≈ 20%（CFP 明确「至少 20%」）；三条线：在线推理的可观测与调度、静默故障/发散检测、异构与碎片化资源编排
+- 推理服务与诊断：StriaTrace（SJTU+阿里，关键路径追踪 + 回归式 roofline 诊断在线异常）、Kairox（在线神经元再平衡做 GPU–CPU 混合推理）、Revisiting Pipeline Parallelism（把 PP 重新作为 TP 的替代做在线 serving）、Prism（GPU 显存 ballooning 做多模型降本）、Sereno（移动 LLM 推理的访存带宽争抢治理）
+- 训练可靠性成独立赛道：OpGuard（UMich+ByteDance Seed，用跨 run 的 bitwise 对齐作生产环境定位静默发散的调试原语）、TrainMover（弹性 + 备用机中断恢复，低停机零内存开销）
+- 资源编排：OpenTela（用户态编排层把碎片化 HPC 集群变成容错异构 serving 平台，见上文）、RoCE BALBOA（SmartNIC 上的服务增强 RDMA offload 引擎）
+- SOSP 2025 回看（10/13–16 首尔，65/368 ≈ 17.7%）：训练可靠性 ByteRobust / Mycroft / TrainVerify / Sailor；推理 KV 与显存管理 Jenga / Aegaeon / DiffKV / IC-Cache / Pie；GPU 系统与运维 PhoenixOS（OS 级检查点恢复 + 校验式推测）/ Aeolia
+- 静默错误线对照：OSDI '25 Best Paper TRAINCHECK 用主动推断的不变量检测 DL 训练静默错误，复现 20 个真实案例并在 DeepSpeed/Transformers 新发现 6 个 bug——与 SOSP 的 TrainVerify/Mycroft 是同一问题的验证面
+- 判据：静默错误检测已从单篇论文长成会议主线，与本库「验证与度量必须独立于提交者」的 zero trust 主线同向
+- 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI-Agent-2026格局]]
