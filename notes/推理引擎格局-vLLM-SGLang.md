@@ -371,4 +371,12 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 读法：混合注意力模型的缓存管理已从「分页」变成「多视图地址翻译 + 依赖追踪」，与 [[HBF-NAND-AI推理内存2026]] 的分层放置、[[AI-Agent-2026格局]] 的执行路径预测同向
 - 关联 [[MLSys2026论文精选]]、[[AI编译器2026格局]]
 
+## vLLM 0.30.0：分层 KV 卸载原生化 + KV 布局重构（2026-09-29 归档）
+整理自 [[inbox/2026-09-29-大模型推理-vLLM0.30与分层KV卸载]]
+- 9/10 官方博客说明原生分层 KV 卸载设计（v0.22 起内置、无外部依赖），9/22 发布 0.30.0；KV cache 布局做了一次重构——把 K/V 打包进 content 维（backend-published KV packing），并支持按 KV-cache group 选择不同 attention 后端
+- 核心设计 host-centric：所有 KV 都经 CPU DRAM，host 侧用规范化布局（每页存一层的一块、跨 TP rank 的 KV head 聚成连续区），于是不同加速器、不同注意力后端、不同并行配置共享同一份 KV
+- 二级层带来跨节点能力：缓存水平扩展、新实例用共享存储热启动、PD 分离或负载均衡时对等传输 KV；混合模型上 Mamba 状态层每 chunk 覆盖 token 远多于全注意力层 → 卸载频率更低（与 SGLang UnifiedRadix/HiCache 同构）
+- 调度侧同期改动：KV-cache watermark 降抢占、two-phase allocation 处理跨组前缀命中、Marconi 式混合缓存准入、Mamba/线性注意力前缀缓存保留、LIFO 空闲块复用顺序修复 → KV 管理从「一个池子」变成有策略的分层资源
+- 读法：引擎竞争已从「谁的 attention 快」转到「谁能把 KV 的放置、共享与生命周期管明白」——本条补分层卸载设计，与 [[#KVServe 与 vLLM v0.30 Fast Start：KV 压缩与权重驻留都变成运行时决策（2026-09-26 归档）]] 的 Fast Start 同属 v0.30 版本线
+
 

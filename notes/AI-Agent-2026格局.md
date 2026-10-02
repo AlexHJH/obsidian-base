@@ -385,4 +385,10 @@
 - 直接可抄（对应 [[LongLoop Console]] 的防虚假完成）：状态字段分维表达 + 投递确认独立于执行完成
 - 关联 [[MLSys2026论文精选]]、[[推理引擎格局-vLLM-SGLang]]
 
+## OpenAI Agents API 采集条目与既有归档重合（2026-09-29 归档）
+整理自 [[inbox/2026-09-29-AI-Agent-OpenAI-Agents-API公测与Codex-harness托管化]]
+- 本条（9/10 公测）与 [[#OpenAI Agents API 公测与 ADK 未认证 RCE（2026-09-13 归档）]]、[[#OpenAI Agents API：Codex harness 被产品化（2026-09-19 归档）]] 同源：对象模型（Agent / Environment / Session / events）、托管能力清单与「无 API 附加费」口径均一致，未引入新事实
+- 唯一略新的表述是把 harness 定性为「模型消耗的漏斗」——不额外收费说明 harness 不是产品线，对自建 harness 的团队是一份公开成本参照；同时产品权限、验收测试与数据义务仍归调用方，不等于质量责任转移（呼应 [[#九款 Harness 横评：换壳的收益量级（2026-09-17 归档）]] 里的验收/quarantine 缺口，对 [[LongLoop Console]] 的契约冻结仍是自家活）
+- 结论不变：harness 工程质量与「用零件拼装 harness」成为竞争焦点
+
 
