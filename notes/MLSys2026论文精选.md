@@ -375,3 +375,21 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 静默错误线对照：OSDI '25 Best Paper TRAINCHECK 用主动推断的不变量检测 DL 训练静默错误，复现 20 个真实案例并在 DeepSpeed/Transformers 新发现 6 个 bug——与 SOSP 的 TrainVerify/Mycroft 是同一问题的验证面
 - 判据：静默错误检测已从单篇论文长成会议主线，与本库「验证与度量必须独立于提交者」的 zero trust 主线同向
 - 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI-Agent-2026格局]]
+
+## SOSP 2026 会中：AgenticOS + 新增 HARNESS 工作坊，agent 运行时被单独立题（2026-10-03 归档）
+整理自 [[inbox/2026-09-30-MLSys顶会-SOSP2026-AgenticOS工作坊与Agent运行时加固]]
+- 9/29 工作坊日：AgenticOS 2026（第 2 届）与 PACMI 之外新增 HARNESS（Hardening Agent Runtimes: Networking, Execution, State, Security），把「运行时加固」拆成可分工的工程问题，与 AgenticOS 的原语/调度议题互补；主会 9/30–10/2 布拉格 Clarion Congress Hotel
+- 直面「防虚假完成 / 越界执行」的三篇：Externalization Barriers（MPI-SWS + 多伦多，不可信 agent 探索的 OS 抽象）、The Irreversibility Budget（把不可逆动作当成要预算的资源 + 舰队级风险记账与准入控制）、Agent libOS（清华，能力受控的自演化 agent 运行时底座）
+- 抽象错配同题：阿里云 The Abstractions Are Slipping（agent 时代的四类 OS 错配）、Wisconsin Isolation in the Age of Agents → 现有隔离/权限抽象与 agent 实际负载错配
+- 主会 Session 3D（GPU kernels and accelerators）：Morphable Kernels（清华）、Ave（HKUST）——与 [[#Ave（SOSP'26）：用数据流不变量当编译期护栏，管住 agent 优化 GPU 内核（2026-09-25 归档）]] 衔接
+- 与本机对照：不可逆预算 / 准入控制 / 外部化屏障 = 验收契约冻结与验证检疫的学术版本；评审仍缺「通过率要配上怎么过关的」这类口径
+- 关联 [[#SOSP 2026 工作坊侧：AgenticOS 把「agent 的 OS 层」单独立题（2026-09-26 归档）]]、[[AI-Agent-2026格局]]
+
+## SOSP 2026：llmovoice 把语音 LLM 的「上下文预算」做成中间件（2026-10-03 归档）
+整理自 [[inbox/2026-09-30-MLSys顶会-SOSP2026-llmovoice语音LLM上下文编排]]
+- 上交（Yifei Zhu 组 / AgenticSys，arXiv 2609.04288 / DOI 10.1145/3830418.3843860）：夹在流式音频与模型推理之间的上下文管理中间件，把语音对话建模为 VoicePage（一次完整问答，含 audio/transcript/summary/style/环境状态）+ VoiceThread（跨页任务与话题连续性），一页可同时属于多个 thread
+- 关键区别：不把副语言（语速）与环境（网络抖动）留在音频里当隐变量，而是显式状态参与预算分配——这是「语音 agent 记忆」区别于文本 RAG 的地方
+- 两层决策：Context Projector 选历史 + 表示保真度（音频/转写/摘要）；Context Orchestrator 统一决定内容、表达风格与轮次控制（turn-taking），每轮结束提交为新 vpage 闭合回路
+- 官方自测口径（未第三方复核）：长对话单轮成本最高降 40.1×、长期语音服务整体成本降 79.2%、保留基线答案质量 98.7%、语速对齐误差降 52.35%、网络波动下误触发改善 2.29×
+- 对本机的意义：语音服务瓶颈不在 ASR/TTS，而在「历史怎么压缩、以何保真度回喂」——与本机语音栈的会话状态处理同构
+- 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI-Agent-2026格局]]
