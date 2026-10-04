@@ -379,4 +379,12 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 调度侧同期改动：KV-cache watermark 降抢占、two-phase allocation 处理跨组前缀命中、Marconi 式混合缓存准入、Mamba/线性注意力前缀缓存保留、LIFO 空闲块复用顺序修复 → KV 管理从「一个池子」变成有策略的分层资源
 - 读法：引擎竞争已从「谁的 attention 快」转到「谁能把 KV 的放置、共享与生命周期管明白」——本条补分层卸载设计，与 [[#KVServe 与 vLLM v0.30 Fast Start：KV 压缩与权重驻留都变成运行时决策（2026-09-26 归档）]] 的 Fast Start 同属 v0.30 版本线
 
+## 推理控制平面与共享 KV 溯源（2026-10-01 归档）
+整理自 [[inbox/2026-10-01-大模型推理-llm-d-v0.10与推理控制平面]]、[[inbox/2026-10-01-大模型推理-共享KVCache溯源]]
+- llm-d v0.10.0（9/29）+ BU 综述（arXiv 2609.23130）：主张主战场从「引擎内优化」转为「分布式控制问题」——vLLM/SGLang 是执行引擎，llm-d 是引擎无关的推理控制平面（路由、缓存状态感知、分离、流控、自动扩缩、可靠性），互补而非替代
+- 核心判据：稀缺资源从裸 FLOPs 转向可复用状态（KV）、阶段放置、异构加速器与网络；v0.9 起路由高可用、DisaggregatedSet revision 路由让 P/D 滚动升级首次安全、GPU 利用率感知路由；路线扩散到扩散模型路由、非 K8s 环境（RL/Slurm/文件系统端点发现）与 GB200/GB300/XPU/ROCm/TPU well-lit paths
+- 共享 KV 溯源（arXiv 2609.38706，Griffith/NUS/Macquarie）：前缀缓存已是默认优化但缓存块「来源」（哪个租户、哪次请求写入）通常不记录；共享带来 PromptPeek / InputSnatch 等 TTFT 计时侧信道攻击 → 溯源须与路由、淘汰、跨实例 KV 搬运联合设计
+- 工程风险提示：vLLM 分离式预填仍标 experimental；llm-d 月更节奏 + 仓库迁移/弃用，需锁版本并预留升级工时
+- 关联 [[HBF-NAND-AI推理内存2026]]、[[MLSys2026论文精选]]
+
 
