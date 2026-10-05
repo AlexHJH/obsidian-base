@@ -393,3 +393,22 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 官方自测口径（未第三方复核）：长对话单轮成本最高降 40.1×、长期语音服务整体成本降 79.2%、保留基线答案质量 98.7%、语速对齐误差降 52.35%、网络波动下误触发改善 2.29×
 - 对本机的意义：语音服务瓶颈不在 ASR/TTS，而在「历史怎么压缩、以何保真度回喂」——与本机语音栈的会话状态处理同构
 - 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI-Agent-2026格局]]
+
+## MLSys 2027 征稿：10/10 开投、10/30 截止，agentic AI 与 LLM 做硬件设计入正式主题（2026-10-02 归档）
+整理自 [[inbox/2026-10-02-MLSys顶会-MLSys2027征稿与时间线]]
+- 时间线：10/10 开放投稿 → 10/30 20:00 UTC 截止（约 4 周窗口）→ 2027-01-18 评审 → 01-21 rebuttal → 02-28 通知；会期 2027-06-21~25（industry day 06-25）
+- 双轨且**截止后不可切换**：research track 看 novelty/quality/impact；industrial track 只要求大规模真实系统的方法论与基准，不要求新颖性
+- 匿名规则不对称：research 全匿名（含机构与自引）；industrial 只匿作者名，公司/产品名/URL 可留
+- 格式沿用 2025 模板：正文 ≤10 页（2 栏）、参考文献不限、附录另传，要求逐条列出全部作者
+- 新增/强调主题：agentic AI 系统、大规模 RL for LLM、ML 编译器与运行时、大规模 ML 存储系统（training/serving/RL）、LLM 用于硬件设计或系统优化
+- 与本库交叉：storage-for-ML 与 HBF／推理内存方向同源
+- 关联 [[HBF-NAND-AI推理内存2026]]、[[AI-Agent-2026格局]]
+
+## SOSP 2026 闭幕：录用名单上线，GPU 优化 / LLM 服务 / 验证三簇最密（2026-10-02 归档）
+整理自 [[inbox/2026-10-02-MLSys顶会-SOSP2026完整录用名单]]
+- GPU／编译：`Anchor`（清华，解耦内存治 GPU shallow disruption）、`Efficient GPU Multitasking with Morphable Kernels`、`Taming Dynamism on GPUs`（SJTU，跨 SM kernel 融合）、`MeshRT`+`Wavel`（Edinburgh+MSR，晶圆级 runtime 与编译系统）
+- LLM 服务：`LLM-42`（MSR+UW，带验证推测的确定性推理）、`StreamEP`（抗尾延迟 MoE 解码、无通信屏障）、`Janus`（PKU+京东，生产级多 LLM 服务）、`Cerium`（CMU+UT+NVIDIA，多 GPU TB 级加密推理）
+- 可靠性／验证：`M2K`（PSU+中科院计算所，显式化 model-kernel 接口以验证 CUDA kernel）、`Don't Let AI Agents YOLO Your Files`（Wisconsin+MSR，agent 原生文件系统的信息与控制）
+- agent 系统线延续 9/29 工作坊议题（不可逆预算、外部化屏障），与本库「验收契约」主线同源
+- 数据质量提示：名单页为两段 A–Z 且疑似混入往年条目（PowerInfer／LoongServe 等），引用前按 ACM DL 核年份
+- 关联 [[#SOSP 2026 会中：AgenticOS + 新增 HARNESS 工作坊，agent 运行时被单独立题（2026-10-03 归档）]]、[[AI-Agent-2026格局]]
