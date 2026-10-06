@@ -399,4 +399,19 @@
 - 与主线 [[LongLoop Console]] 的验收契约冻结、防「虚假完成」同向
 - 关联 [[MLSys2026论文精选]]
 
+## AI 运行时基础设施：把「运行时干预」定为独立系统层（2026-10-06 归档）
+整理自 [[inbox/2026-10-03-AI-Agent-AI运行时基础设施与执行期干预]]
+- 论文（arXiv 2603.00495）主张把「AI 运行时基础设施」正式化为独立系统层：不只是观察失败，而是在执行过程中实时改写输入、控制流与执行状态；判据是「事后诊断」不算运行时，「执行期干预」才算
+- 两个实例划线：VIGIL（证明事后诊断 + 恢复管不住长任务失败）与 AFM（Adaptive Focus Memory，把自适应控制嵌进执行循环，持续观测状态并动态分配/压缩/重加权记忆）
+- 与业界实践口径吻合：框架管行为，运行时管进程状态、资源边界与崩溃恢复
+- 对 [[LongLoop Console]] 的对照：执行期干预 = 验收契约与验证检疫的前置化，问题在执行中暴露并处理
+- 关联 [[MLSys2026论文精选]]
+
+## Microsoft Agent Framework 1.0 GA：从 SDK 走到被支持的运行时（2026-10-06 归档）
+整理自 [[inbox/2026-10-03-AI-Agent-MicrosoftAgentFramework1.0与AgentHarness]]
+- 4/3 GA：Semantic Kernel 企业基座 + AutoGen 编排思路合并为 .NET/Python 同构 SDK，两个前身转入维护模式；承诺稳定 API + 长期支持，多模型连接器覆盖 Foundry/Azure OpenAI/OpenAI/Claude/Bedrock/Gemini/Ollama，跨运行时互操作走 A2A 与 MCP
+- Build 2026（6/2–3）后重心从「建 agent」转向「跑 agent」：Agent Harness（shell、文件系统与消息循环）、GitHub Copilot SDK 与 Claude Agent SDK 连接器、Foundry Hosted Agents 相继 GA
+- Hosted Agents 按用量计费，本地 agent 几行代码即可转托管；第三方 coding agent 被当作受治理的 fleet 成员
+- 选型信号：生产问题从「用哪个框架」变为「在哪执行、能碰什么、如何观测」——与本库 [[LongLoop Console]] 的 harness + 治理 + 可观测三件套同题
+
 
