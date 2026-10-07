@@ -412,3 +412,11 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - agent 系统线延续 9/29 工作坊议题（不可逆预算、外部化屏障），与本库「验收契约」主线同源
 - 数据质量提示：名单页为两段 A–Z 且疑似混入往年条目（PowerInfer／LoongServe 等），引用前按 ACM DL 核年份
 - 关联 [[#SOSP 2026 会中：AgenticOS + 新增 HARNESS 工作坊，agent 运行时被单独立题（2026-10-03 归档）]]、[[AI-Agent-2026格局]]
+
+## MLSys 2026 容错方向 + 三趋势复盘：瓶颈回落到软件栈（2026-10-07 归档）
+整理自 [[inbox/2026-10-04-MLSys顶会-容错LLM服务GhostServe与RaidServe]]、[[inbox/2026-10-04-MLSys顶会-MLSys2026三大趋势]]
+- 新增 Fault Tolerance 方向（与「长跑 agent 任务」直接呼应）：**GhostServe**（UCF）对 streaming KV cache 做纠删码、把 parity shard 放 host memory，既不全量重算也不做状态复制 —— checkpoint 延迟最多降 2.7×、单 batch 恢复延迟降 2.1×、中位响应延迟 1.2×；**RaidServe**（Stanford）在 tensor-parallel 服务里用 computation + memory rebalancing 扛 GPU 故障
+- 评价维度从纯「性能/吞吐」扩到「韧性/高可用」，是生产化信号
+- Modular 复盘的三趋势：①异构硬件贯穿全部 6 个 LLM Serving session（Esha Choukse 主题演讲《Beyond Model Serving》定调硬件多样性是高效服务 agentic 系统的前提）②瓶颈在软件栈不在硬件 —— SuperInfer 把 GH200 的 NVLink-C2C 当 PCIe 用，900 GB/s 只用不到 5% ③SHIP 是 Groq LPU 上基于 SRAM 的超大推理流水线
+- 与既有条目互证：BOute（异构模型+GPU 多目标贝叶斯路由）、MorphServe（运行时量化层交换 + KV cache 缩放）
+- 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI芯片推理硬件2026全景]]
