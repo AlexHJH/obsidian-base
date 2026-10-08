@@ -402,4 +402,14 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 可衔接原语：前缀缓存（发现可复用）、KV offloading（跨层级搬）、预取与路由（放置决策）、Internet 式路由；对内存层级的意义是 KV 成为横跨 HBM / CXL / 本地 SSD / 远端存储 / 网络的统一寻址对象，归属与一致性域问题被推到台前
 - 关联 [[HBF-NAND-AI推理内存2026]]
 
+## SGLang 分层 KV 原生化 + K8s 推理服务冷启动（2026-10-08 归档）
+整理自 [[inbox/2026-10-05-大模型推理-SGLang分层KV缓存与2026路线图]]、[[inbox/2026-10-05-大模型推理-K8s推理服务冷启动与SLO调度]]
+- SGLang 把 KV cache 分层做成原生能力：GOSIM Shenzhen 2026（10/17）专设工作坊讲 RadixAttention / Unified RadixAttention、HiCache 跨存储层级搬 cache、面向混合注意力模型的 Unified Memory Pool
+- 2026 Q2 路线图主目标：分层缓存与混合注意力原生化、为 agentic 负载提供弹性 session 控制；Distributed KVCache System for Agentic Workload（#21846）、HiSparse（#28874）、elasticmem 集成
+- 调度侧同期重构：forward-mode 泛化、scheduler 更无状态、完全支持 mixed chunked prefill、把准备逻辑更多挪进 CUDA graph 以降 CPU 开销
+- 生产侧佐证：LMCache 的「多进程 KV cache」与 KV 持久化到 S3（NIXL / ICMS / Mooncake 一线）已成独立赛道
+- K8s 侧缺口（arXiv 2607.16596 / 2609.20874）：缺「一等公民的模型/权重分发」，靠 sidecar 与镜像层拼凑 → 冷启动 2–10 分钟，响应式扩缩「结构性地总是晚一步」
+- 扩缩信号在进化：队列深度 / KV cache 利用率 → Cascade（arXiv 2608.06557）按同一 SLO 下请求紧迫度分层调度；生态面 Gateway API Inference Extension、NVIDIA Dynamo、ModelExpress 权重分发、KAI Scheduler / Grove / Kueue
+- 关联 [[#llm-d：Kubernetes 原生分布式推理控制平面（2026-08-31 归档）]]、[[HBF-NAND-AI推理内存2026]]
+
 

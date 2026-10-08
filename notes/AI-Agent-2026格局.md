@@ -414,4 +414,14 @@
 - Hosted Agents 按用量计费，本地 agent 几行代码即可转托管；第三方 coding agent 被当作受治理的 fleet 成员
 - 选型信号：生产问题从「用哪个框架」变为「在哪执行、能碰什么、如何观测」——与本库 [[LongLoop Console]] 的 harness + 治理 + 可观测三件套同题
 
+## Claude Agent SDK 子代理隔离 + MCP 2026-07-28 无状态化复核（2026-10-08 归档）
+整理自 [[inbox/2026-10-05-AI-Agent-ClaudeAgentSDK子代理隔离与计费拆分]]、[[inbox/2026-10-05-AI-Agent-MCP2026-07-28无状态化与路线图]]
+- Claude Agent SDK（2025-09 由 Claude Code SDK 更名）：主 agent 可派生子代理，每个子代理跑在独立会话 / 独立 system prompt / 独立工具与权限集，只有最终消息回传父会话 → 父上下文不被子代理中间过程污染；消息带 `parent_tool_use_id` 做归属与成本追踪
+- 边界口径：需要「驱动」用 Claude Code，需要「构建产品」用 SDK；SDK 原生消费 MCP server、与 A2A 互通；只适配 Claude 模型，要换模型得走 LangGraph 一类编排层（呼应 [[#2026 H1 框架格局：大一统趋势（2026-07-30 归档）]]）
+- 计费/合规：2026-06-15 起 Agent SDK 与 `claude -p` 单列额度，不再吃订阅交互额度；对外发布产品必须用 API key 认证，不得给终端用户放 claude.ai 登录
+- MCP 2026-07-28 修订（本条补充细节）：移除 `initialize` 握手与协议级 session，协议层变无状态，每次请求用 `_meta` 自带协议版本与客户端能力；roots/sampling/logging 与旧 HTTP+SSE 传输一并弃用
+- 跨调用状态改由 server 显式铸造的 handle 当普通工具参数传（SEP-2567）；Tasks 移出实验核心 → `io.modelcontextprotocol/tasks` 扩展；授权收紧（客户端凭据绑定签发方、不可跨授权服务器复用，DCR 弃用转 CIMD）
+- 路线图（2026-08-22）：统一 transport（消除 HTTP/stdio 双轨）、面向 agent 身份的授权模型（云 workload 自持身份、子 agent 收窄权限）
+- 对本库主线的含义：subagent 隔离 + 回传契约，正是 [[LongLoop Console]] 验收契约 / 防「虚假完成」要的边界
+
 
