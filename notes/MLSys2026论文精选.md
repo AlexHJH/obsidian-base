@@ -420,3 +420,11 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - Modular 复盘的三趋势：①异构硬件贯穿全部 6 个 LLM Serving session（Esha Choukse 主题演讲《Beyond Model Serving》定调硬件多样性是高效服务 agentic 系统的前提）②瓶颈在软件栈不在硬件 —— SuperInfer 把 GH200 的 NVLink-C2C 当 PCIe 用，900 GB/s 只用不到 5% ③SHIP 是 Groq LPU 上基于 SRAM 的超大推理流水线
 - 与既有条目互证：BOute（异构模型+GPU 多目标贝叶斯路由）、MorphServe（运行时量化层交换 + KV cache 缩放）
 - 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI芯片推理硬件2026全景]]
+
+## SkVM 把 skill 当程序编译 + SOSP 2026 AgenticOS 会后回补（2026-10-09 归档）
+整理自 [[inbox/2026-10-06-MLSys顶会-SkVM把agent-skill当程序编译]]、[[inbox/2026-10-06-MLSys顶会-SOSP2026会后AgenticOS议程与HARNESS教程]]
+- **SkVM（SJTU IPADS，SOSP 2026，arXiv 2604.03088）**：分析 10 万+ skill 后把 skill 当代码、把 LLM+harness 当异构处理器；AOT 按模型能力画像生成适配变体 + 环境绑定，JIT 做 code solidification（把验证过的轨迹固化成可执行代码）；官方口径 8 LLM × 3 harness 上完成率 +~10%、token 最多 -40%、延迟降 19–50×（作者自测）
+- 三类失配：模型失配（能力缺失需补偿）、系统失配（工具/环境依赖漂移）、结构失配（串行工作流里可并行/向量化部分未被提取）
+- **AgenticOS 回补**：新增具身 runtime **TypeGo**（Yale，把机器人当 OS 一等负载）与「agent 上下文陈旧」（港大）议题；验证侧首次成组（Formal Methods as the Harness for AIOS 等）——与本库「验收契约」主线同源；口径修正：HARNESS 实为 Bindschaedler 半天 tutorial 而非 workshop
+- 材料：Bindschaedler 博客公开三篇 PDF 摘要（The Irreversibility Budget、Externalization Barriers、Don't Trust the Code, Check Its Effects）
+- 关联 [[AI编译器2026格局]]、[[AI-Agent-2026格局]]
