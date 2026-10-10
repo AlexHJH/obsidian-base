@@ -412,4 +412,14 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 扩缩信号在进化：队列深度 / KV cache 利用率 → Cascade（arXiv 2608.06557）按同一 SLO 下请求紧迫度分层调度；生态面 Gateway API Inference Extension、NVIDIA Dynamo、ModelExpress 权重分发、KAI Scheduler / Grove / Kueue
 - 关联 [[#llm-d：Kubernetes 原生分布式推理控制平面（2026-08-31 归档）]]、[[HBF-NAND-AI推理内存2026]]
 
+## KVSET 工作集容量规划 + vLLM v0.31.0 重启/背压/准入（2026-10-10 归档）
+整理自 [[inbox/2026-10-07-大模型推理-KVSET工作集容量规划]]、[[inbox/2026-10-07-大模型推理-vLLM-0.31发布]]
+- KVSET（arXiv 2609.27746，Luchang Li 等，9/23）：把「KV cache 工作集」定义为达到目标命中率所需的最小缓存容量；用 Mattson stack algorithm 一次算出各容量下的命中率（对每个 KV 页算 LRU 栈距离，再与各候选容量的页数比较判定命中），由「目标命中率所需前缀页的最大 LRU 深度」直接反推最小缓存容量，把经验参数变成可测指标
+- 价值定位：KV 分层/卸载方案（[[HBF-NAND-AI推理内存2026]] 的 SALT-KV、vLLM 多级 KV 卸载）缺的正是「该配多大」的独立判据；已用生产 LLM 负载 trace 验证，开源且同时支持在线请求与离线回放
+- vLLM v0.31.0（10/5，717 commits / 307 贡献者）：结构信号在三处——`vllm preload` 权重缓存守护进程把已量化权重常驻显存跨引擎重启复用（实验性 `vllm snapshot create/restore` 用 CRIU 恢复 TP1 引擎）；KV offloading 新增**背压检测**（#50045）；`--max-num-active-seqs` 把 RUNNING 准入与 `max_num_seqs` 解耦，`--long-prefill-token-threshold` 改为按等待 prefill 数量自适应、等待队列重做（已持有 KV 块的请求优先调度）
+- 内核与并行主线（延续 V4.1-Flash 优化）：FlashMLA mega attention + NVFP4 压缩 KV cache 成 SM100 默认、Mega-Gate 融合门控 GEMM、decoder 边界融掉 TP all-reduce 与 MoE finalize；MoonEP 均衡 EP all2all、DeepEPv2 + 序列并行、EPLB 共享专家重叠
+- 安全/兼容：per-request 多模态 kwargs 默认拒绝（需 `--trust-request-mm-kwargs`）；prefix-cache extra key 按来源打标签（LoRA 名与 `cache_salt` 不再相撞）、LoRA 路径进 block hash；移除 `tokenizer_mode="slow"`、`--enforce-eager` 同时禁用 JIT warmup、XPU graphs 默认开启
+- 读法：延续 [[#KVServe 与 vLLM v0.30 Fast Start：KV 压缩与权重驻留都变成运行时决策（2026-09-26 归档）]] —— 引擎优化对象从稳态吞吐扩到「重启成本、卸载背压与队列准入」这些运维面
+- 关联 [[#vLLM 0.30.0：分层 KV 卸载原生化 + KV 布局重构（2026-09-29 归档）]]、[[MLSys2026论文精选]]
+
 
