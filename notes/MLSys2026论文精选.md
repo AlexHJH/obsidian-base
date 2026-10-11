@@ -428,3 +428,12 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - **AgenticOS 回补**：新增具身 runtime **TypeGo**（Yale，把机器人当 OS 一等负载）与「agent 上下文陈旧」（港大）议题；验证侧首次成组（Formal Methods as the Harness for AIOS 等）——与本库「验收契约」主线同源；口径修正：HARNESS 实为 Bindschaedler 半天 tutorial 而非 workshop
 - 材料：Bindschaedler 博客公开三篇 PDF 摘要（The Irreversibility Budget、Externalization Barriers、Don't Trust the Code, Check Its Effects）
 - 关联 [[AI编译器2026格局]]、[[AI-Agent-2026格局]]
+
+## MLSys 2026 三趋势回看 + OSDI'26 OpenTela 生产部署（2026-10-11 归档）
+整理自 [[inbox/2026-10-08-MLSys顶会-MLSys2026三趋势]]、[[inbox/2026-10-08-MLSys顶会-OSDI26-OpenTela异构HPC服务LLM]]
+- MLSys 2026（5/18–21，Bellevue）三主线：①ML for Systems 从「agent 会生成 kernel」转向「生成 + 评测 + 部署闭环」②推理负载拥抱异构硬件（六个 LLM Serving session 均涉及）③agentic AI 的系统化设计（规划/记忆/缓存）——与 [[#MLSys 2026 容错方向 + 三趋势复盘：瓶颈回落到软件栈（2026-10-07 归档）]] 互证，本次新增的是「闭环 + 评测」侧措辞
+- 数据点：AccelOpt（自改进 agent 闭环提 kernel）在 H100 paged GQA 上相对 FlashInfer v0.5.3，Qwen3-30B-A3B decode/prefill 达 1.50×/1.38×，但 Llama-3.1-8B prefill 仅 0.10× → 收益高度 workload 相关；FlashInfer-Bench 给统一 schema + benchmark + 部署闭环，兼作 MLSys 2026 AI Kernel 挑战赛（B200）平台
+- 警示信号（keynote）：agent 会「刷分」——在给定 test case 上过拟合、泛化性存疑；与 [[#SkVM 把 skill 当程序编译 + SOSP 2026 AgenticOS 会后回补（2026-10-09 归档）]] 的「验收契约」线同源
+- **OpenTela（OSDI'26，ETH Zurich）**：OSDI'26 于 7/13–15 Seattle 举行、接收率 20%（136/681）；OpenTela 用用户态编排 overlay 把分散、异构、由 Slurm 管理的 HPC 集群拼成跨机构 LLM 服务台——CRDT gossip 容错服务发现、统一 API 屏蔽各集群管理器与推理引擎差异、异构感知调度，无需 root、不改集群配置
+- 可信度：已生产部署 22 个月、服务 1300 万请求（系统顶会里少见的长期数据）；要解的问题是 HPC 无 K8s 的 discovery/routing/health、分配临时、节点对外不可达、GPU 跨管理域碎片化；同期 ETH 另一篇 RoCE BALBOA（SmartNIC service-enhanced RDMA offload，研究 track）
+- 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI-Agent-2026格局]]
