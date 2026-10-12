@@ -434,4 +434,13 @@
 - 口径提示：条款细节转述自媒体解读，未读标准原文；与 [[#OWASP Agentic Applications Top 10（2026-08-23 归档）]] 互补（后者是风险清单，前者是合规框架）
 - 关联 [[LongLoop Console]]、[[#Agent 运行时安全：插件零点击 RCE、首例 agent 数据泄露申报、Safari 27 本地 MCP（2026-09-21 归档）]]
 
+## 生产级 Agent 框架五强格局 + Harness Engineering 定名（2026-10-12 归档）
+整理自 [[inbox/2026-10-09-AI-Agent-2026框架格局与PydanticAI]]、[[inbox/2026-10-09-AI-Agent-HarnessEngineering正式化]]
+- 五强格局（2026 年综述口径）：LangGraph（有状态/合规工作流默认，强在确定性与可审计）、CrewAI（多 agent 快速原型）、OpenAI Agents SDK（轻量模型无关，只给 Agents/Handoffs/Guardrails/Sessions 几个原语，后续并入 AgentKit）、Google ADK（多模态 / GCP 原生）、Microsoft Agent Framework（AutoGen + Semantic Kernel 合流，1.0 已 GA）；选型主线收敛成一句「要不要自己掌握控制流」——LangGraph 强在审计与人审步骤，OpenAI SDK 强在上手速度但可观测性弱
+- 真正的 breakout 是 Pydantic AI：直接拿各框架都在外面套的那层 Pydantic 校验做底座，而非在它之上再加 wrapper——该层已被 OpenAI SDK / ADK / Anthropic SDK / LangChain / CrewAI 依赖；趋势是框架从「编排库」变成「被支持的运行时」
+- Harness Engineering 定名：源头并列 Mitchell Hashimoto《My AI Adoption Journey》（2026-02 初）与 OpenAI 博文（2026-02-11，Ryan Lopopolo「零手写代码交付生产应用」实践，定调 Humans steer. Agents execute.），LangChain 压缩成 Agent = Model + Harness；焦点从提示词（2022）→ 上下文检索（2023–24）→ 2025+ 让 agent 可靠运行的系统工程
+- 误诊代价与硬证据：大量 2025 生产故障其实是 harness 故障被当成 prompt/context 故障，修错层导致症状复发、团队对 agent 失去信心；Apiiro 统计 2025-06 单月 AI 生成代码引入 >10,000 条安全发现（约 2024-12 的 10 倍），Spotify Honk 靠验证回路累计合并 1,500+ AI PR
+- 对本库主线的含义：harness 的「约束 + 验证回路」正是 [[LongLoop Console]] 验收契约冻结 / 验证检疫的通用化表述；与 [[#Harness 概念地图 + 智能体安全治理框架 3.0（2026-10-10 归档）]] 同一条线
+- 关联 [[MLSys2026论文精选]]、[[LongLoop Console]]
+
 

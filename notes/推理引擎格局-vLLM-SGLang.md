@@ -422,4 +422,13 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 读法：延续 [[#KVServe 与 vLLM v0.30 Fast Start：KV 压缩与权重驻留都变成运行时决策（2026-09-26 归档）]] —— 引擎优化对象从稳态吞吐扩到「重启成本、卸载背压与队列准入」这些运维面
 - 关联 [[#vLLM 0.30.0：分层 KV 卸载原生化 + KV 布局重构（2026-09-29 归档）]]、[[MLSys2026论文精选]]
 
+## PD 分离扩到多厂商 GPU + vLLM×AgentX 分布式 KV cache（2026-10-12 归档）
+整理自 [[inbox/2026-10-09-大模型推理-PD分离多厂商GPU]]、[[inbox/2026-10-09-大模型推理-vLLM面向agentic服务]]
+- P-D 分离（DPD）的基本判断：prefill 算力受限（决定 TTFT）与 decode 带宽受限（决定 ITL）共置会互相干扰，长 prompt 会拖住所有并发请求的 token 生成；分离后两池各自对准瓶颈，代价是池间 KV 搬运带宽成为新瓶颈
+- 机制与落地：chunked prefill 让单个 prefill 请求能拼出多个 decode max batch，最大化「可捎带 decode」的覆盖；落地形态从 NVIDIA 单厂商扩到多厂商 GPU，AWS SageMaker HyperPod 用 vLLM 实现 DPD、池间走 EFA RDMA 而非 NVLink，把耦合从专有硬件解到标准网络
+- 谱系与判据：Splitwise（map-reduce 式阶段拆分）/ DistServe（OSDI'24，goodput）/ Mooncake（KV 中心化）/ MemServe（弹性内存池）；DPD 不是万灵药，只有长 prompt + 高并发共置才明显收益
+- vLLM × AgentX（2026-09-08）：把 Mooncake Store 集成成**分布式 KV cache 池**，让 prefix 缓存超出单机显存并跨每个 engine 复用，KV cache offloading 成为 first-class；补齐稀疏 / 压缩 / 线性注意力架构支持的同时，异步调度、P-D 分离、投机解码与并行均不退化
+- 新架构坑：Kimi K3 的 MLA + Kimi Delta Attention 把 KV 压进单一 latent 空间，纯张量并行会在各 rank 复制该 latent cache → 需要新的并行策略；趋势与 [[#KVSET 工作集容量规划 + vLLM v0.31.0 重启/背压/准入（2026-10-10 归档）]] 一致：KV 从单机显存管理升为跨 engine / 跨层的分布式缓存系统
+- 关联 [[#KVSET 工作集容量规划 + vLLM v0.31.0 重启/背压/准入（2026-10-10 归档）]]、[[AI芯片推理硬件2026全景]]
+
 
