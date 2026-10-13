@@ -437,3 +437,13 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - **OpenTela（OSDI'26，ETH Zurich）**：OSDI'26 于 7/13–15 Seattle 举行、接收率 20%（136/681）；OpenTela 用用户态编排 overlay 把分散、异构、由 Slurm 管理的 HPC 集群拼成跨机构 LLM 服务台——CRDT gossip 容错服务发现、统一 API 屏蔽各集群管理器与推理引擎差异、异构感知调度，无需 root、不改集群配置
 - 可信度：已生产部署 22 个月、服务 1300 万请求（系统顶会里少见的长期数据）；要解的问题是 HPC 无 K8s 的 discovery/routing/health、分配临时、节点对外不可达、GPU 跨管理域碎片化；同期 ETH 另一篇 RoCE BALBOA（SmartNIC service-enhanced RDMA offload，研究 track）
 - 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI-Agent-2026格局]]
+
+## AgenticOS 2026 议程定稿 + MLSys 2027 投稿窗口口径冲突（2026-10-13 归档）
+整理自 [[inbox/2026-10-10-MLSys顶会-AgenticOS2026议程与OS抽象]]、[[inbox/2026-10-10-MLSys顶会-MLSys2027征稿与投稿窗口]]
+- AgenticOS 2026（第 2 届，9/29 布拉格，与 SOSP 同址）程序公开，论文含 **Patient Bytes: A Reliability-Budgeted Scheduler for Agentic LLM Workflows**（UCSC / HKUST / 阿里）、**Agate: Capability Microkernels as a Natural Substrate for AI Agents**（Huawei 2012 Labs）、**Securing Agentic AI with OS-Level Intent-Driven Capabilities**（INESC-ID / 里斯本大学 / Oracle Labs）
+- CfP 议题清单：compiler–OS 协同设计（agent 感知的自适应 JIT）、agent 负载的 GPU/加速器虚拟化、agent 调起工具/代码/数据流的隔离、agents managing systems、agent 间通信原语、agent 可靠性 —— 与 [[#SOSP 2026 会中：AgenticOS + 新增 HARNESS 工作坊，agent 运行时被单独立题（2026-10-03 归档）]] 的 keynote 三篇 PDF（《The Irreversibility Budget》等）互为正文与骨架
+- 对本库主线的意义：不可逆预算 + 准入控制 + 效果核查，是 [[LongLoop Console]] 验收契约冻结／验证检疫的学术版本
+- MLSys 2027 投稿窗口口径冲突：官网 2027 主页写 10/10 12:00 PDT 开放，CallForResearchPapers 页写 10/19 20:00 UTC 开放 → 以 OpenReview 实际开放时间为准；截稿 10/30 20:00 UTC、通知 2027-02-28，会议 Bellevue（in-person）
+- 规则细节：research 全双盲（含机构与自引）/ industrial 只匿作者名（公司、产品名与 URL 可留）、截止后不可切换轨道；arXiv 预印明确允许；新增主题含 autonomous & agentic AI systems、大规模 ML 存储系统（训练/服务/RL）
+- 口径提示：程序页与 PDF 均经搜索摘要读取（web_extract 被拦），作者与标题可能有个别拼写差异，引用前核对原页；日期与主题部分与 [[#MLSys 2027 征稿：10/10 开投、10/30 截止，agentic AI 与 LLM 做硬件设计入正式主题（2026-10-02 归档）]] 重复，本轮新增的是口径冲突与匿名/双轨规则
+- 关联 [[AI-Agent-2026格局]]、[[LongLoop Console]]
