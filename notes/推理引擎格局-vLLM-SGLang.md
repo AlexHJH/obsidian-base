@@ -431,4 +431,11 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 新架构坑：Kimi K3 的 MLA + Kimi Delta Attention 把 KV 压进单一 latent 空间，纯张量并行会在各 rank 复制该 latent cache → 需要新的并行策略；趋势与 [[#KVSET 工作集容量规划 + vLLM v0.31.0 重启/背压/准入（2026-10-10 归档）]] 一致：KV 从单机显存管理升为跨 engine / 跨层的分布式缓存系统
 - 关联 [[#KVSET 工作集容量规划 + vLLM v0.31.0 重启/背压/准入（2026-10-10 归档）]]、[[AI芯片推理硬件2026全景]]
 
+## PrfaaS 跨数据中心 prefill 外包 + Tutti GPU 发起 I/O（2026-10-11 归档）
+整理自 [[inbox/2026-10-11-大模型推理-PrfaaS跨数据中心KV缓存路由]]、[[inbox/2026-10-11-大模型推理-Tutti-GPU侧发起IO的SSD-KV缓存]]
+- PrfaaS（arXiv 2604.15039，Moonshot AI + 清华）：新模型 KV 占用变小后瓶颈从显存容量转向算力/带宽错配，于是把长请求 prefill 整体外包给算力密集的远端集群、KV 经以太网回传 decode 节点；核心是路由阈值 t（增量 prefill 长度 l > t 才外移），案例最优 t=19.4K token → 49.6% 请求外移、出口约 13 Gbps（占 100 Gbps 链路 13%）
+- PrfaaS 实测（内部 1T 模型 Kimi Linear，均输入 27K/输出 1024）：32×H200 远端 prefill + 64×H20 本地 PD vs 96×H20 同构基线——TTFT −50%、P90 −64%、吞吐 1.54×（朴素异构仅 1.16× → 增益主要来自调度层）；坑点是混合前缀缓存池需单独处理线性注意力/SWA 层的请求级 recurrent state（匹配规则与 token/block 级不同）
+- Tutti（arXiv 2605.03375）：长上下文把 KV 推往 NVMe SSD 后，GPU 显存布局碎片化会产生海量微小随机 I/O，即使走 GPU Direct Storage 每个 I/O 仍要 CPU 发起 → 低并行度 CPU 成瓶颈；Tutti 改以 GPU 为中心的 KV 对象存储打通 HBM↔SSD（gio_uring 提交/完成环驻留 GPU、按依赖事件启动 I/O，离线分析各层空闲窗口做查表调度、写延后到空窗），受控固定 32K prompt 下 GPU 停顿近零；跨节点仍走 CPU + RDMA（GPU-initiated RDMA 列为 future work）
+- 关联 [[#PD 分离扩到多厂商 GPU + vLLM×AgentX 分布式 KV cache（2026-10-12 归档）]]、[[HBF-NAND-AI推理内存2026]]
+
 
