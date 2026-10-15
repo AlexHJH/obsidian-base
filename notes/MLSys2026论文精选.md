@@ -447,3 +447,12 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 规则细节：research 全双盲（含机构与自引）/ industrial 只匿作者名（公司、产品名与 URL 可留）、截止后不可切换轨道；arXiv 预印明确允许；新增主题含 autonomous & agentic AI systems、大规模 ML 存储系统（训练/服务/RL）
 - 口径提示：程序页与 PDF 均经搜索摘要读取（web_extract 被拦），作者与标题可能有个别拼写差异，引用前核对原页；日期与主题部分与 [[#MLSys 2027 征稿：10/10 开投、10/30 截止，agentic AI 与 LLM 做硬件设计入正式主题（2026-10-02 归档）]] 重复，本轮新增的是口径冲突与匿名/双轨规则
 - 关联 [[AI-Agent-2026格局]]、[[LongLoop Console]]
+
+## OSDI'26 阿里 ASI 生产 trace + AgenticOS keynote「先要 POSIX 再要内核」（2026-10-15 归档）
+整理自 [[inbox/2026-10-12-MLSys顶会-OSDI26-阿里ASI异构集群15万GPU-trace]]、[[inbox/2026-10-12-MLSys顶会-AgenticOS-keynote-Harness需要POSIX]]
+- **ASI trace（OSDI'26 Operational Systems，HKUST × 阿里 × 复旦）**：六个月 trace 覆盖 155,410 块多厂商多代 GPU（81 个部门的 ad-hoc 开发 / 训练 / 在线与离线推理），核心结论是 GPU 需求高 ≠ 有效利用率高
+- 不可分配的根因不是缺卡：空闲容量碎散在各节点、缺配套 CPU、违反网络局部性，且用户为生产安全预留大量 headroom；以往热议的小数 GPU 碎片化如今可忽略（GPU 共享很少被使用）
+- 已落地解法：GPU defragmentation 把「存在闲置资源的节点数」砍掉 20.2%；SpotGPU 抢占成本感知调度把 GPU 分配率 68% → 93%；开放挑战是多厂商 GPU 采用偏斜、异构 GPU 间带宽瓶颈、共置负载干扰；trace 已公开发布
+- **AgenticOS@SOSP 2026 keynote（MPI-SWS, Laurent Bindschaedler）《The Harness Wars: Why Agents Need a POSIX Before a Kernel》**：缺的不是内核，而是「模型与世界之间那个运行时」的契约接口；三个失败样本（下单超时重试导致重复发货却记为成功 / 压缩上下文静默丢掉常驻规则后发版 / 人审通过后 rebase 改了被审代码但流程复用旧批准）里模型决策都合理、结果都错——OS 从不判断「程序行为是否合理」，但 agent 自己生成动作，判断权落到 harness 上
+- 会议侧信号：best paper 给了「并发 GPU-coding agent 负载下保持 GPU profiling 准确性」与 AgentProf「AI agent 的语义剖析」→ 验证与可观测被摆到工作坊 C 位；呼应 [[LongLoop Console]] 的验收契约冻结
+- 关联 [[AI-Agent-2026格局]]、[[#AgenticOS 2026 议程定稿 + MLSys 2027 投稿窗口口径冲突（2026-10-13 归档）]]
