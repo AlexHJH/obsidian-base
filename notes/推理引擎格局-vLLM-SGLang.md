@@ -438,4 +438,13 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - Tutti（arXiv 2605.03375）：长上下文把 KV 推往 NVMe SSD 后，GPU 显存布局碎片化会产生海量微小随机 I/O，即使走 GPU Direct Storage 每个 I/O 仍要 CPU 发起 → 低并行度 CPU 成瓶颈；Tutti 改以 GPU 为中心的 KV 对象存储打通 HBM↔SSD（gio_uring 提交/完成环驻留 GPU、按依赖事件启动 I/O，离线分析各层空闲窗口做查表调度、写延后到空窗），受控固定 32K prompt 下 GPU 停顿近零；跨节点仍走 CPU + RDMA（GPU-initiated RDMA 列为 future work）
 - 关联 [[#PD 分离扩到多厂商 GPU + vLLM×AgentX 分布式 KV cache（2026-10-12 归档）]]、[[HBF-NAND-AI推理内存2026]]
 
+## KV 的取数粒度：SAC（CXL 细粒度）与 DirectKV（NVLink-C2C 零拷贝）（2026-10-16 归档）
+整理自 [[inbox/2026-10-13-大模型推理-SAC-CXL稀疏注意力KV]]、[[inbox/2026-10-13-大模型推理-DirectKV零拷贝KV卸载]]
+- **SAC**（arXiv 2606.19746，作者含北大 Guojie Luo 等）：首个面向稀疏注意力模型的分离式 KV cache——RDMA 池按前缀整块抓 KV 再 decode 对稀疏注意力极度浪费（decode 只激活少量 KV）；SAC 改为 KV 全量驻留 CXL 池、用 cache-line 粒度 load/store 按需取 top-k；DeepSeek-V3.2 + SGLang 实测相对 RDMA 基线吞吐 2.1×、TTFT 降 9.7×、TBT 降 1.8×，实现基底是 SGLang 的 HiSparse 稀疏服务路径
+- **DirectKV**（OSDI'26，UVA 的 Shutian Luo / Haiying Shen）：首个面向 GH200/GB200 的零拷贝 KV offloading——GPU kernel 直接访问 CPU 内存里的 KV，取消 HBM staging buffer，CPU 内存成为 KV 容量的直接扩展
+- DirectKV 关键测量：朴素零拷贝在 PCIe 上慢 20×+、即便 NVLink-C2C（900GB/s）上仍慢 2×——matmul kernel 按 HBM 常驻张量调优，反复从 CPU 取数还会压低 L2 命中率；解法是用 SMEM tiling 重构访存 + CPU-memory-aware kernel，并把 KV 生成与 attention 融合进单 kernel 做 warp 级流水（GH200 上传输量最多 -50%、显存 -43%、端到端最高 1.2×）
+- 读法：与 [[#BOOST：让主机内存与 HBM 带宽被并发吃掉（2026-09-19 归档）]] 同线——KV 的**取数粒度**（block / cache-line / on-demand top-k / 并发比例）正成为继「放哪一层」之后的新设计维度
+- 口径：DirectKV 摘要与引言已读原文 PDF，性能数字为论文自测、未复现；SAC 机构页未在 abs 摘要列出，作者单位未核实
+- 关联 [[HBF-NAND-AI推理内存2026]]、[[MLSys2026论文精选]]
+
 

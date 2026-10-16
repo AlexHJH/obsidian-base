@@ -451,4 +451,14 @@
 - 对本库主线的含义：这正是 [[LongLoop Console]] 验收契约冻结 / 验证检疫的同一条问题线——长任务 agent 的验证是持续工程，不是一次性 harness 工件；与 [[#生产级 Agent 框架五强格局 + Harness Engineering 定名（2026-10-12 归档）]] 的「验证回路」结论一致
 - 关联 [[MLSys2026论文精选]]、[[LongLoop Console]]
 
+## Agent 插件包标准 + Managed Agents 动态工作流（2026-10-16 归档）
+整理自 [[inbox/2026-10-13-AI-Agent-AgentPlugins1.0包格式标准]]、[[inbox/2026-10-13-AI-Agent-ManagedAgents动态工作流与web工具域限制]]
+- **Agent Plugins 1.0.0**（Vercel 发起，AWS / Anysphere(Cursor) / GitHub / Microsoft / OpenAI 共同定稿）：一个目录 + `plugin.json` 清单即可把 Agent Skills 与 MCP server 打包成跨客户端携带的插件，首发即被 ChatGPT/Codex、Cursor、GitHub Copilot、Kiro、VS Code 加载；只标准化「组件打包 + 客户端发现/加载」，市场、权限模型、运行时环境明确不在范围内（后续版本再收 hooks 与自定义 agent）；TSC 由五家 core maintainer 组成、声明无单一厂商定调
+- 定位：与 MCP 的分工是「运行时连接 vs 可移植包」而非替代；三巨头此前互不兼容的插件目录结构首次收敛（Skills 是 Anthropic 的开放标准，现进了跨厂商包格式）
+- **Claude Managed Agents 动态工作流（beta）**：agent 可自己写「多阶段跑多个 agent 再合并结果」的程序，由服务端作为 workflow run 后台执行（agent 的 `multiagent` 字段 + `managed-agents-2026-04-01` beta header，进度看 session 事件流的 `workflow_run.*`）→ 编排从「平台固定图/handoff」转向「agent 运行时自己生成编排程序」，但执行落在服务端后台而非沙箱内
+- 同期 web 工具域限制（10-07）：web_search / web_fetch 收进域白名单，web_fetch 只接受会话内已出现过的 URL（用户消息文本 / web_search 结果 / 先前 fetch 页面），否则返回 `url_not_in_prior_context`；仅出现在模型输出、system prompt、附件或 bash/MCP 输出里的 URL 不算 → 针对数据外泄
+- 顺带：Sonnet 5.5 prompt cache 读价 $0.20→$0.10 / 百万 token（0.05× 输入价）；Haiku 5.5 发布（1M 上下文、adaptive thinking，手动 thinking 预算与 temperature/top_p/top_k 会 400）
+- 口径：官方 release notes 与厂商公告原文摘录，未实测各客户端兼容度；「Hermes / OpenClaw 亦支持」出自第三方汇总文、未核实
+- 关联 [[LongLoop Console]]、[[#九款 Harness 横评：换壳的收益量级（2026-09-17 归档）]]
+
 
