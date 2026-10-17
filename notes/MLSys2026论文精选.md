@@ -456,3 +456,13 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - **AgenticOS@SOSP 2026 keynote（MPI-SWS, Laurent Bindschaedler）《The Harness Wars: Why Agents Need a POSIX Before a Kernel》**：缺的不是内核，而是「模型与世界之间那个运行时」的契约接口；三个失败样本（下单超时重试导致重复发货却记为成功 / 压缩上下文静默丢掉常驻规则后发版 / 人审通过后 rebase 改了被审代码但流程复用旧批准）里模型决策都合理、结果都错——OS 从不判断「程序行为是否合理」，但 agent 自己生成动作，判断权落到 harness 上
 - 会议侧信号：best paper 给了「并发 GPU-coding agent 负载下保持 GPU profiling 准确性」与 AgentProf「AI agent 的语义剖析」→ 验证与可观测被摆到工作坊 C 位；呼应 [[LongLoop Console]] 的验收契约冻结
 - 关联 [[AI-Agent-2026格局]]、[[#AgenticOS 2026 议程定稿 + MLSys 2027 投稿窗口口径冲突（2026-10-13 归档）]]
+
+## MLSys'26 论文集上线：135 篇，KV/注意力稀疏与 agentic 系统成主线（2026-10-17 归档）
+整理自 [[inbox/2026-10-14-MLSys顶会-MLSys2026论文集135篇趋势]]
+- 论文集（第 9 届，2026-05-18–22 Bellevue；主编 A. Chowdhery / Z. Jia）共 135 篇，三大热点：把 self-attention 与 KV 成本压下来、把通信与计算重叠起来、agentic workflow 的规划与记忆系统
+- 注意力/KV 线：BLASST（Dynamic BLocked Attention Sparsity via Softmax Thresholding，作者自述 Best Research Paper）、MAC-Attention、Kitty（2-bit KV 量化 + 动态通道精度）、SkipKV（推理模型选择性跳过 KV 生成）
+- 通信-计算重叠：TokenWeave、Stream2LLM（上下文流式与 prefill 重叠降 TTFT）、TeleRAG（RAG 上下文预取）；agent 线：AccelOpt、AgenticCache、Hippocampus、PROMPTS（多 agent 调优训练/服务）
+- 服务侧：ProfInfer（eBPF 细粒度推理 profiler）、RaidServe（韧性服务）、"Demystifying the Mixture of Experts Serving Tax"、CRAFT（专家复制）
+- 今年新增独立工业赛道 CFP，并设三个比赛（AWS Trainium2/3 MoE kernel、Google 图调度、NVIDIA FlashInfer kernel 生成）
+- 口径提醒：最佳论文归属只见作者社媒自述（BLASST / LEANN 各称拿下最佳论文），官方 awards 页无可抓取列表，勿当定论
+- 关联 [[#MLSys 2026 三趋势回看 + OSDI'26 OpenTela 生产部署（2026-10-11 归档）]]、[[推理引擎格局-vLLM-SGLang]]、[[AI编译器2026格局]]
