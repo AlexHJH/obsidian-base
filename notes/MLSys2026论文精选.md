@@ -466,3 +466,9 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 今年新增独立工业赛道 CFP，并设三个比赛（AWS Trainium2/3 MoE kernel、Google 图调度、NVIDIA FlashInfer kernel 生成）
 - 口径提醒：最佳论文归属只见作者社媒自述（BLASST / LEANN 各称拿下最佳论文），官方 awards 页无可抓取列表，勿当定论
 - 关联 [[#MLSys 2026 三趋势回看 + OSDI'26 OpenTela 生产部署（2026-10-11 归档）]]、[[推理引擎格局-vLLM-SGLang]]、[[AI编译器2026格局]]
+
+## Strata 条目重述 + OSDI'26 Jay Lepreau 最佳论文（2026-10-17 归档）
+整理自 [[inbox/2026-10-14-MLSys顶会-OSDI26-Strata分层上下文缓存]]
+- 机制部分与 [[#Strata：长上下文 LLM 分层缓存框架（OSDI'26，2026-08-15 归档）]] 同源（GPU 辅助 I/O 解耦 GPU/主机布局 + cache-aware 调度），本次新增的是出处与获奖：USENIX 官方页面（xie-zhiqiang）+ arXiv 2508.18572，且 Strata 拿下 OSDI'26 **Jay Lepreau Best Paper** —— 中国内地机构首次以第一完成单位获该奖（同届共 3 篇获奖）
+- 口径补充：TTFT 比 vLLM+LMCache 低至 1/5、比 TensorRT-LLM 快 3.75×，均来自论文/作者自述，未做独立复现
+- 关联 [[推理引擎格局-vLLM-SGLang]]、[[HBF-NAND-AI推理内存2026]]
