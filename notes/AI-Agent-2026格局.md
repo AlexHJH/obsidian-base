@@ -461,4 +461,12 @@
 - 口径：官方 release notes 与厂商公告原文摘录，未实测各客户端兼容度；「Hermes / OpenClaw 亦支持」出自第三方汇总文、未核实
 - 关联 [[LongLoop Console]]、[[#九款 Harness 横评：换壳的收益量级（2026-09-17 归档）]]
 
+## 企业 Agent 治理落差 + 950 Agent 科研闭环（2026-10-15 归档）
+整理自 [[inbox/2026-10-15-AI-Agent-企业Agent治理与影子AI风险]]、[[inbox/2026-10-15-AI-Agent-Anthropic-950智能体发现ART酶系统]]
+- 治理落差（Gravitee 2026，919 名企业主管/技术人员）：80.9% 技术团队已进入 Agent 测试或运行阶段，平均仅 47.1% 的 Agent 受主动监控与保护，仅 14.4% 组织称全部 Agent 经 IT/资安完整核准 → 风险面从「模型输出」转为「身份 + 权限 + 行为」
+- 标准侧：OWASP 于 2025-12 发布《Top 10 for Agentic Applications 2026》；治理流程按「盘点资产 → 辨识漏洞配置 → 威胁分级 → 修补建议」四步走
+- Anthropic 科研样本：约 950 个 Claude Agent 连续工作 21 小时、约 2.1 亿 token，筛过 20 万余个反向转录酶，发现 CRISPR 样串联重复阵列并命名 ART（array-associated reverse transcriptases）；人类只负责初始提问与实验室验证
+- 读法：并行 Agent 的卖点是广度覆盖而非单模型能力；官方与媒体均无对照基线（人类团队同时间产出），「发现」的独立价值待同行评议
+- 与 [[LongLoop Console]] 的验收契约/权限边界同源：落点是每个 agent 的操作可审计、可回滚
+
 
