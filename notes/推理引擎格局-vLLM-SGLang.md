@@ -455,4 +455,13 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - PD 分离已成默认 playbook（DistServe 回顾），多轮场景出现 PPD/AMPD 变体（arXiv 2603.13358 / 2602.14516），把增量 prefill 与首次 prefill 区别对待
 - 口径提示：`inbox/2026-10-15-大模型推理-OSDI26零拷贝KV卸载`（USENIX 页 luo）即上文 DirectKV，同文未重复立项
 
+## llm-d 0.10 生产化收口 + agentic MTP 并发前沿（2026-10-20 归档）
+整理自 [[inbox/2026-10-17-大模型推理-llmd0.10与PD分离生产化]]、[[inbox/2026-10-17-大模型推理-GLM5.2-agentic负载MTP与KV卸载]]
+- llm-d 0.10 主题从「加功能」转为「可运维」：签名发布镜像、更安全的 rollout，并给每条 well-lit path（含 1P1D）发布测试矩阵，底座绑 vLLM 0.30；PD 分离已是默认服务形态（官方口径 3× 输出吞吐、2× TTFT，项目自报基准）
+- 分离落地件：prefill 池 + decode 池共用一个 InferencePool，靠 `llm-d.ai/role`（prefill/decode/prefill-decode）路由；P/D 可用不同 TP 度——decode 吃带宽需更大 TP，prefill 用小 TP 更省；KV 接线走 vLLM 原生 `OffloadingConnector`（CPU/共享 FS）或 LMCache/Mooncake connector 做跨 pod P2P
+- agentic 负载实测（SemiAnalysis Weka trace 的 219 个生产 Claude Code 会话，H200 + GLM-5.2-FP8，1P1D/DEP16/32 GPU）：以「每用户 ≥30 tok/s」为底线，MTP 能撑并发 128、聚合约 5,647 tok/s，而只靠 CPU 侧 KV 卸载在并发 16 撞墙（约 561 tok/s）→ ≥8× 并发、10.1× 聚合输出
+- 优化顺序：先用推测/并行解码拉高每用户出词率，再谈靠卸载扩并发；单靠卸载只解决容量不解决速率——与 [[#KV Cache 卸载落地实测：ODCC 全场景测评与华为 OceanStor M900（2026-09-25 归档）]] 的「容量 vs 速率」判据一致
+- 口径：两组数字均为项目自报、单模型单硬件，未读到原始指标表格；0.10 release notes 原文未取到（web_extract 被拦）
+- 关联 [[#推理控制平面与共享 KV 溯源（2026-10-01 归档）]]、[[MLSys2026论文精选]]
+
 
