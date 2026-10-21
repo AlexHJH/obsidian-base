@@ -490,3 +490,12 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 读法：数据中心靠拆集群（PD 分离），端侧要把 CPU/GPU 统一编址「合用一条总线」——对 GP+CC 分离 SoC 的 UVA 设计有直接参照
 - 口径：摘要与 intro 取自 arXiv，性能数字未复现，作者单位未在检索结果中出现
 - 关联 [[推理引擎格局-vLLM-SGLang]]、[[MLX生态2026]]
+
+## MLSys 2027 投稿窗口收敛 + 主席阵容（2026-10-21 归档）
+整理自 [[inbox/2026-10-18-MLSys顶会-MLSys2027投稿窗口与主席阵容]]
+- 时间线按官方 CFP 页收敛：10/19 20:00 UTC 开放投稿（此前官网两页「10/10 vs 10/19」冲突，以 CFP 为准）、10/30 20:00 UTC 截稿 → 2027-01-18 放评审、01-21 rebuttal、02-28 通知
+- 组织：General Chair Joseph Gonzalez（Berkeley），PC Rashmi Vinayak（CMU/Google）+ Song Han（MIT/NVIDIA）；会期 2027-06-21~25 Bellevue，6/25 Industry Day
+- 双轨不可切换：research 全双盲看 novelty/quality/impact；industrial 只看真实大规模系统的方法论与影响
+- 主题明确收 autonomous & agentic AI systems、大规模 RL for LLM、大规模 ML 存储系统（训练/服务/RL）、ML 编译器与运行时
+- 待核：mldeadlines 称今年有 per-author 投稿配额（合著者越多每人额度越少），官方页未见细则 → 投稿前按 OpenReview 实际规则确认
+- 关联 [[#MLSys 2027 征稿：10/10 开投、10/30 截止，agentic AI 与 LLM 做硬件设计入正式主题（2026-10-02 归档）]]、[[AI编译器2026格局]]
