@@ -453,7 +453,7 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 决定因素是负载画像而非引擎强弱：前缀重合率高 → 缓存复用收益大；以唯一提示词为主 → 比模型支持广度与运维复杂度
 - 工程坑比能力更重要：Qwen3.8-27B 类混合模型在 vLLM 0.30 需下调序列上限才能起、SGLang 0.5.20 曾静默限并发 20、TensorRT-LLM 稳定版在部分新架构上直接不加载
 - PD 分离已成默认 playbook（DistServe 回顾），多轮场景出现 PPD/AMPD 变体（arXiv 2603.13358 / 2602.14516），把增量 prefill 与首次 prefill 区别对待
-- 口径提示：`inbox/2026-10-15-大模型推理-OSDI26零拷贝KV卸载`（USENIX 页 luo）即上文 DirectKV，同文未重复立项
+- 口径提示：`inbox/2026-10-15-大模型推理-OSDI26零拷贝KV卸载`（USENIX 页 luo）即上文 DirectKV，同文未重复立项；`inbox/2026-10-19-大模型推理-DirectKV零拷贝KV卸载`（2026-10-19 采集）亦为同文第三次采集，仅补充 CUDA Graph 可 replay（零拷贝让动态 KV 块选择只改 kernel 入参、不改图拓扑）一条，已并入上文
 
 ## llm-d 0.10 生产化收口 + agentic MTP 并发前沿（2026-10-20 归档）
 整理自 [[inbox/2026-10-17-大模型推理-llmd0.10与PD分离生产化]]、[[inbox/2026-10-17-大模型推理-GLM5.2-agentic负载MTP与KV卸载]]
