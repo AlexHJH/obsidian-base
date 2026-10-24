@@ -464,4 +464,11 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 口径：两组数字均为项目自报、单模型单硬件，未读到原始指标表格；0.10 release notes 原文未取到（web_extract 被拦）
 - 关联 [[#推理控制平面与共享 KV 溯源（2026-10-01 归档）]]、[[MLSys2026论文精选]]
 
+## TP/PP/混合并行的解析权衡模型（arXiv 2610.05305，2026-10-24 归档）
+整理自 [[inbox/2026-10-21-大模型推理-TP-PP-HB并行权衡解析模型.md]]
+- 把分布式推理端到端延迟分解为「计算 + GPU 间通信 + 流水线气泡」三部分，分别推出 TP 集合通信、PP 点对点通信与流水线利用率的闭式表达 → 「TP 还是 PP」从经验之争变成按硬件/模型/负载可算的判据
+- 主要结论：PP 适合算力密集的 prefill（每层同步开销被摊薄），TP 适合延迟敏感的 decode（无 fill/drain 气泡损失）；混合 PP4TP2 / PP2TP4 落在两者之间，用 TP 的通信开销换掉部分 PP 气泡
+- 验证方式：固定 8 GPU，比较 TP8 / PP8 / PP2TP4 / PP4TP2 四种配置与模型预测是否吻合
+- 读法：与本库 [[MLX生态2026]] 的 Mac 实测（2 机 pipeline 的收益在 prefill、4 机 tensor 才拉 decode）是同一权衡的硬件侧证据；与 [[MLSys2026论文精选]] 的 Revisiting Pipeline Parallelism（动态 chunk + delay scheduling 让 PP 反超 TP）互补——一个给调度手段，一个给选型判据
+
 

@@ -499,3 +499,12 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 主题明确收 autonomous & agentic AI systems、大规模 RL for LLM、大规模 ML 存储系统（训练/服务/RL）、ML 编译器与运行时
 - 待核：mldeadlines 称今年有 per-author 投稿配额（合著者越多每人额度越少），官方页未见细则 → 投稿前按 OpenReview 实际规则确认
 - 关联 [[#MLSys 2027 征稿：10/10 开投、10/30 截止，agentic AI 与 LLM 做硬件设计入正式主题（2026-10-02 归档）]]、[[AI编译器2026格局]]
+
+## BLIS：纯 CPU 的 LLM 推理部署仿真器（SIGMETRICS 2027，2026-10-24 归档）
+整理自 [[inbox/2026-10-21-MLSys顶会-BLIS纯CPU推理仿真器.md]]
+- IBM 等团队（arXiv 2610.14255，代码 github.com/inference-sim/inference-sim）：确定性离散事件仿真器，覆盖 admission、路由、调度、prefill/decode 执行、KV cache 管理与抢占——正是既有预测工具只建模片段、忽略批处理与排队动态的地方
+- 用一次全局拟合的物理信息延迟模型（解析基函数 + 学到的缩放/开销项）替代逐配置 profiling：36 组实验（6 模型 × 3 种 GPU）端到端中位误差 6.7%，比真实执行快约 200×，同 seed 输出逐字节一致
+- Llama-2-70B 上搜索 420 种服务配置，找到满足 300ms 平均 TTFT SLO 的 4 卡方案；对比工具要么需要双倍 GPU、要么推荐不达标方案
+- 目标是对齐 llm-d 栈（router/EPP、P/D 分离、KV offload、autoscaling），当前引擎以 vLLM 起步
+- 与 [[#SOSP 2026 录用论文：AI/LLM 系统成主角（2026-08-24 归档）]] 里的 CrystalLLM（少量 GPU 忠实模拟大训练）同向——「先仿真后上机」正在成为独立工具层，对本机多板/小规模实验环境尤其值钱
+- 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI编译器2026格局]]
