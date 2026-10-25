@@ -14,3 +14,4 @@
 - AI 编译器 (TVM, Triton, MLIR)
 - 大模型推理 & 部署
 - HBF (High Bandwidth Flash) & AI 推理内存
+- RISC-V Matrix 扩展上游社区进展 ([IME](https://github.com/riscv/integrated-matrix-extension) / [VME](https://github.com/riscv/riscv-vme) / [AME](https://github.com/riscv/riscv-attached-matrix-extension))：关注官方规范、TG 会议纪要/邮件列表、Issues/PRs，以及 LLVM/GCC/binutils、Linux/QEMU 上游支持；区分提案/草案、已批准标准、实现合入状态与厂商扩展
