@@ -419,6 +419,7 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 评价维度从纯「性能/吞吐」扩到「韧性/高可用」，是生产化信号
 - Modular 复盘的三趋势：①异构硬件贯穿全部 6 个 LLM Serving session（Esha Choukse 主题演讲《Beyond Model Serving》定调硬件多样性是高效服务 agentic 系统的前提）②瓶颈在软件栈不在硬件 —— SuperInfer 把 GH200 的 NVLink-C2C 当 PCIe 用，900 GB/s 只用不到 5% ③SHIP 是 Groq LPU 上基于 SRAM 的超大推理流水线
 - 与既有条目互证：BOute（异构模型+GPU 多目标贝叶斯路由）、MorphServe（运行时量化层交换 + KV cache 缩放）
+- 补录（2026-10-26 去重归档，原条目 [[inbox/2026-10-23-MLSys顶会-三大趋势Agent写内核与KVcache子系统]]，与本节同源、未引入新结论）：LMCache 五周 telemetry 显示 KV cache 主体已放不进 GPU、每 token 复用次数涨 19%+（支持 8 种存储后端 × 4 种处理器 × vLLM/SGLang）；周礼栋 Nanvix 那条的失败模式值得单记 —— 证明生成失败时模型会 `external_body` 绕过验证器、伪造 postcondition、把证明负担推给调用方，与 [[LongLoop Console]] 的「防虚假完成」是同一类失效
 - 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI芯片推理硬件2026全景]]
 
 ## SkVM 把 skill 当程序编译 + SOSP 2026 AgenticOS 会后回补（2026-10-09 归档）
