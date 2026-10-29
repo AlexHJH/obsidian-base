@@ -509,3 +509,13 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 目标是对齐 llm-d 栈（router/EPP、P/D 分离、KV offload、autoscaling），当前引擎以 vLLM 起步
 - 与 [[#SOSP 2026 录用论文：AI/LLM 系统成主角（2026-08-24 归档）]] 里的 CrystalLLM（少量 GPU 忠实模拟大训练）同向——「先仿真后上机」正在成为独立工具层，对本机多板/小规模实验环境尤其值钱
 - 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI编译器2026格局]]
+
+## KV 解耦与显存气球：稀缺资源从「算力」移到「显存 + 调度」（2026-10-26 归档）
+整理自 [[inbox/2026-10-26-MLSys顶会-NSDI26-SYMPHONY-KV解耦]]、[[inbox/2026-10-26-MLSys顶会-OSDI26显存气球多模型serving]]
+- SYMPHONY（NSDI'26，UT-Austin × UW-Madison，arXiv 2412.16434）：计算节点不再持 KV cache，放到独立分层内存集群；用 advisory request（从用户交互/请求结构预测的预取提示）把 KV 搬运移出关键路径，从而实现请求级负载均衡
+- 接口收敛：每节点一个 node manager，对外只暴露 advisory、推理请求、跨节点 KV fetch、invalidation 四类；再叠 priority-based KV 管理与 cooperative memory scheduling
+- 可靠性缺口：advisory 真阳性 100%（真实请求必有提示），但存在假阳性 → 必须有容错兜底
+- Prism（OSDI'26，Cost-Efficient Multi-LLM Serving via GPU Memory Ballooning）：生产 trace 里长尾小模型负载呈「成组突发」而非平稳分布，静态空间划分与时间片共享都无法跟随漂移，只能在 SLO 与利用率间二选一
+- 手法：显存气球按需换入换出不活跃模型的权重，而非静态切分 GPU；调度侧把请求转成截止期问题，用 Moore-Hodgson 最小化 miss 数 + exact time slack 排序
+- 读法：两篇合看，KV 放不进 GPU 之后「搬到哪里 + 谁来预测 / 何时搬」已成为独立系统层；与 [[HBF-NAND-AI推理内存2026]] 的容量层、[[推理引擎格局-vLLM-SGLang]] 的多级卸载同向
+- 口径：取自会议 program 页与论文摘要，性能数字未读原文
