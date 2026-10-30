@@ -478,4 +478,23 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - GOSIM Shenzhen 2026（10/16–17）KVCDN 专场工作坊：议题把 KV Cache 从单机显存问题抬到分布式资产层面——异构 PD → 跨区域 AI 基建、LMCache 生产级多进程 KV Cache、SGLang 中的 KV 用法、UCM 面向智能体规模推理的生命周期管理、FlexKV 池化实践、Turbo 用网络内聚合服务长上下文
 - 读法：主线从「单机 KV 管理」上移到「跨区域池化 + 生命周期」，LMCache 讲的是可观测性与容错而非又一组命中率 benchmark；与 [[#llm-d 0.10 生产化收口 + agentic MTP 并发前沿（2026-10-20 归档）]] 的「KV 放置与搬运成为一级设计对象」同线
 
+## vLLM v0.32：低精度 KV cache 铺开、解析器下沉到 checkpoint（2026-10-30 归档）
+整理自 [[inbox/2026-10-27-大模型推理-vLLM-v032低精度KV]]
+- v0.32.0 含 814 个 commit、363 位贡献者（121 位新人）；节奏约两周一个 release（v0.30.0 9-22 → v0.31.0 10-05 → v0.32.0 10-18）
+- NVFP4 KV cache 扩到 SM8x/SM12x，并支持 SM90、SM12x 上的 XQA decode 与 SM100 上 MiniMax-M3 稀疏注意力；GLM-5.x 默认走 FP8 KV cache → **低精度 KV 从「可选优化」变成默认路径，量化粒度下沉到 KV 层**
+- 新增 `POST /v1/systemone` 端点，对结构化状态回答 choice/noul/score，默认开启，已适配 Cloudflare/clef-omni、LiquidAI/d1-3B、DiffusionGemma
+- 新增 `hf` 工具/推理解析器（`--tool-call-parser hf`、`--reasoning-parser hf`），直接读 checkpoint 自带的 `response_template`，模型不再需要专属 parser；Python 与 Rust 前端同步
+- 承接 v0.30 的 Fast Start（per-GPU 权重缓存守护进程 + `--load-format ipc_cache`，CUDA IPC 映射）→ 冷启动时间已是一等指标
+- 口径：取自 release notes 摘要，未见逐项 benchmark
+
+## TPU 上的原生 PyTorch 推理引擎：vLLM-TorchTPU 与 SGLang-TorchTPU（2026-10-30 归档）
+整理自 [[inbox/2026-10-27-大模型推理-TPU原生PyTorch引擎vLLM-SGLang]]
+- Google 在 TorchTPU 之上新建 vLLM / SGLang 两个引擎后端，分别与 Inferact、RadixArk 合作；思路是「平台插件」：保留各自 worker 模型、调度器、KV cache 管理与 API server，只把算子与层实现换成 Pallas 自定义 kernel，模型定义基本复用上游 PyTorch
+- KV 搬运统一走开源 C++ 库 TPU Sync：直接读 PyTorch tensor 背后的 device buffer，**无需 host 端 staging copy**，独立线程在 Python 之外跑；vLLM 经 KV connector 接入，SGLang 当作 PD 分离的传输后端与 HiCache 的 I/O 后端
+- 能力面覆盖 agentic 全栈：自动前缀缓存（含 hybrid 模型）、KV 分层卸载到 host DRAM / Managed Lustre、MTP/EAGLE-3/DFlash/DSpark/n-gram 投机解码、context parallel、FP8 KV、FP8/FP4(MXFP4·NVFP4)/INT8/INT4
+- 基准走 SemiAnalysis InferenceX + AgentX，宣称 Ironwood（TPU 7x）每百万 token 成本 2.01 美分；已是 preview 客户生产在用
+- 读法：厂商正把「引擎」变成可插拔平台层，护城河从调度算法转向 KV 搬运与 kernel 库；与 [[#TP/PP/混合并行的解析权衡模型（arXiv 2610.05305，2026-10-24 归档）]] 互补
+- 口径：官方博客自报数字，未做第三方复核
+
+
 
