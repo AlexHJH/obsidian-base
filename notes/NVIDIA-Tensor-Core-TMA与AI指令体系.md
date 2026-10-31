@@ -417,3 +417,18 @@ CUTLASS 4.8.1 修复了 device-side TMA descriptor 缩小尺寸时可能发生�
 6. **可重复性**：每条性能结果保留平台、软件栈、shape、精度、计时边界和基线；不能将“TFLOPS 翻倍”直接转成模型速度翻倍。
 
 这是一份关注主题与研究框架，不代表已部署新的定时采集任务。后续更新应保留旧版本锚点，另列新增证据与修订原因。
+
+## CUTLASS 4.8 / PTX ISA 9.4 的 Rubin（SM107）增量（2026-10-31 归档）
+整理自 [[inbox/2026-10-28-NVIDIA-Rubin-SM107-CUTLASS48与PTX94]]
+- CUTLASS 4.8（10-07）给出 SM107 初版：CuTe C++ 侧 Rubin Tensor Core MMA atom + 4 个 block-scaled 示例；目标名 `sm_107a` / `sm_107f`，SM100 的 GEMM/conv 可直接跑，TMEM 分配器走 Rubin 独占路径
+- 硬件预算：TMEM 每 SM 576 列（Blackwell 512）、smem 327KiB、FP8 MMA_K=64 / FP4 MMA_K=128 —— 是「同指令族 + 更大资源预算 + 更宽 K」，不是新增 warp 级指令；吞吐手段落在 MMA_K 变宽与 B collector reuse
+- PTX ISA 9.4（CUDA 13.4 U1，13.4.1 于 09-09 发）新增 `cvt` 的 `.pzo`、`tcgen05.commit` 的 `.sync_restrict::shared::read::mma::a`；CUDA 13.4 同步给 sm_107 developer preview
+- 口径：docs.nvidia.com 正文抽取被拦，上述出自搜索快照的原始文本片段，PTX 9.4 完整 release note 未逐条核对 —— 引用 target 可用性前须回原表复核
+
+## B300 上 INT8 的四层撤除：规格表不是 kernel（2026-10-31 归档）
+整理自 [[inbox/2026-10-28-NVIDIA-B300-INT8四层撤除审计]]
+- arXiv 2608.11693 逐层审计 Blackwell Ultra（sm_103a）的 INT8 W8A8，得出一条撤除链：规格表有 → PTX 不暴露 → CUTLASS 不生成 → serving 引擎直接崩
+- PTX 层：即便在把 FP4 kinds 扩到 sm_103a 的同一版 PTX 里，也从未暴露 `tcgen05.mma` 的 `.kind::i8`；合法整数 tensor-core 路径只剩老式 warp 级 IMMA
+- 库层 / 引擎层：CUTLASS 对 103a 目标显式跳过 INT8 UMMA 生成（FP8 则无条件生成）；vLLM 无 Blackwell INT8 GEMM、模型加载后首次 forward 抛硬错；SGLang 的 AOT INT8 GEMM 停在 Sm90
+- 方法学价值：把「硬件能力 / 指令语义 / 库支持 / 真实 kernel」拆四层分别取证 —— 与本文档的版本 + target note 读法一致，也说明 PTX 未暴露就等于该精度在 kernel 层不存在
+- 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI芯片推理硬件2026全景]]
