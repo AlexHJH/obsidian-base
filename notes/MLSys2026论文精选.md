@@ -519,3 +519,14 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 手法：显存气球按需换入换出不活跃模型的权重，而非静态切分 GPU；调度侧把请求转成截止期问题，用 Moore-Hodgson 最小化 miss 数 + exact time slack 排序
 - 读法：两篇合看，KV 放不进 GPU 之后「搬到哪里 + 谁来预测 / 何时搬」已成为独立系统层；与 [[HBF-NAND-AI推理内存2026]] 的容量层、[[推理引擎格局-vLLM-SGLang]] 的多级卸载同向
 - 口径：取自会议 program 页与论文摘要，性能数字未读原文
+
+## SOSP 2026 两篇：给 agent 的 GPU 调优上数据流护栏，给动态批处理买确定性（2026-11-01 归档）
+整理自 [[inbox/2026-10-29-MLSys-SOSP26-Ave数据流不变量约束GPU调优]]、[[inbox/2026-10-29-MLSys-SOSP26-LLM42可验证投机确定性推理]]
+- Ave（arXiv 2604.18616，v2 2026-09-14，DOI 10.1145/3830418.3843902）：LLM coding agent 能写出正确的 GPU kernel 但追不上手写库，根因是单测与 profile 只给稀疏端到端反馈，agent 不知道自己违反了哪条全局约束（SMEM staging、软件流水、指令调度）
+- Ave 的手法：tile-based Pythonic DSL 暴露硬件指令与编译策略，tag 函数给数据打符号标签，flow-sensitive 分析 + SMT 检查断言，违例返回具体反例，运行期零开销；闭环是 ICRL planner 提方案 + lowering agent 落实不变量
+- Ave 数字：AMD MI300X 上 GEMM / flash attention / MoE 达手写库有效吞吐 89–99%；KernelBench 200 题 Level 1 100%、Level 2 88% 三次内出合法 kernel；明确限制是无法表达依赖堆上取值的不变量
+- LLM-42（arXiv 2601.17768）：同 prompt 多次结果不同的根源是浮点非结合性 + 动态批处理的 reduction 顺序漂移，与采样随机性无关；不关批处理、也不要求 batch-invariant kernel
+- LLM-42 的手法：常规快路解码 + 轻量 verify-rollback，在固定 shape 的 reduction 调度下重放候选 token，能一致的才提交否则回滚 → 只按「需要确定性的那部分流量」付开销
+- LLM-42 失效边界：依赖「上下文一致时下一 token 高概率一致」与「kernel reduction 对 shape 一致」两条假设；SOSP 2026 artifact 拿到 Available / Functional / Reproduced 三枚徽章
+- 对本项目的迁移：验收契约可以是「可静态检查的数据流性质 + 反例」，确定性可以做在调度层而不是绑死在 kernel
+- 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI编译器2026格局]]、[[AI-Agent-2026格局]]
