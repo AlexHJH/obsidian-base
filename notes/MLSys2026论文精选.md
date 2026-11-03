@@ -530,3 +530,13 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - LLM-42 失效边界：依赖「上下文一致时下一 token 高概率一致」与「kernel reduction 对 shape 一致」两条假设；SOSP 2026 artifact 拿到 Available / Functional / Reproduced 三枚徽章
 - 对本项目的迁移：验收契约可以是「可静态检查的数据流性质 + 反例」，确定性可以做在调度层而不是绑死在 kernel
 - 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI编译器2026格局]]、[[AI-Agent-2026格局]]
+
+## SOSP'26 两篇 GPU 内核形态学：Meld 把融合推过 SM 边界，MorphX 让 kernel 会变形（2026-10-31 归档）
+整理自 [[inbox/2026-10-31-MLSys-SOSP26-MeldKernel跨SM核融合]]、[[inbox/2026-10-31-MLSys-SOSP26-MorphX可变形内核]]
+- Meld（DOI 10.1145/3830418.3843857）把 MoE 条件路由 + 变长 batch 的根因定位为「跨 execution phase 的跨 SM 数据依赖」：编译器只能用 kernel 边界保证正确性，代价是 SM 间相位内失衡 + 中间态绕道 off-chip 内存
+- 机制两条：借 cluster/DSMEM 把顺序 kernel 变成跨 SM 流体式流水线；把相位级依赖拆成子任务级依赖 + JIT reduction（异步、无等待的局部状态归约）；计算逻辑声明式描述、硬件映射与 SM 协作推迟到 runtime → decode attention 平均 1.3× over best solutions
+- 同方向对照：FlashFuser 走 cluster 内 DSM 融合（kernel 3.3–4.1×、e2e 1.24×、访存 −58%），Meld 把边界推到全 GPU 并用 runtime 协作吃动态 shape
+- MorphX（DOI 10.1145/3830418.3843904）从另一头解：编译期把普通 kernel 改写成可运行中 yield / reclaim 算力的形态（不需重新 launch，省掉 draining 与调度延迟），再用 in-place profiling 按实时争用调调度 → 同等前台延迟下后台吞吐 2.24×
+- 分工：Meld 处理单 kernel 内的动态性，MorphX 处理 kernel 之间的共存；两者都把「让路/协作」从 OS/驱动职责下沉进 kernel 与 runtime
+- 口径：SOSP'26 共 62/390 录用（15.9%）；数字取自两篇论文摘要，未复现
+- 关联 [[#SOSP 2026 两篇：给 agent 的 GPU 调优上数据流护栏，给动态批处理买确定性（2026-11-01 归档）]]、[[NVIDIA-Tensor-Core-TMA与AI指令体系]]、[[AI编译器2026格局]]

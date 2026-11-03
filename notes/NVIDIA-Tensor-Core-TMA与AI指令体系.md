@@ -432,3 +432,13 @@ CUTLASS 4.8.1 修复了 device-side TMA descriptor 缩小尺寸时可能发生�
 - 库层 / 引擎层：CUTLASS 对 103a 目标显式跳过 INT8 UMMA 生成（FP8 则无条件生成）；vLLM 无 Blackwell INT8 GEMM、模型加载后首次 forward 抛硬错；SGLang 的 AOT INT8 GEMM 停在 Sm90
 - 方法学价值：把「硬件能力 / 指令语义 / 库支持 / 真实 kernel」拆四层分别取证 —— 与本文档的版本 + target note 读法一致，也说明 PTX 未暴露就等于该精度在 kernel 层不存在
 - 关联 [[推理引擎格局-vLLM-SGLang]]、[[AI芯片推理硬件2026全景]]
+
+## tcgen05 手写 PTX 的六版阶梯：从 autotune 的 17% 爬到 cuBLAS 的 98%（2026-10-31 归档）
+整理自 [[inbox/2026-10-31-NVIDIA-tcgen05实测阶梯到cuBLAS98%]]
+- 平台与口径：Modal B200（sm100），纯 CUDA C++ + PTX 从零写 fp16 matmul，M=N=K=4096，PyTorch 2.9.1 + cu13 的 cuBLAS 为基线（1506 TFLOPS），无 ncu，改用 kernel 内 clock 采样导 Perfetto trace
+- 六版数字：v1 2D/16B TMA 255 → v2 改 128B TMA 681（2.7×，最大一跳）→ v3 流水 940 → v4 warp specialization 1209 → v5 2-SM MMA 1302 → v6 persistent + 静态调度 1476（≈cuBLAS 98%）
+- 128B swizzle 的本质是「tile 从 16B 变宽到 128B」，代码上只需 tensor map 设 128B 并在 shared descriptor 置 bits 61–63=2，不必手算 swizzle；3D TMA 单次 issuance 反而略慢（253/695）→ 不是所有布局都吃得到 TMA 引擎
+- 同步只有两对生产者-消费者（TMA↔MMA 走 smem，mainloop↔epilogue 走 TMEM），都用 mbarrier；v6 的关键是 148 个 DC 固定 block 常驻 + 6 warp 分工（1 TMA / 1 MMA / 4 epilogue，4 个是喂满 TMEM 的下限）
+- 2-SM（`.cta_group::2`）只涨 8%：descriptor 仍传本地 smem 地址，硬件按相同 offset 读远端 CTA 的 smem → cluster 内各 rank 的对象布局必须完全一致；集群级同步是 `barrier.cluster.arrive/wait`
+- 读法：Blackwell 上 Tensor Core 编程可以只在 tile 粒度思考，难点从「线程级地址/布局推算」转移到 generic proxy 与 async proxy 的同步成本
+- 关联 [[#CUTLASS 4.8 / PTX ISA 9.4 的 Rubin（SM107）增量（2026-10-31 归档）]]、[[Nvidia-GPU微架构演进]]
