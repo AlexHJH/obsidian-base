@@ -557,3 +557,13 @@
 - 方法论可直接抄进验收：确定性评分 + 跨 harness 单模型对照 + 原始脏数据入口，正好卡住"看起来完成"
 - 对 [[LongLoop Console]] 的含义：别用单一总分给 agent 打分；把同一模型的 harness 作为自变量做对照，才能把"框架贡献"与"模型贡献"拆开
 - 口径：数字取自 notes/inbox 原笔记与 abs 摘要，未跑复现
+
+## MCP 2026-07-28：协议改成无状态，会话与握手退场（2026-11-04 归档）
+整理自 [[inbox/2026-11-01-AI-Agent-MCP改成无状态协议]]
+- 核心协议无状态化：`initialize`/`initialized` 握手与 `Mcp-Session-Id` 全部删除，任何请求可落到任何 server
+- 协议版本、client 身份与 capabilities 改为逐请求放 `_meta`；需要预知能力时用新的 `server/discover` RPC（SEP-2575 / SEP-2567），非必需
+- 交互式工具改用 Multi Round-Trip Requests：多轮交互从「会话状态」变成「请求内往返」
+- 授权硬化：引入 RFC 9207 issuer 校验，从 DCR 动态客户端注册转向 CIMD 客户端元数据文档
+- 弃用策略：features 分 Active/Deprecated/Removed，弃用后至少保留 12 个月；本轮弃 Roots、Sampling、Logging、DCR、legacy HTTP+SSE
+- 工程影响：远程 MCP server 可退化成普通无状态 HTTP 服务（Cloudflare 单 Worker 可跑），代价是客户端要重写缓存握手结果的状态机
+- 读法：复杂度从「连接与会话管理」移回「每次调用的自描述」——与 [[#Concordat：把 agent 接口写成有限状态协议，运行时强制（2026-11-02 归档）]] 方向相反，两者分别治理传输层与业务语义层
