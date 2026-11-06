@@ -567,3 +567,13 @@
 - 弃用策略：features 分 Active/Deprecated/Removed，弃用后至少保留 12 个月；本轮弃 Roots、Sampling、Logging、DCR、legacy HTTP+SSE
 - 工程影响：远程 MCP server 可退化成普通无状态 HTTP 服务（Cloudflare 单 Worker 可跑），代价是客户端要重写缓存握手结果的状态机
 - 读法：复杂度从「连接与会话管理」移回「每次调用的自描述」——与 [[#Concordat：把 agent 接口写成有限状态协议，运行时强制（2026-11-02 归档）]] 方向相反，两者分别治理传输层与业务语义层
+
+## Hermit：模型与 harness 都冻结，只训外面那层适配器（2026-11-03 归档）
+来源：https://github.com/Infini-AI-Lab/hermit（v0.1.0，2026-10-25）
+- 把「指令、skills、memory、tools、甚至整个仓库」当可训练参数放在 agent 外部，底座模型与 harness 一律冻结；RL 式循环（Trainer 跑批次 → judge 打分 → Evolver 提新版本），每版落到 git 树可回滚可审计
+- 与 LoRA 的分界：LoRA 改模型，harness adapter 改模型外的一切，因此能跨 Codex / Claude Code / Pi 迁移，也能当插件导出
+- 自带 5 种进化法：GEPA、SkillOpt、MWM、Harness²、Continual Harness（ACE、ReHarness 待发）
+- 数字（GLM 5.3 Flash 上自报、多为单次跑）：CL-Bench 数据库探索 MWM 0.795 vs in-context 0.580；OfficeQA 上 Harness² 0.541→0.651，约 $0.16 与 7 分钟/题
+- 对 [[LongLoop Console]] 的直接启发：把「验收契约/防虚假完成」当成 adapter 的一部分去优化，比改框架代码更好版本化
+- 待核：单次跑无方差，且 judge 与被测模型同源，收益里有多少是自评偏置没有拆开
+- 关联 [[#验证作为 harness 的设计维度：独立评审性价比最高（2026-10-31 归档）]]、[[#kw-bench：前沿以下，harness 决定模型能走多远（2026-11-02 归档）]]
