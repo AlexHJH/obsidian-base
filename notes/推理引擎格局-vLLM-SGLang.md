@@ -514,5 +514,22 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 读法：与 [[#光路 KV cache 网络：把 OCS 重配置延迟藏进 prefill（2026-11-02 归档）]] 同向——prefill 的产物（KV）正在变成可在模型之间、机器之间搬运的一等对象
 - 关联 [[HBF-NAND-AI推理内存2026]]、[[MLX生态2026]]
 
+## vLLM v0.33：弃 CUDA 12.9、上 Triton 3.8，草稿槽不再占 token 预算（2026-11-04 归档）
+整理自 [[inbox/2026-11-04-大模型推理-vLLM-v0.33弃CUDA12.9]]
+- 927 commits / 389 贡献者（只发到 rc3）：运行时基线升 PyTorch 2.14.0 + Triton 3.8.0，CUDA 12.9 的 wheel 与 `-cu129` 镜像全停发 → CUDA 13.0 成唯一发布形态，wheel 改为对 libtorch ABI 稳定
+- 投机解码的真正增量是调度：DFlash/DSpark 不再在 token budget 里预留草稿槽，DeepSeek-V4.1-Flash 在 GB300 从 1373 → 3390 output tok/s（PR 自测）
+- 低精度 KV 继续铺开：NVFP4 KV 覆盖 SM8x/SM12x/SM90，GLM-5.x 在 SM100 默认 FP8 KV（KV 内存减半、吞吐 +2.3–5.5%，代价 TTFT +7–11%）
+- 破坏性变更：Medusa 与 MLP speculator 删除、legacy Ray compiled-graph executor 删除、NIXL connector 要求 ≥1.5；ROCm 默认镜像升 ROCm 10.0
+- 读法：与 SGLang 同周发布对照——vLLM 走「kernel 特化 + 低精度 KV」，SGLang 走「整步融合 + 专家分页」，两边都在把 GPU 当 launch 昂贵的加速器
+- 口径：数字均为 release notes 内 PR 自测，未独立复现
+
+## SGLang v0.5.23：整步 decode 压成一个持久 kernel，单用户解码 +44%(GB300)/+75%(MI350X)（2026-11-04 归档）
+整理自 [[inbox/2026-11-04-大模型推理-SGLang-v0.5.23融合持久kernel]]
+- 1007 PR / 257 贡献者；核心是可选插件 `sgl-nvidia-mega` / `sgl-amd-mono` 的 low-latency mode：把 DeepSeek-V4.1-Flash 的整层解码循环融合成 persistent kernel，把 launch 开销当一等问题
+- Paged Experts（可选）：超出显存的 MoE 在单张消费级卡上跑，比 CPU offload 快最多 30× → 专家分页从研究原型变成可用开关
+- MoE 首 token：DeepSeek-V4.1-Flash、GLM-5.3-Flash、gpt-oss 在 H200 上 8K prompt 的 TTFT 提前 30–58%
+- 硬件面首次上岸 Google TPU7x（SGLang-TorchTPU，PyTorch 原生插件，镜像 `v0.1.0-tpu`）；MLA + decode context parallelism 的 prefix cache 可落 HiCache 文件式 L3
+- 口径：均为 release notes 内自测，未独立复现；与 [[#vLLM v0.33：弃 CUDA 12.9、上 Triton 3.8，草稿槽不再占 token 预算（2026-11-04 归档）]] 同日
+
 
 
