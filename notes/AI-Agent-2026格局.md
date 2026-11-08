@@ -577,3 +577,11 @@
 - 对 [[LongLoop Console]] 的直接启发：把「验收契约/防虚假完成」当成 adapter 的一部分去优化，比改框架代码更好版本化
 - 待核：单次跑无方差，且 judge 与被测模型同源，收益里有多少是自评偏置没有拆开
 - 关联 [[#验证作为 harness 的设计维度：独立评审性价比最高（2026-10-31 归档）]]、[[#kw-bench：前沿以下，harness 决定模型能走多远（2026-11-02 归档）]]
+
+## VeriHarness：让生成方自己的模型当验证器，专打「一致地漏掉需求」（2026-11-05 归档）
+来源：https://arxiv.org/abs/2610.00972（Google Cloud AI Research，代码 github.com/google-research/veriharness）
+- 不训 verifier、不要参考答案：给同一模型一个 workspace、取证工具与可复用验证技能，对 N 条 rollout 做两件事——`disagreement resolver`（互相矛盾时拿环境证据裁决）与 `consensus challenger`（全都一致时反查是否集体漏掉需求），再据此选或重建产物
+- 五个 long-horizon workspace benchmark × 两个前沿模型（Gemini 3.5 Flash / Claude Opus 4.8，各自既生成又验证），selection score 全部最高；证据驱动的 revision 相对单条 rollout 平均 +6.2 / +6.4 分
+- 方法论关键：**一致 ≠ 正确**。多数投票只压随机误差，压不掉「同一模型、同一盲区」的系统性遗漏，所以必须有专门角色去打共识
+- 对 [[LongLoop Console]] 的映射：验收契约检查器应是「有 workspace + 取证工具 + 可演化技能」的 agent，而不是一次性 LLM judge；防虚假完成 = consensus challenger + 逐条需求对环境回读
+- 口径提醒：生成器与验证器同源，自评偏置没被拆开；作者开源约 2.6 万条 rollout（自称成本 >$10 万）

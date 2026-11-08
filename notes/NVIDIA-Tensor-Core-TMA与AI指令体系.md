@@ -451,3 +451,11 @@ CUTLASS 4.8.1 修复了 device-side TMA descriptor 缩小尺寸时可能发生�
 - 可信度红旗：有逐节反驳（https://girl.surgery/bad_paper），指出「TMEM 有独立地址生成单元把 tile 预取进 staging buffer」这类机制描述站不住
 - 结论口径：延迟数字可作量级参考，机制解释要回到 PTX ISA 9.4 的 tcgen05.alloc/ld/st/cp/fence/commit 原文核对；420 周期是 SMEM→TMEM 还是 TMEM→寄存器，摘要没区分
 - 关联 [[#tcgen05 手写 PTX 的六版阶梯：从 autotune 的 17% 爬到 cuBLAS 的 98%（2026-10-31 归档）]]
+
+## PTX 9.4/9.5：同步语义从「整个 proxy」收窄到「read 子集」，sm_107a 把 2:4 稀疏做成指令（2026-11-05 归档）
+整理自 [[inbox/2026-11-05-NVIDIA-PTX9.5同步收窄与sm107a稀疏压缩]]
+- 9.4 新增 `sm_107` / `sm_107f` / `sm_107a` 目标：`tcgen05.commit` 加 `.sync_restrict::shared::read::mma::a`——只等 MMA 对 SMEM 的**读**完成，不再等整条流水；`.multicast::cluster::32b` 扩到 `mbarrier.arrive/expect_tx/complete_tx`、`cp.async.bulk(.tensor)`
+- 稀疏下沉到 ISA：新增 `spcompress` / `spdecompress`（dense↔2:4 结构化稀疏 + 元数据，`.elemsize` b8/b16、`.idxsize` b2/b4）与 `tcgen05.ld{.red}.spcompress`，仅 `sm_107a`
+- TMA 周边：`cp.async.bulk.prefetch(.tensor)` 加 `.level::eviction_priority`；新增 `applypriority.async.bulk(.tensor)`；`cp.async.bulk.tensor` 加 `.override::global_address`
+- 9.5（文档先行）：`cp.async.bulk.wait_group.sync_restrict::proxy::async`、`fence.alias.sync_restrict::read.release.sys`、`fabric.submit.commit_group` + `fabric.wait...`，以及新概念 **locality domain**（`%locality_domain_id` / `%locality_domain_supplemental_sm`）
+- 读法：fence 从「全体读/整 proxy」细化到 read 子集与 proxy 定向，说明异步代理域的对齐成本已能被编译器算账；但全部依赖 sm_107a 与 9.5 工具链，CUTLASS 是否封装未核（9.4 随 CUDA 13.4.1，2026-09-09）
