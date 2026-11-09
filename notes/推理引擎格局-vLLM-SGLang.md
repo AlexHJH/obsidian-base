@@ -531,5 +531,15 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 硬件面首次上岸 Google TPU7x（SGLang-TorchTPU，PyTorch 原生插件，镜像 `v0.1.0-tpu`）；MLA + decode context parallelism 的 prefix cache 可落 HiCache 文件式 L3
 - 口径：均为 release notes 内自测，未独立复现；与 [[#vLLM v0.33：弃 CUDA 12.9、上 Triton 3.8，草稿槽不再占 token 预算（2026-11-04 归档）]] 同日
 
+## SGLang 把 KV 池收敛成一套：删 ChunkCache、draft KV 融进 target 页框（2026-11-09 归档）
+来源：https://github.com/sgl-project/sglang/pulls?q=is%3Apr+is%3Amerged+merged%3A2026-10-09
+- 方向：前缀缓存从「按 attention 形态分裂」（RadixCache / SWARadixCache / ChunkCache）收敛为 UnifiedRadixCache + PureSWARadixCache 两类
+- #43199 / #43200 / #43198 分别接 disabled full-attention、hybrid-SWA、pure-SWA；#43201 直接删除 ChunkCache，调度路径里的 `isinstance(tree_cache, ChunkCache)` 一并移除
+- 判据从「类型」改成「能力」：调度器改查 supports_swa / supports_mamba / is_tree_cache / is_chunk_cache，缓存类的继承关系不再是分支依据
+- #37627 / #37628（unified-memory）：draft KV 与 target KV 共用同一 page 池的读写路径；#40491 / #40492 接上 EAGLE/EAGLE3、D-FLASH、D-SPARK → 投机解码不再另占一套显存
+- #41593：FCFS 类策略下刷新等待中请求的已缓存前缀 + LRU 驱逐，减少「排队期间前缀被踢掉再重算」
+- 读法：与 [[#SGLang v0.5.23：整步 decode 压成一个持久 kernel，单用户解码 +44%(GB300)/+75%(MI350X)（2026-11-04 归档）]] 是两条不同战线——一个省 launch 开销，一个省显存碎片；共同点是把 KV 当内存管理器，而不是每个特性各带一套
+- 口径：仅据 PR 标题与 mem_cache 提交历史（合并日 2026-10-09），未读全量 release notes，无公开收益数字
+
 
 
