@@ -459,3 +459,13 @@ CUTLASS 4.8.1 修复了 device-side TMA descriptor 缩小尺寸时可能发生�
 - TMA 周边：`cp.async.bulk.prefetch(.tensor)` 加 `.level::eviction_priority`；新增 `applypriority.async.bulk(.tensor)`；`cp.async.bulk.tensor` 加 `.override::global_address`
 - 9.5（文档先行）：`cp.async.bulk.wait_group.sync_restrict::proxy::async`、`fence.alias.sync_restrict::read.release.sys`、`fabric.submit.commit_group` + `fabric.wait...`，以及新概念 **locality domain**（`%locality_domain_id` / `%locality_domain_supplemental_sm`）
 - 读法：fence 从「全体读/整 proxy」细化到 read 子集与 proxy 定向，说明异步代理域的对齐成本已能被编译器算账；但全部依赖 sm_107a 与 9.5 工具链，CUTLASS 是否封装未核（9.4 随 CUDA 13.4.1，2026-09-09）
+
+## TMEM 是「要在 kernel 里抢的资源」：256KB/SM、按列分配、分配失败就自旋（2026-11-07 归档）
+整理自 [[inbox/2026-11-07-NVIDIA-TMEM按列分配与占用率]]
+- 256 KB/SM、128 lane × 512 列 32-bit 单元，地址是 `(lane<<16)|column` 的坐标而非线性地址；只有 tcgen05 家族能碰，由单个 elected thread 代表整个 CTA（或 `cta_group::2` 的两个 CTA）发起
+- 操作数规则被反转：A 可在 SMEM 或 TMEM、B 必须在 SMEM、累加器必须在 TMEM，寄存器不出现 → Hopper 那套 warp specialization 的动机被抽掉一半
+- 访问按 warp 硬切：warp0 只够得着 lane 0–31、warp1 只够 32–63 → 抽一个 128 lane 累加器 tile 必须整个 warpgroup（CUTLASS `make_tmem_copy` 写死 4 warp）
+- 分配是运行时原子竞争：`tcgen05.alloc` 按列（2 的幂、≥32），SASS 落到 `UTCATOMSWS.FIND_AND_SET`，失败 `NANOSLEEP 0x64` 无限重试；ptxas 无条件注入三个 guardrail trap（释放未分配列/跨分配释放/非法 phase）
+- 占用率变天：Blackwell SM 的寄存器 64K、warp 64、block 32、SMEM 228KB 与 Hopper 全同，一代翻倍的是 tensor 吞吐，新增容量只有 TMEM；512 列按 2 的幂切，最小合法块已把并发分配上限压到 16
+- 与 11-05 记的 PTX 9.4/9.5 互补：那边是 fence/commit 粒度收窄，这边解释为什么——TMEM 上的状态由累加器、稀疏元数据、block scale 三类共用 512 列
+- 口径：逆向 + 推导（SASS、ptxas 注入符号、CUTLASS 源码），非厂商披露；一处 SASS 助记符疑似手误，未在硬件上复现
