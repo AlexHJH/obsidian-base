@@ -541,5 +541,14 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 读法：与 [[#SGLang v0.5.23：整步 decode 压成一个持久 kernel，单用户解码 +44%(GB300)/+75%(MI350X)（2026-11-04 归档）]] 是两条不同战线——一个省 launch 开销，一个省显存碎片；共同点是把 KV 当内存管理器，而不是每个特性各带一套
 - 口径：仅据 PR 标题与 mem_cache 提交历史（合并日 2026-10-09），未读全量 release notes，无公开收益数字
 
+## KV 被抽成「提示面」：SGLang 定五意图，vLLM 直接对齐（2026-11-08 归档）
+整理自 [[inbox/2026-11-08-大模型推理-KV提示面收敛]]（sglang#27574 2026-06 RFC；sglang#36224 08-24；vllm#51428 08-07）
+- 问题：agent 场景 orchestrator 握着轨迹级信息（下一步还复用哪段前缀），引擎看不到；答案不是让上层直接管 KV，而只给它一个 hint 面
+- 五意图：Share（跨 worker 挪前缀）、Prefetch（访问前异步拉回 HBM）、Demote（HBM→Host→SSD 下推而非销毁）、Pin（禁驱逐）、Retain（refcount 归零后再保一段）
+- 铁律 hint ≠ command：引擎保留调度与内存所有权，可裁剪、可延迟、可直接拒绝；SGLang 侧目前只把 Pin 映射成 Mooncake L3 lease
+- sglang#36224 把提示做成可版本化 envelope：`/server_info` 报 `kv_hint.demote.v1` 之类能力，指标分 accepted/ignored/rejected/duplicate/completed，不带 hint 的流量行为不变
+- vLLM 方向性数字：受控 responses 路由下 KV 命中 49.54%→99.08%、续写延迟 811→315ms（原文自注样本小）；真正的变量是路由准确率而非缓存算法
+- 状态：两处均 RFC/POC，未合主干；关联 [[AI-Agent-2026格局]]、[[LongLoop Console]]
+
 
 
