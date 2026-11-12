@@ -469,3 +469,11 @@ CUTLASS 4.8.1 修复了 device-side TMA descriptor 缩小尺寸时可能发生�
 - 占用率变天：Blackwell SM 的寄存器 64K、warp 64、block 32、SMEM 228KB 与 Hopper 全同，一代翻倍的是 tensor 吞吐，新增容量只有 TMEM；512 列按 2 的幂切，最小合法块已把并发分配上限压到 16
 - 与 11-05 记的 PTX 9.4/9.5 互补：那边是 fence/commit 粒度收窄，这边解释为什么——TMEM 上的状态由累加器、稀疏元数据、block scale 三类共用 512 列
 - 口径：逆向 + 推导（SASS、ptxas 注入符号、CUTLASS 源码），非厂商披露；一处 SASS 助记符疑似手误，未在硬件上复现
+
+## B300 INT8 补充三项：30:1 规格比、JIT 逃生口、profiler 假阴性（2026-11-12 归档）
+整理自 [[inbox/2026-11-09-NVIDIA-B300-INT8被整栈撤下]]（同源 arXiv 2608.11693，v2 2026-08-14）
+- 与 [[#B300 上 INT8 的四层撤除：规格表不是 kernel（2026-10-31 归档）]] 同一篇论文，本次补三个可操作细节
+- 规格比：B300 规格书的 FP8:INT8 ≈ 30:1（H200/B200 都是 1:1）→ 整数张量吞吐在 Blackwell Ultra 的 datapath 预算里被整体削掉，不是「没调优」
+- 逃生口：可用环境变量把 vLLM 的 INT8 路径切到 JIT 的 Triton 后端，落到 legacy warp 级 IMMA 才跑得起来
+- 方法陷阱：作者另指出 profiler 判「是否走原生 INT8」存在 false-negative；验收应先查 arch target（`sm_103a` 有无 `tcgen05.mma.kind::i8`）再查 SKU 规格表
+- 口径：纯静态审计（8 页、单作者、无实测），commit/digest 钉死；配套测量论文另发
