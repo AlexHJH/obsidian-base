@@ -550,5 +550,24 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - vLLM 方向性数字：受控 responses 路由下 KV 命中 49.54%→99.08%、续写延迟 811→315ms（原文自注样本小）；真正的变量是路由准确率而非缓存算法
 - 状态：两处均 RFC/POC，未合主干；关联 [[AI-Agent-2026格局]]、[[LongLoop Console]]
 
+## llm-d 1.0：Day 1 是「跑得快」，Day 2 是多租户、不断服、能升级（2026-11-11 归档）
+整理自 2026-11-11 inbox 笔记（llm-d.ai blog，2026-10-20）
+- 工程重心从「任何模型跑在任何加速器上」转到生产运维：中央流控按 flow key（fairness ID + priority band）分队列，先优先级、再租户间公平轮转；拥塞时 no-regret——宁可把请求压在 router 也不塞进已过载的后端队列；默认仍等价 FCFS，不 opt-in 行为不变
+- P/D 拆开后的运维难点被点名：`DisaggregatedSet` 以 pod 快照门控 readiness + revision-aware 路由，请求只在 prefill/decode 两侧都滚完且版本相容后落地，省掉「并行 fleet + 手工切流」
+- 原生支持 agentic 会话：session-aware routing、turn-priority、Responses API 的 `previous_response_id`
+- 生产数据（厂商自述，未独立复核）：GKE 上 TTFT 降 >35%、prefix 命中 35%→70%；IBM 544×H100 跑 ~3000 并发 coding agent，命中率 ~98%、$0.11/百万 token
+- 结构性判断：竞争面从「引擎吞吐」上移到「集群调度层」——同一套路由/调度同时盖 vLLM 与 SGLang、NVIDIA/AMD/Intel GPU 与 TPU，引擎退化为可替换后端
+- 拓扑感知调度走 DRA + DRANET，为 wide EP 与 P/D 挑物理上靠近的卡；这一层成本模型直接取决于 fabric，见下一条
+
+## 拓扑不是传输优化，是跨五层的端到端契约（GKE H200→GB300 的 P/D 实践，2026-11-11 归档）
+整理自 2026-11-11 inbox 笔记（llm-d.ai blog「topology as an end-to-end contract」，2026-10-29）
+- 分工链条：platform 发现拓扑 → allocator 保留拓扑 → runtime 验证 → router 消费；任何一层丢信息，故障症状都会出现在离病因很远的地方
+- 退化不是变慢而是事故：故意制造一次 RDMA→TCP 静默回退，5400 个请求里 436 个超时；A4X 上消除一次回退，KV 传输均值时间降 >93%
+- 收益可分层归因（A3 Ultra/H200）：GPU 与 NIC 同 PCIe root + 验证过 RDMA 后 TTFT 2.15s→1.157s；router 再按拓扑配对 prefill/decode 后 →0.33s（再 3.5×）——路由层贡献和硬件层同量级
+- rail 是关键词：每卡独立 RoCE NIC 接到独立交换平面（A3 Ultra 8 rail、A4/A4X 4 rail），同 rail 一跳、跨 rail 要上交换；同节点跨 pod 的 RDMA 仍是 hairpin（GPU→PCIe→NIC→ToR→回），可行性取决于平台
+- 「有链路 ≠ 有路由」：DRA claim 不约束 rail 时 UCX 报 `RDMA_CM_EVENT_ADDR_ERROR` / 连接超时，真因是 pod 网络里缺 per-NIC 路由与邻居项；现用 `UCX_IB_ROCE_REACHABILITY_MODE=all` 绕过，作者明确说修复属于平台侧注入
+- NVLink 取舍：GB200 上试过 ComputeDomain/IMEX 让跨 pod 共享 NVLink，能通，但四机型上端到端验证过的仍是 RDMA
+- 判读：契约每一环都能映射回自研硬件——PCIe root、rail 编号、descriptor 式地址、以及谁来验证数据真的走了快路径
+
 
 
