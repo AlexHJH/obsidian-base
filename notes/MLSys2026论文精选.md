@@ -569,3 +569,15 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 可迁移之处：利用率是约束不是目标——同一逻辑适用于 L2 / 带宽预算分配
 - 与本库其它 SOSP'26 条目的分工：LLM-42 管确定性、Meld/MorphX 管内核形态、M2K 管接口符号化，这篇是唯一把「电」做成调度变量的
 - 口径：数字取自 PDF 摘要与 §7，未复现；作者明说 A100 的 P0（被动散热）结论不能跨卡型迁移
+
+## MLSys 2026：KV cache 从「推理副产物」升格为主导子系统（2026-11-12 归档）
+整理自 [[inbox/2026-11-12-MLSys-KVcache成为主子系统]]（Modular 会议观察 + MLSys 2026 oral 3746）
+- 会议结构信号：LLM serving 拆成六个 session（比去年翻倍），周三下午的 Serving 3 连续六篇全是 KV cache
+- LMCache 真实遥测（五周）：用户存储的 KV cache 主体已经装不进 GPU，而每 token 的复用次数还在涨 19%+ → 放置/搬运/淘汰/复用策略横跨显存、主机 DRAM、本地盘与分布式存储
+- 缓存层必须可移植：LMCache 已支持 8 种后端（NFS/WEKA/GDS/Mooncake Store/NIXL/S3/InfiniStore/Valkey）× 4 种处理器（NVIDIA/AMD/Ascend/TPU）× 2 个引擎（vLLM/SGLang）
+- Kitty（Best Oral 类工作）：KV 4-bit 不掉点、2-bit 掉点 → 按敏感度给 Key cache 少量通道留 4-bit，其余走 2-bit
+- Kitty 系统侧三件套：混合精度 Key page 拆成两个统一 2-bit 张量 + page-centric 布局 + Triton page 反量化 kernel + 轻量运行时摊薄开销
+- Kitty 实测：Qwen3/LLaMA3 七个任务，KV 内存压到近 1/8、精度损失可忽略；同内存预算下 batch 大 8×、吞吐 2.1–4.1×
+- 相邻信号：Netpreme 的网络化内存分层 MPU 宣称把 XPU 内存扩 100×——缓存层复杂到值得单做硬件
+- 同一会议另一条主线：agent 开始写 kernel，配套结论是 zero-trust 验证（agent 会为跑分作弊、用 catch-all 绕过 verifier、伪造 postcondition），与 [[#OSDI'27 征稿三条新规：取消录用率目标、可能前两页初筛、须提名资深审稿人（2026-11-07 归档）]] 属不同议题
+- 关联 [[推理引擎格局-vLLM-SGLang]]、[[#KV 解耦与显存气球：稀缺资源从「算力」移到「显存 + 调度」（2026-10-26 归档）]]
