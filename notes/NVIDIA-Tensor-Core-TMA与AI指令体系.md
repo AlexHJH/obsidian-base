@@ -487,3 +487,22 @@ CUTLASS 4.8.1 修复了 device-side TMA descriptor 缩小尺寸时可能发生�
 - SASS 按精度分派 `tcgen05.mma` 为 DMMA/HMMA/QMMA/OMMA/IMMA；Hopper 是统一 `wgmma` 再分 HGMMA/QGMMA/IGMMA，FP4 的 OMMA 在 Hopper 无对应
 - 判读：延迟平坦意味着「加深 stage 数掩盖宽 tile」这套调参法失效，瓶颈从寄存器压力转到 TMEM 容量/带宽与 mbarrier 级数；与上文 TMEM 按列分配合起来看，256KB 是这一代真正的稀缺资源
 - 口径：延迟为论文表 V 的 SI-LAT（累加器携带依赖），非吞吐；「TMEM 访问 ≈420 拍 vs H200 ≈1000 拍」来自第三方转述，未读原文对应表
+
+## CuTeDSL sm100 epilogue 少一条 `tcgen05.wait::ld`：下一 tile 的 MMA 能覆写 TMEM（2026-11-16 归档）
+整理自 2026-11-13 inbox 笔记（CUTLASS issue #3805，2026-10-31）
+- `utils.gemm.sm100.epilogue` 的「非重叠累加器」分支在最后一个 subtile 上，`tcgen05.ld` 之后直接 `mbarrier.arrive` 放 buffer，中间没有 `tcgen05.wait::ld`；arrive 一唤醒 MMA warp，还没搬进寄存器的 TMEM 单元就被覆写
+- 位置 `python/CuTeDSL/cutlass/utils/gemm/sm100.py:483-486`；重叠分支在 :478 调了 `fence_view_async_tmem_load()`，非重叠分支没有——同一文件两条路径完成语义不一致
+- 复现条件：每 block 多于两个输出 tile（M256/N384、tile 128×192、单 cluster → 4 tile）；症状是结果错而非崩，单测静默，靠 fuzz 抓
+- 违反 PTX ISA 9.7.18.6.4.4 例 1：生产者必须在自己与「将发下一条 `tcgen05.mma` 的线程」同步之前跑 `tcgen05.wait::ld`
+- 因果链要看全：CHANGELOG 新加的「opt-in TMEM accumulator-buffer planning + overlapping ping-pong」是为容量受限 kernel 提前放 buffer，fence 是随新路径补的，老 subtile 路径沿用「arrive 即空」的假设才失效
+- 判读：不是硬件坑，是「异步 ld 有完成 token，`mbarrier.arrive` 只保证 buffer 逻辑上空、不保证数据已进寄存器」这个模型细节没写全
+
+## Rubin 多出来的 100 KiB smem 买的是第五级流水：NVFP4 22.24 PFLOPS 只到峰值 64%（2026-11-16 归档）
+整理自 2026-11-13 inbox 笔记（Together / ThunderKittens，2026-09-10）
+- 把 Blackwell kernel 逐条套 Rubin 新条件：MMA K 从 32 字节加宽到 64、TMEM 576 列、smem 328 KiB、B collector reuse
+- stage 扫描（16k NVFP4）：3 stage/202 KiB → 17,054 TFLOPS；4 stage/258 KiB → 20,595；5 stage/314 KiB → 22,239；第 5 级越过 Blackwell 228 KiB 上限，Rubin 那 +100 KiB 唯一作用就是买到这一级
+- 边际收益收窄：3→4 级 +20.7%，4→5 级 +8.0%，瓶颈开始从流水深度转移到别处
+- FP8 反过来：4 stage 10,895 → 5 stage 11,995 → 6 stage 11,288，到 6 级反噬；堆 stage 不是线性收益
+- 对官方峰值（NVFP4 35 PFLOPS/GPU、FP8 17.5）分别约 64% 与 68.5%；「competitive with cuBLAS/CuTe DSL」是作者自述口径
+- B collector reuse 只支持 A 在 M 方向复用、B 不离开 collector，且不支持 B 转置——这是 Rubin 相对 Blackwell 真正新增的复用面
+- 结构判读：Rubin 是 delta 不是 reset（warp specialization/TMA/2-CTA cluster/persistent scheduler 全不变），要学的只有三件：更大片上存储、K 加宽、collector 复用；与 [[Nvidia-GPU微架构演进]] 的五代脉络并列读
