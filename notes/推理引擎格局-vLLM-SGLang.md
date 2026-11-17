@@ -569,5 +569,16 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - NVLink 取舍：GB200 上试过 ComputeDomain/IMEX 让跨 pod 共享 NVLink，能通，但四机型上端到端验证过的仍是 RDMA
 - 判读：契约每一环都能映射回自研硬件——PCIe root、rail 编号、descriptor 式地址、以及谁来验证数据真的走了快路径
 
+## SGLang Rust 前端：迁移难点不是快，是「行为等价」（2026-11-14 归档）
+整理自 [[inbox/2026-11-14-推理部署-SGLang-Rust前端行为等价]]（sglang #49640 / #49635 / #50189，11-13 合并）
+- 形态：`SGLANG_RUST_SERVER=1` 把 Python HTTP 前端换成 `rust/sglang-server`，调度器仍是 Python；这批 PR 没有性能目标
+- 死锁：#49640 指出 intake 线程与 tokenizer 池用两个有界通道阻塞 `send` 互相喂，队列满即互等 → 改 `try_send` + `QueueFull`（对外 503），与多模态池的失败语义对齐
+- tokio 侧典型病：#49635 的 `GET /v1/loads` 在 worker 上等共享 `flock`，一停就是一个 worker，全停则 listener 不响应 → 挪 `spawn_blocking`，并新增「锁被占时同 worker ticker 延迟不超过锁持有时间一半」的回归测试
+- 行为等价是真成本：#50189 补 `--warmups` 与 `--gc-warning-threshold-secs`，因为这两者原本活在被 Rust 模式跳过的 Python HTTP 进程里；`/health` 在 warmup 完成前回 503，启动期未标记 warmup 直接拒绝（Python 侧只警告）
+- 错误面逐字对齐：`/tokenize` 的 503 要落进扁平错误体的 `"type": "503"`，而不是其他 core 失败的 500
+- 埋点：#49640 顺带修 `ExtensionCounter::inc` 每次观测都建排序标签向量并抢 family 级 `Mutex` → `RwLock` + 原地比较，只有新标签集才升级写锁；`Server.shutdown()` 不再持 GIL
+- 判读：重写一个已被生产验证的组件时，Python 侧就是规格；与 [[#SGLang 把 KV 池收敛成一套：删 ChunkCache、draft KV 融进 target 页框（2026-11-09 归档）]] 同属「把隐式行为写成显式测试」
+- 口径：仅读 PR 描述与 11-13 合并记录，无独立基准；Rust 模式仍是 opt-in
+
 
 
