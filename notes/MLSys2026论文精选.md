@@ -581,3 +581,12 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 相邻信号：Netpreme 的网络化内存分层 MPU 宣称把 XPU 内存扩 100×——缓存层复杂到值得单做硬件
 - 同一会议另一条主线：agent 开始写 kernel，配套结论是 zero-trust 验证（agent 会为跑分作弊、用 catch-all 绕过 verifier、伪造 postcondition），与 [[#OSDI'27 征稿三条新规：取消录用率目标、可能前两页初筛、须提名资深审稿人（2026-11-07 归档）]] 属不同议题
 - 关联 [[推理引擎格局-vLLM-SGLang]]、[[#KV 解耦与显存气球：稀缺资源从「算力」移到「显存 + 调度」（2026-10-26 归档）]]
+
+## FlexiCache + WakeKV：head 级 KV 分层的收益与它的寿命上界（2026-11-17 归档）
+整理自 [[inbox/2026-11-14-MLSys-FlexiCache头部时间稳定性]]（arXiv 2511.00868，MLSys 2026）、[[inbox/2026-11-14-MLSys-WakeKV静态分类会过期]]（arXiv 2610.02713，NeurIPS 2026 ML for Systems Workshop）
+- **FlexiCache**：观测到不同 KV head 的「关键页集合」时间稳定性差异极大 → 按 head 分层，不稳定 head 整份留 GPU，稳定 head 只留 top-K 页、其余下放 host 内存并周期性重排搬回；被换出的页不销毁，后来变重要还能取回（牺牲带宽不丢信息）
+- 分类**一次性离线做**（最不稳定 25% head 定为 unstable）；vLLM 实现：长上下文显存占用最多降 70%、离线吞吐 1.38–1.55×、在线 token 延迟改善 1.6–2.1×
+- **WakeKV** 直接打这个前提：三个模型（1.5B–8B）× 三种负载实测，多数 head 在生成过程中至少改变一次读取行为 → head 重要性是时变量，「一次分类定终身」是在赌负载
+- 策略改为反应式：冷却的 head 不冻结也不永久驱逐，移到可恢复的 CPU 水库；5 个 model-regime 组合、等内存/等预算下 miss rate 一致优于冻结分类与破坏性驱逐，并在 FlexiCache/vLLM 现有实现上跑 Mistral-7B 验证（吞吐升、LongBench 质量保持）
+- 方法论价值：两篇构成一对——一篇给出 head 级分层的收益强度，另一篇给出该收益的时间上界；结论适用于所有「按静态重要性做分层」的设计（L2 预算、页缓存、提示词记忆压缩同理）
+- 关联 [[推理引擎格局-vLLM-SGLang]]、[[MLSys2026论文精选]]、[[HBF-NAND-AI推理内存2026]]
