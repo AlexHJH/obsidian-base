@@ -590,3 +590,12 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 策略改为反应式：冷却的 head 不冻结也不永久驱逐，移到可恢复的 CPU 水库；5 个 model-regime 组合、等内存/等预算下 miss rate 一致优于冻结分类与破坏性驱逐，并在 FlexiCache/vLLM 现有实现上跑 Mistral-7B 验证（吞吐升、LongBench 质量保持）
 - 方法论价值：两篇构成一对——一篇给出 head 级分层的收益强度，另一篇给出该收益的时间上界；结论适用于所有「按静态重要性做分层」的设计（L2 预算、页缓存、提示词记忆压缩同理）
 - 关联 [[推理引擎格局-vLLM-SGLang]]、[[MLSys2026论文精选]]、[[HBF-NAND-AI推理内存2026]]
+
+## SuperInfer：GH200 的 NVLink-C2C 被现有栈用掉不到 5%（2026-11-19 归档）
+整理自 [[inbox/2026-11-16-MLSys-SuperInfer-C2C带宽只用5%]]（arXiv 2601.20309，MLSys 2026）
+- 前提：GH200 的 NVLink-C2C 上限 900 GB/s，但现有 KV offloading 栈把它当 PCIe 使，利用率不足 5% → 瓶颈是软件栈不是互联
+- 做法：把抢占式换出改成主动轮转——RotaSched 按 SLO 进度决定谁留在 GPU，DuplexKV 做全双工 C2C 传输
+- 结果：高请求率下 TTFT SLO 达成率最高 +74.7%，TBT 与吞吐与 SOTA 持平；低负载与 baseline 打平 → 收益全来自内存管理而非算力
+- 相对 Pie 的差异：Pie 也溢写 KV 到 CPU，但无 SLO 感知调度、没吃满 C2C
+- 迁移判据：能否搬到 GP+CC 分离的国产 SoC，取决于 C2C 是否 cache-coherent，而非带宽数字；同 [[NVIDIA-Tensor-Core-TMA与AI指令体系]] 里「TMA 之前靠 cp.async 手工凑流水」属同一类栈缺陷
+- 口径：arXiv v2（2026-05-18）自述数据，未复现

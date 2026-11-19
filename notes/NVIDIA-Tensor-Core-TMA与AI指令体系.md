@@ -506,3 +506,12 @@ CUTLASS 4.8.1 修复了 device-side TMA descriptor 缩小尺寸时可能发生�
 - 对官方峰值（NVFP4 35 PFLOPS/GPU、FP8 17.5）分别约 64% 与 68.5%；「competitive with cuBLAS/CuTe DSL」是作者自述口径
 - B collector reuse 只支持 A 在 M 方向复用、B 不离开 collector，且不支持 B 转置——这是 Rubin 相对 Blackwell 真正新增的复用面
 - 结构判读：Rubin 是 delta 不是 reset（warp specialization/TMA/2-CTA cluster/persistent scheduler 全不变），要学的只有三件：更大片上存储、K 加宽、collector 复用；与 [[Nvidia-GPU微架构演进]] 的五代脉络并列读
+
+## PTX 把 2:4 稀疏的「选哪两个」做成指令，但只在 sm_107a 可用（2026-11-19 归档）
+整理自 [[inbox/2026-11-16-NVIDIA-PTX稀疏压缩指令只在sm107a]]（PTX ISA 9.4 新增 9.7.10.31 `spcompress` / 9.7.10.32 `spdecompress`；9.5 ↔ CUDA 13.5 / r620）
+- `spcompress.elemsize.idxsize.sp::2:4.num mdata, cdata, data, spdesc`：压缩因子只有 `.sp::2:4`；`.elemsize` = b8/b16，`.idxsize` = b2/b4，`.num` = x1…x64（x64 时 data 是 128 个 .b32）→ 稀疏化下沉成「格式转换」而非「另一个 MMA」，动的是数据面
+- 选择规则在 32 位 `spdesc` 里：bit0-1 = MAX/MAXABS/MIN/MINABS，bit2-4 = 元素类型；类型位与 `.elemsize` 冲突是运行期报错
+- 文档明写的不确定面：一组 4 个里满足条件多于 2 个或并列时保留哪两个是 implementation-specific；NaN 必被选中；`-0.0 < +0.0`
+- `spdecompress` 因子多（1:2/1:4/1:8/1:16/2:4/2:8/2:16/4:8/4:16），空位补零；约束：单次 `num_src*elemsize ≤ 32` 位、`.b2` 索引只能喂 `num_target ≤ 4`
+- Target ISA 只写 `sm_107a` 一行——Rubin 专属，Blackwell（sm_100/103）无此指令；架构清单里 sm_107/107f/107a 与 sm_110/110f/110a、sm_121 并列 → 家族化 target 成型，`-arch` 判据不能再只盯 sm_100a
+- 9.5 顺带：`tensormap.replace` 新增 `.alloc_class`（alloc_small/alloc_large/alloc_same），配 `tensormap.query.alloc_class_large`；`global_address` 字段不带 alloc_class 默认 Small

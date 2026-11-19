@@ -626,3 +626,11 @@
 - 廉价的赢法：工具输出截到固定长度，每轮成本降 38%（缓存命中率几乎不变）；决策阈值是缓存输入价格低于约 $0.55/M token 时全量更便宜
 - 对 [[LongLoop Console]] 的含义：验收契约/禁止动作清单不能放在会被压缩的对话历史里（须系统层或外部强制点），且压缩应只在「窗口装不下 / 质量真衰减」时启用——默认策略应是「全量 + 工具输出封顶」
 - 关联 [[#LHTB：长任务 agent 的「假完成」被量化了（2026-11-10 归档）]]、[[MLSys2026论文精选#FlexiCache + WakeKV：head 级 KV 分层的收益与它的寿命上界（2026-11-17 归档）]]
+
+## harness 决定 token 成本，模型只决定准确率天花板（2026-11-19 归档）
+整理自 [[inbox/2026-11-16-AI-Agent-harness决定token成本模型只决定天花板]]（arXiv 2607.22585，2026-07-30）
+- 受控实验：同一模型换 harness，解同一题的 token 消耗最多差 40×，pass@1 只差 0–8 个百分点 → 「换框架提升 5 个点」多半是噪声，harness 真正决定的是成本与失败指纹
+- Terminal-Bench 2.0 官方数据：Claude Opus 4.5 在两个 harness 上 52.1% vs 57.8%，输入 token 256.9M vs 3.9M（65×）——5.7 分差距付了 65 倍的钱
+- 实验面：Terminal-Bench Pro 分层 50 题子集、跨模型配对比较；95% bootstrap CI 除最大差距外均含 0
+- 失败指纹可跨模型复现：Goose 恒为 REASON 循环、OpenHands-SDK 为 VERIFY/MAX_TURNS、OpenCode 为空转超时 → 结构性偏差，不是模型性格
+- 对 [[LongLoop Console]] 的含义：验收契约冻结在 harness 层成立，但必须同时记账 token/步数，否则「更可靠」可能是拿 40× 预算换来的
