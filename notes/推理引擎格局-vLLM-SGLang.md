@@ -580,5 +580,25 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 判读：重写一个已被生产验证的组件时，Python 侧就是规格；与 [[#SGLang 把 KV 池收敛成一套：删 ChunkCache、draft KV 融进 target 页框（2026-11-09 归档）]] 同属「把隐式行为写成显式测试」
 - 口径：仅读 PR 描述与 11-13 合并记录，无独立基准；Rust 模式仍是 opt-in
 
+## SGLang Consortium 成立：厂商拿到议程权，没拿到合并权（2026-11-17 归档）
+整理自 [[inbox/2026-11-17-推理部署-SGLang联盟成立]]（LMSYS 博客，2026-11-12 首届 SGLang Summit）
+- 成员：NVIDIA、AMD、Intel、Google、Meta、Thinking Machines Lab（11-16 增补）、Cloudflare、Modal、RadixArk；治理写得很明确——成员影响路线图，维护者保留技术决策与代码接收权
+- 机制是「代表 + 一年两次路线图会议 + 会间工作组」，贡献形式为工程投入/部署反馈/测试资源/联合开发，不是投票制
+- 与 vLLM 的对照：单项目厂商主导 → 跨厂商咨询委员会，但两边都保留 meritocracy 式合并权，席位换不了代码
+- 需求侧数字（引 Deloitte）：推理占 2026 年 AI 算力约 2/3，2025 年约一半 → 联盟成立的理由不是技术而是推理已成主要成本项；生产客户含 Meta、Microsoft、Google、Amazon、Cloudflare、Reflection、Modal，规模自述「数十万 GPU」
+- 五个方向里没有「编译器/内核」独立条目，硬件优化把内核与算子包住了
+- 判读：硬件厂商的真实动机是自家加速器在新模型 day-0 路径上不掉队；联盟化后新硬件拿支持，谈判对象从 PR reviewer 变成路线图会议
+- 口径：仅据官方博客与新闻稿；章程、成员义务、决策流程无公开文本
+
+## vLLM v0.34.0：KV 容量从「估算」改「实测」，代价落在单 token 延迟（2026-11-17 归档）
+整理自 [[inbox/2026-11-17-推理部署-vLLM034-KV容量改实测]]（vLLM release v0.34.0，2026-11-16）
+- extensible KV cache 转默认：容量不再按 `gpu_memory_utilization` 估算，而是在 CUDA graph 捕获与 warmup 之后按真实空闲显存反推；H200 上 MiniMax-M3 的 KV 容量 433k → 672k token
+- 换来吞吐、付出 TPOT：并发 128 时部分 H200 模型 TPOT +6–18%（更多序列共享同一份 cache，命中与带宽同时被摊薄）；回退开关 `--gpu-memory-utilization 0.9` 或 `--no-enable-extensible-kv-cache`
+- 语义连带变化：`gpu_memory_utilization` 默认抬到 1.0，从「预留上限」变成「拿满实测空闲」；默认 `--block-size` 16→64（ROCm paged attention 仍 16），本质是把碎片预算当可调项
+- Model Runner V1 彻底删除，V2 唯一 GPU runner；dual-batch overlap 现跑在 MRV2 上（含投机解码与 DCP）；新增 CRIU + `cuda-checkpoint` 三接口，推理服务开始按「可暂停进程」管理
+- 厂商自测档位：Step5 NVFP4 在 4×GB200 解码 1.95×；GLM-5.3-Flash DeepGEMM FP8 MegaMoE 输出吞吐 1.6×；GLM-5.3 在 32K–128K 上 TTFT 1.24–1.40×
+- 判读：容量决策从静态配置项变成启动期测量产物 = 显存预算这个旋钮交回引擎；对自研芯片是提醒——warmup 后的空闲显存必须可信，否则整套自动定容建立在假数上
+- 口径：数字均来自 release note 自测，无独立复现
+
 
 
