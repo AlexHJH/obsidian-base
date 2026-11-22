@@ -515,3 +515,12 @@ CUTLASS 4.8.1 修复了 device-side TMA descriptor 缩小尺寸时可能发生�
 - `spdecompress` 因子多（1:2/1:4/1:8/1:16/2:4/2:8/2:16/4:8/4:16），空位补零；约束：单次 `num_src*elemsize ≤ 32` 位、`.b2` 索引只能喂 `num_target ≤ 4`
 - Target ISA 只写 `sm_107a` 一行——Rubin 专属，Blackwell（sm_100/103）无此指令；架构清单里 sm_107/107f/107a 与 sm_110/110f/110a、sm_121 并列 → 家族化 target 成型，`-arch` 判据不能再只盯 sm_100a
 - 9.5 顺带：`tensormap.replace` 新增 `.alloc_class`（alloc_small/alloc_large/alloc_same），配 `tensormap.query.alloc_class_large`；`global_address` 字段不带 alloc_class 默认 Small
+
+## PTX 9.4 把 cluster 多播扩到 32 位、并给 bulk 预取配上异步驱逐优先级（2026-11-22 归档）
+整理自 [[inbox/2026-11-19-NVIDIA-PTX94-TMA多播与驱逐优先级]]
+- `.multicast::cluster::32b`：`cp.async.bulk(.tensor)`、`mbarrier.expect_tx/arrive`、`tcgen05.commit` 均可带 32 位 CTA mask，但只 sm_107f 及同族更高型号支持 → cluster 超过 16 CTA 才用得上（16 位 mask 是原上限）
+- `applypriority.async.bulk(.tensor)`：把「设缓存驱逐优先级」做成异步指令（当前只有 `.L2::evict_normal` + `.bulk_group` 完成机制），可与 `cp.async.bulk.prefetch` 的 `.level::eviction_priority` 串联，在预取阶段就决定数据落 L2 的位置
+- `mbarrier::report::validity::per_16bytes::8000`（`.report_mechanism`，sm_107f+）：TMA 完成后按每 16B 用 0x8000 模式做有效性校验，等于给 bulk 拷贝加逐段完成证据
+- `tcgen05.commit` 新增 `.sync_restrict::shared::read::mma::a`，把同步域收窄到共享内存读取与 MMA 之间
+- 9.5 侧（本轮复核）：`tensormap.replace.alloc_class` 已在 [[#PTX 把 2:4 稀疏的「选哪两个」做成指令，但只在 sm_107a 可用（2026-11-19 归档）]] 记录；此外新增 `fabric.submit.commit_group`、`fabric.wait.sync_restrict::read`（取代旧的 `::reads`）
+- 关联 [[Nvidia-GPU微架构演进]]、[[#CUTLASS 4.8 / PTX ISA 9.4 的 Rubin（SM107）增量（2026-10-31 归档）]]

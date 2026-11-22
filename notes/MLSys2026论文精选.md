@@ -599,3 +599,11 @@ PyTorch 官方端侧推理框架，统一覆盖手机/MCU/嵌入式设备。通�
 - 相对 Pie 的差异：Pie 也溢写 KV 到 CPU，但无 SLO 感知调度、没吃满 C2C
 - 迁移判据：能否搬到 GP+CC 分离的国产 SoC，取决于 C2C 是否 cache-coherent，而非带宽数字；同 [[NVIDIA-Tensor-Core-TMA与AI指令体系]] 里「TMA 之前靠 cp.async 手工凑流水」属同一类栈缺陷
 - 口径：arXiv v2（2026-05-18）自述数据，未复现
+
+## ProfInfer：不改代码、用 eBPF 挂探针看 llama.cpp 在干什么（2026-11-22 归档）
+整理自 [[inbox/2026-11-19-MLSys-ProfInfer-eBPF剖析llama_cpp]]（arXiv 2601.20755，MLSys 2026 Industry Track）
+- 上海交大 IPADS：eBPF 在运行时函数上动态挂探针，不改源码不重编译，输出算子/graph/timeline/硬件计数器四类视图，主打 llama.cpp 与边缘设备
+- 开销 <4%（instrument 类工作能否上生产的门槛）；覆盖 dense 推理、MoE routing、算子 offloading 三类真实行为
+- 适用面：挂的是函数符号，因此对 RK3588/Jetson 上的自定义 runtime 同样有效；限制是仅 Linux、只到 runtime 函数粒度，Metal/CUDA 图内细分拿不到
+- 与 XProf（Google，改栈路线）是同一问题域的两种解法：一个改栈、一个外部挂探针
+- 关联 [[推理引擎格局-vLLM-SGLang]]、[[#StriaTrace：在线 LLM 推理的低开销追踪诊断（OSDI'26，2026-09-01 归档）]]
