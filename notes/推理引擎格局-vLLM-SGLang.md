@@ -600,5 +600,26 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 判读：容量决策从静态配置项变成启动期测量产物 = 显存预算这个旋钮交回引擎；对自研芯片是提醒——warmup 后的空闲显存必须可信，否则整套自动定容建立在假数上
 - 口径：数字均来自 release note 自测，无独立复现
 
+## PD 解耦只在该解耦时划算：NVIDIA 几十万设计点扫出的边界（2026-11-20 归档）
+整理自 [[inbox/2026-11-20-推理引擎-PD解耦的设计空间边界]]（MLSys 2026 Industry Day，Bellevue，2026-05-22）
+- 结论不是「解耦更好」：只有 ISL≫OSL 且模型 >10B 时解耦才扩大吞吐-交互性 Pareto 前沿；decode 为主或延迟宽松时，piggyback 式同机部署更优
+- 收益主要来自 rate matching 而非拆分：DeepSeek-R1-Distill-Llama-8B / H200 / 3K ISL、300 OSL、5–45 req/s、FTL 200ms、TTL 10ms 下，SLA-aware Dynamo Planner 比固定 3:1 Ctx:Gen 好 8× goodput（每 GPU 7×），比最优静态部署（1:1、TP1）好 2×
+- 最优 Ctx:Gen 比例随模型与目标延迟漂移 → 静态配比表基本没有复用价值，必须带时序预测弹性伸缩；context chunking 的有效性强依赖 attention 形态（MLA vs GQA），不是通用开关
+- 更大的 NVLink 域持续有利（可换更宽 EP/TP），因为 decode 阶段要的是并行自由度
+- KV 传输带宽闭式：出口带宽按 FTL 反比、入口按 TTL×OSL 反比；attention 平方项使 FTL 随 ISL 超线性增长而 KV 体积线性增长 → ISL 越长出口带宽需求反而下降（可逐层 overlap）
+- 工程难点在 KV 搬运的 fan-in/fan-out 与并行映射副本（TP 域 > KV head 数时 KV 被复制而非切分），不是「分两个池」本身；与上文 [[#PrfaaS 实测]] 的结论一致——增益主要来自调度层
+- 口径：数十万设计点为仿真/小规模实测混合，具体硬件档位见原文
+
+## 前缀缓存成了攻击面：NDSS 2026 把 vLLM/SGLang 的缓存逐个拆开（2026-11-20 归档）
+整理自 [[inbox/2026-11-20-推理引擎-前缀缓存成为攻击面]]（NDSS 2026，San Diego，2026-02-23）
+- 六类攻击：面向用户的前缀哈希碰撞投毒、语义模糊投毒；面向系统完整性的块级/多模态碰撞绕过内容审核。在 vLLM、SGLang、AIBrix、LMDeploy、rtp-llm 上验证成功
+- 根因是四个设计准则被违反（序列化保真、命名空间隔离、抗碰撞哈希、安全检索）：主流框架普遍用非密码学哈希（vLLM=Python hash、AIBrix/rtp-llm/TGI=xxhash/Jenkins、TensorRT-LLM=FNV-like），64 位空间下 5 万条 KV、均值 400 token 的库约 2^40 条消息即可撞一次
+- SGLang 把 SHA-256 截断到有效 64 位，同量级；GPU 侧多模态哈希用简化 xxHash（不抗碰撞且可逆），改最后几个像素即可构造同哈希输入
+- 「日历」技巧很实用：Grok/OpenAI/Kimi/Qwen 把时间戳嵌进系统提示词每天刷新，攻击者在新一天开始前用「明天的时间戳」投毒，成功后恶意缓存被全体用户复用 24h
+- 连锁效果不止答非所问：先投毒一段「无害」Python（注释里塞特定 token ID 造碰撞），再提交恶意 import，代码审计直接放行
+- 成本：语义缓存投毒 100 条恶意查询约 $0.15（另一路攻击的 1/5）；RAG 让命中率下降但投毒率仍 92%
+- 防御五条（启动期随机数、密码学哈希、命名空间、结构元数据入键、命中后校验）：vLLM、GPTCache、AIBrix 已合入，SGLang/LMDeploy 仅确认
+- 判读：与上文 [[#共享 KV 溯源]] 同属「缓存键即安全边界」，可迁移到自研推理栈的 cache 设计评审清单
+
 
 
