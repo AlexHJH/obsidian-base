@@ -634,3 +634,15 @@
 - 实验面：Terminal-Bench Pro 分层 50 题子集、跨模型配对比较；95% bootstrap CI 除最大差距外均含 0
 - 失败指纹可跨模型复现：Goose 恒为 REASON 循环、OpenHands-SDK 为 VERIFY/MAX_TURNS、OpenCode 为空转超时 → 结构性偏差，不是模型性格
 - 对 [[LongLoop Console]] 的含义：验收契约冻结在 harness 层成立，但必须同时记账 token/步数，否则「更可靠」可能是拿 40× 预算换来的
+
+## Agent 沙箱层成基础设施选型，而逃逸都发生在出口的 trust handoff（2026-11-21 归档）
+整理自 [[inbox/2026-11-21-AI-Agent-沙箱执行层选型矩阵]]（LangSmith Sandboxes GA 2026-05-13 等）、[[inbox/2026-11-21-AI-Agent-沙箱逃逸在出口trust-handoff]]（Pillar Security 2026-07-22，CSA 研究笔记）
+- 隔离档位已成事实默认：microVM（LangSmith/Firecracker 系、Fly Sprites、CodeSandbox）> gVisor（GKE Agent Sandbox）> 容器；容器挡不住供应链投毒与内核提权是被反复引用的理由
+- 真正决定可用性的不是隔离技术而是平台原语：snapshots + 廉价 COW fork、blueprint 预热、Service URL、creator-private、可暂停；密钥统一走出口代理，沙箱内只见占位符
+- 规模化数字全是厂商/二手口径（GKE 单集群 300 沙箱/秒、Modal 百万并发、冷启动 p50 <1s），未复核，不宜当基准
+- **逃逸的真实类别**：Pillar 披露的 7 例（Cursor/Codex CLI/Gemini CLI/Antigravity）没有一例正面打穿沙箱——agent 只写了一个「箱外受信组件稍后会读/跑」的文件（IDE hook 配置、venv 解释器、git config、task 定义）；沙箱管住动作，管不住产出物的下游消费者
+- 四类失效模式：denylist 枚举不全 OS 攻击面、项目内配置文件被当受信基础设施、git/任务运行器在回合结束后以用户身份执行、共享 daemon（Docker socket）绕过隔离；DuneSlide（CVE-2026-50548/549，CVSS 9.8）则直接改执行体本身
+- 证据权重不均：7 条中 4 条属 Cursor，DuneSlide 也只打 Cursor——可推广的是模式，不是各家风险等同
+- 工程判据：threat model 须显式列出「箱外会消费 agent 产出物的全部组件」并纳入最小权限与签名校验；对 [[LongLoop Console]]，验收产物本身即被下游消费，产物写入路径应与执行路径同权审计
+- 关联 [[#上下文压缩的两条实证：会删掉治理约束，且多数场景根本不省钱（2026-11-17 归档）]]、[[2026-11-24-AI-Agent-agent-framework-PyPI投毒]]
+
