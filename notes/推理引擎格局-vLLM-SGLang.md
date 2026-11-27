@@ -630,6 +630,16 @@ Prefill（计算密集，打满 Tensor Core）与 Decode（访存密集，吃满
 - 判读：三篇共同的姿势是换计价单位——确定性按流量、压缩按张量、规模按 rank；对验收的意义是「同一负载可复现」可以是设计出来的属性，而不是部署环境碰巧一致
 - 关联 [[MLSys2026论文精选]]、[[AI芯片推理硬件2026全景]]
 
+## NVFP4 KV 的误差拆解与 vLLM 0.32/0.33 的平台断裂（2026-11-24 归档）
+整理自 [[inbox/2026-11-24-推理部署-FP4-KV误差分解]]（arXiv 2611.09825）、[[inbox/2026-11-24-推理部署-vLLM032-033]]
+- BitDecoding-FP4 把 4-bit KV 掉点拆成三个可分离误差源，最反直觉的一条是 **query 量化贡献 60% 的 logit 误差、KV 量化反而次要**；双残差 query（q = s1·q̂1 + s2·q̂2，第二项塞进首块 tile 的零填充列由 stacked MMA 吸收）把 logit 误差压到 1%，内核只多 0.4% 开销
+- 另两个误差：128K 上下文下 E4M3 block scale 把小概率四舍五入到 0（需下溢感知缩放）；key 的 outlier 需静态平滑 + Hadamard 旋转 + scale search
+- 系统侧真正见效的是转置 softmax：S^T 变成 B_k×G 后，线程串行归约换成 warp 级蝶式归约，顺便免费拿到概率量化的 block max，Qwen3-30B-A3B / batch 64 / 128K 下内核 3994µs → 1040µs（3.8×）
+- 对照口径：BitDecoding 七个 benchmark 距 BF16 KV 平均 0.5 分内（MXFP4 1 分内），而 TRT-LLM 原生 NVFP4 在 Qwen3-4B 上掉 8.5 分 → 厂商「<1% 掉点」依赖数据分布与评测集，不是格式属性
+- vLLM 0.32 把 NVFP4 KV 从 Blackwell 扩到 SM8x/SM90（约 0.5 byte/元素，对 FP16 减 75%），SM100 上 GLM-5.x 默认 FP8 KV（每 rank 显存减半、吞吐 +2.3~5.5%、代价 TTFT +7~11%）；0.33 只发 CUDA 13.0 wheel、下线 CUDA 12.9 镜像，并引入不保持目标分布的 FLy 近似投机解码
+- PR #59468 属「调度器记账错误」型高杠杆修复：不再为不占 batch 行的 draft token 预留 token budget，DeepSeek-V4.1-Flash 单节点吞吐近 3 倍
+- 判读：FP4 attention 的瓶颈在 softmax 与量化耦合处的串行开销，不在 MMA 吞吐；做 RISC-V 矩阵扩展若考虑 int4/fp4 attention，转置归约这类布局优化比算子本身更值钱
+
 
 
 
