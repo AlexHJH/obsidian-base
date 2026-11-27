@@ -5,6 +5,11 @@
 
 ## 专题入口
 
+- [[大模型推理性能与成本基线]]：200B–2T 工作负载、合格吞吐与 TCO 数据源。
+- [[K1-K3上游变更与回归档案]]：从上游变更到构建、QEMU 和板测的验证矩阵。
+- [[低精度量化格式与硬件实现]]：MXFP4、MXINT4、NVFP4 的格式、转换和精度。
+- [[芯片架构与实测数据源]]：Chips and Cheese 等独立测量、架构披露与规格索引。
+
 - [[RISC-V矩阵扩展两年进展-2024-2026]]：IME、VME、AME 的规范演化、架构语义、软件支持与实现证据（截至 2026-10-31）。
 - [[NVIDIA-Tensor-Core-TMA与AI指令体系]]：从 warp MMA、Hopper WGMMA/TMA 到 Blackwell tcgen05/TMEM，梳理数据流、同步、低精度与软件映射（截至 2026-10-31）。
 - [[昇腾950-NPU架构白皮书精读]]：Cube/Vector、NDDMA、BufferID、STARS2.0 与 UB/CCU 数据流，区分白皮书规格、推论与未披露项。
