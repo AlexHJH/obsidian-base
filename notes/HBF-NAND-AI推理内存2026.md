@@ -472,3 +472,7 @@
 - 站队信号：Kioxia 未加入 Sandisk/SK hynix 的 HBF 联盟，等于给「不改封装」留一条路；联盟现有 Google、Meta、Tenstorrent，NVIDIA/AMD/Micron 缺席
 - 映射到推理负载：稀疏 attention 的 top-k 散射读、MoE 专家跳转更像 GP1 场景；权重流式加载、长前缀复用更像 HBF
 - 口径：IOPS 与延迟为厂商标称，送样在 2026 年底，无第三方实测
+
+## Kioxia XL-FLASH Gen3 与 GP2：分别看介质和设备（2026-11-28 归档）
+
+[Kioxia XL-FLASH Gen3](https://apac.kioxia.com/en-apac/business/news/2026/20261125-1.html)公布原型样品的平均闪存读取延迟 3 µs，计划 2027 年 3 月少量客户功能评估，不是整盘/主机请求延迟。[GP2 公告](https://www.kioxia.com/en-jp/business/news/2026/20261126-2.html)给出的 18M+ IOPS 是 512 B 随机读，18M 对应 9.216 GB/s 有效载荷；28 GB/s 是开发设备及 PCIe 6.0 ×4 支持下的顺序预期，不可用于随机专家块模型。[SCADA/XD8 机架 PoC](https://www.kioxia.com/en-jp/business/news/2026/20261126-1.html)是 144 盘/18 节点、约 1.1 PB 的容量展示，既不是 GP2 吞吐也没有推理 TPOT。复测分别记录 I/O 大小、队列深度、介质/设备/端到端延迟、MoE 路由驻留及关键路径上的最长等待。
