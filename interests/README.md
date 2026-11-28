@@ -20,6 +20,6 @@
 - K1/K3 上游变更与回归：RVV/IME 派发、MTP 回滚、Triton/TLE tile lowering；数据源：llama.cpp 上游与 SpacemiT fork、FlagTree、Triton releases、LLVM/GCC。
 - 低精度量化格式与硬件实现：MXFP4、实验性 MXINT4、NVFP4 的 FP16 转换、PTQ/QAT、硬件与真实派发；数据源：OCP MX、CUTLASS、MLX、AMD Quark。
 - 芯片微架构、内存和互联实测：优先 [Chips and Cheese](https://chipsandcheese.com/archive)、ServeTheHome、OpenBenchmarking/Phoronix、TechPowerUp GPU Database、Hot Chips、UCIe Consortium、OCP HBF。详见 [[芯片架构与实测数据源]]。
-- AI 芯片地图（[[AI 芯片地图]]）：扫国内外已经发布和官方披露的产品，含 Mac、AI PC、边缘、GPU/NPU/ASIC；≥16 TOPS 或同数量级矩阵 TFLOPS、外部或统一内存带宽 ≥100 GB/s；记录 SKU、口径、精度、稀疏和一手来源，缺项列待核。
+- AI 芯片地图（[[AI 芯片地图]]）：扫国内外已经发布和官方披露的产品，含 Mac、AI PC、边缘、GPU/NPU/ASIC；AI 算力 ≥80 TOPS 或标明精度的矩阵算力 ≥80 TFLOPS，且外部或统一内存带宽 ≥128 GB/s；记录 SKU、口径、精度、稀疏和一手来源，缺项列待核。
 
 > 新增主题优先收改变成本假设、影响代码或值得复跑的证据。注明规格、供应商目标、独立实测和自测的区别；不自动收录未获授权的内部日志、客户 trace 或报价。

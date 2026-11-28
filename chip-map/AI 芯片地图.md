@@ -1,24 +1,18 @@
 # AI 芯片地图
 
-本次公开来源扫描：**126 条规格记录**，其中 **104 条按各自计量范围满足双门槛**（含按披露或可追溯理论带宽入选的产品），2 条特殊 SRAM 架构，20 条待核或低于门槛。部分相同参数 SKU 合并展示，非全球穷举。
+本次公开来源扫描：**126 条规格记录**，其中 **92 条按各自计量范围满足双门槛**（含按披露或可追溯理论带宽入选的产品），2 条特殊 SRAM 架构，32 条待核或低于门槛。部分相同参数 SKU 合并展示，非全球穷举。
 
 核对日期：2026-11-28。覆盖 Mac 和 AI PC、边缘模组、离散 GPU、国产与国际加速卡、云芯片和路线图。
 
-- 门槛为 **AI 计算 ≥16 TOPS、外部或统一内存峰值带宽 ≥100 GB/s**。对只公布浮点矩阵指标的芯片，同时纳入 ≥16 TFLOPS（同为每秒万亿次运算的数量级，不等于 INT8 TOPS）。原样保留精度、稀疏与量化口径；不能用 FP4 稀疏的数字和 INT8 稠密直接排名。
+- 门槛为 **AI 算力 ≥80 TOPS，且外部或统一内存峰值带宽 ≥128 GB/s**。矩阵算力也可按公开精度的 ≥80 TFLOPS 入选（同为每秒万亿次运算的数量级，不等于 INT8 TOPS）。原样保留精度、稀疏与量化口径；不能用 FP4 稀疏的数字和 INT8 稠密直接排名；不同 GPU、NPU 或 CPU 的峰值不相加凑门槛。
 - 带宽是十进制 GB/s。明确区分显存、片上 SRAM、DMA、PCIe、芯片互联和机架聚合。容量保留厂商 GB 或 GiB。带宽和算力必须对应同一 SKU 与范围；整卡多芯片合计可用于板卡对照，不视为单芯片共享内存。
 - “已发布”表示有可识别产品与公开规格，不表示当前库存、报价或地区可买；“官方披露”只表明公开规格；“云端”不等于可购卡。所有表格数字是公开峰值或标记的推导，非板测。Apple Neural Engine TOPS 不能代替 MLX/Metal 路径实测。
-- 不明数据留空待核。独立微测仅作交叉验证，见 [[芯片架构与实测数据源]]；推理与费用另见 [[大模型推理性能与成本基线]]。
+- 不明数据留空待核。已披露指标低于门槛的移出达标主表，保留原规格供对照；其他计算单元如有同配置的一手峰值，可另行复核。独立微测仅作交叉验证，见 [[芯片架构与实测数据源]]；推理与费用另见 [[大模型推理性能与成本基线]]。
 
 ## Mac、AI PC 与边缘
 
 | 型号 | 阶段 | 计量范围 | 内存容量／类型 | 带宽（GB/s） | 峰值 AI 算力 | 一手来源 |
 | --- | --- | --- | --- | ---: | --- | --- |
-| Apple M1 Ultra | 已发布 | SoC；双 die 统一内存 | 128 GB UMA | 800 | 22 TOPS Neural Engine；精度未列 | [Apple M1 Ultra](https://www.apple.com/newsroom/2022/03/apple-unveils-m1-ultra-the-worlds-most-powerful-chip-for-a-personal-computer/) |
-| Apple M2 Ultra | 已发布 | SoC；双 die 统一内存 | 192 GB UMA | 800 | 31.6 TOPS Neural Engine；精度未列 | [Apple M2 Ultra](https://www.apple.com/newsroom/2023/06/apple-introduces-m2-ultra/) |
-| Apple M4（Mac mini） | 已发布 | SoC | 32 GB UMA | 120 | 38 TOPS Neural Engine；精度未列 | [Apple M4](https://www.apple.com/newsroom/2024/05/apple-introduces-m4-chip/) · [Mac mini M4 规格](https://support.apple.com/en-us/121555) |
-| AMD Ryzen AI Max+ 395 | 已发布 | SoC | 128 GB LPDDR5X UMA | 256 | 50 TOPS NPU | [AMD Ryzen AI Halo 配置](https://developer.amd.com/playbooks/user-guide/) · [AMD Ryzen AI Max+ 395](https://www.amd.com/en/products/processors/laptop/ryzen/ai-300-series/amd-ryzen-ai-max-plus-395.html) |
-| Qualcomm Snapdragon X Elite（X1E-84/80/78） | 已发布 | SoC；按 OEM 配置 | LPDDR5X UMA | 135 | 45 TOPS NPU | [Qualcomm PC SKU 规格](https://www.qualcomm.com/laptops/products) |
-| Qualcomm Snapdragon X Plus（X1P-66/64/46/42） | 已发布 | SoC；按 OEM 配置 | LPDDR5X UMA | 135 | 45 TOPS NPU | [Qualcomm PC SKU 规格](https://www.qualcomm.com/laptops/products) |
 | Qualcomm Snapdragon X2 Elite Extreme（X2E-96/94） | 官方披露 | SoC；机型可得性分查 | LPDDR5X UMA | 228 | 80 TOPS NPU | [Qualcomm PC SKU 规格](https://www.qualcomm.com/laptops/products) |
 | Qualcomm Snapdragon X2 Elite（X2E-90/84） | 官方披露 | SoC；机型可得性分查 | LPDDR5X UMA | 152 | 85 TOPS NPU | [Qualcomm PC SKU 规格](https://www.qualcomm.com/laptops/products) |
 | Qualcomm Snapdragon X2 Elite（X2E-88/80/78） | 官方披露 | SoC；机型可得性分查 | LPDDR5X UMA | 152 | 80 TOPS NPU | [Qualcomm PC SKU 规格](https://www.qualcomm.com/laptops/products) |
@@ -27,17 +21,12 @@
 | NVIDIA Jetson Thor T5000 | 已发布 | 单模组 | 128 GB LPDDR5X | 273 | 1035 TFLOPS FP4 稠密；2070 稀疏 | [NVIDIA Thor 规格](https://developer.nvidia.com/blog/introducing-nvidia-jetson-thor-the-ultimate-platform-for-physical-ai/) |
 | NVIDIA Jetson Thor T4000 | 已发布 | 单模组 | 64 GB LPDDR5X | 273 | 600 TFLOPS FP4 稠密；1200 稀疏 | [NVIDIA Thor 规格](https://developer.nvidia.com/blog/introducing-nvidia-jetson-thor-the-ultimate-platform-for-physical-ai/) |
 | NVIDIA Jetson AGX Orin 64GB | 已发布 | 单模组 | 64 GB LPDDR5 | 204.8 | 275 AI TOPS（官方档位） | [NVIDIA Jetson 模块对照](https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/) |
-| NVIDIA Jetson Orin Nano Super 8GB | 已发布 | 开发套件，Super 档 | 8 GB LPDDR5 | 102 | 67 AI TOPS（官方档位） | [NVIDIA Jetson 模块对照](https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/) |
-| AMD Ryzen AI Max+ PRO 495 | 官方披露 | SoC；AMD Halo 192 GB 型 | 192 GB LPDDR5X UMA | 273 | 55 TOPS NPU | [AMD Ryzen AI Halo 配置](https://developer.amd.com/playbooks/user-guide/) · [AMD Ryzen AI Max+ PRO 495 规格](https://www.amd.com/en/products/processors/laptop/ryzen-pro/ai-max-pro-400-series/amd-ryzen-ai-max-plus-pro-495.html) · [AMD Ryzen AI Max PRO 400 发布](https://www.amd.com/en/blogs/2026/amd-powers-next-generation-agent-computers-with-new-ryzen-ai-hal.html) |
 | Intel Core Ultra X9 388H（ThinkPad X9-15p） | 已发布 | 21VV0029TH；128-bit；理论值 | 32 GB LPDDR5X-9600 | 153.6 | 122 TOPS INT8 GPU；50 TOPS INT8 NPU（不相加） | [Intel ARK](https://www.intel.com/content/www/us/en/products/sku/245526/intel-core-ultra-x9-processor-388h-18m-cache-up-to-5-10-ghz/specifications.html) · [Lenovo 21VV0029TH](https://psref.lenovo.com/Detail/ThinkPad/ThinkPad_X9_15p_Gen_1_Aura_Edition?M=21VV0029TH) |
 | Intel Core Ultra X9 388H（ThinkPad P16s Gen 5） | 已发布 | 21XE006ASG；128-bit；理论值 | 96 GB LPCAMM2-8533 | 136.5 | 122 TOPS INT8 GPU；50 TOPS INT8 NPU（不相加） | [Intel ARK](https://www.intel.com/content/www/us/en/products/sku/245526/intel-core-ultra-x9-processor-388h-18m-cache-up-to-5-10-ghz/specifications.html) · [Lenovo 21XE006ASG](https://psref.lenovo.com/Detail/thinkpad_p16s_gen_5_intel?M=21XE006ASG) |
 | Intel Core Ultra X9 378H | 已发布 | SoC；128-bit 满宽理论值，按 OEM 实际档位 | 最高 96 GB LPDDR5X；按 OEM 配置 | 153.6 | 122 TOPS INT8 GPU；50 TOPS INT8 NPU（不相加） | [Intel ARK](https://www.intel.com/content/www/us/en/products/sku/246128/intel-core-ultra-x9-processor-378h-18m-cache-up-to-5-00-ghz/specifications.html) · [Lenovo X9-15p 配置族](https://psref.lenovo.com/Product/ThinkPad/ThinkPad_X9_15p_Gen_1_Aura_Edition) |
 | Intel Core Ultra X7 368H | 已发布 | SoC；128-bit 满宽理论值，按 OEM 实际档位 | 最高 96 GB LPDDR5X；按 OEM 配置 | 153.6 | 122 TOPS INT8 GPU；50 TOPS INT8 NPU（不相加） | [Intel ARK](https://www.intel.com/content/www/us/en/products/sku/245523/intel-core-ultra-x7-processor-368h-18m-cache-up-to-5-00-ghz/specifications.html) · [Lenovo X9-15p 配置族](https://psref.lenovo.com/Product/ThinkPad/ThinkPad_X9_15p_Gen_1_Aura_Edition) |
 | Intel Core Ultra X7 358H | 已发布 | SoC；128-bit 满宽理论值，按 OEM 实际档位 | 最高 96 GB LPDDR5X；按 OEM 配置 | 153.6 | 122 TOPS INT8 GPU；50 TOPS INT8 NPU（不相加） | [Intel ARK](https://www.intel.com/content/www/us/en/products/sku/245527/intel-core-ultra-x7-processor-358h-18m-cache-up-to-4-80-ghz/specifications.html) · [Lenovo X9-15p 配置族](https://psref.lenovo.com/Product/ThinkPad/ThinkPad_X9_15p_Gen_1_Aura_Edition) |
 | Intel Core Ultra 5 338H | 已发布 | SoC；128-bit 满宽理论值，按 OEM 实际档位 | 最高 96 GB LPDDR5X；按 OEM 配置 | 136.5 | 98 TOPS INT8 GPU；47 TOPS INT8 NPU（不相加） | [Intel ARK](https://www.intel.com/content/www/us/en/products/sku/245531/intel-core-ultra-5-processor-338h-18m-cache-up-to-4-70-ghz/specifications.html) · [Lenovo X9-15p 配置族](https://psref.lenovo.com/Product/ThinkPad/ThinkPad_X9_15p_Gen_1_Aura_Edition) |
-| Intel Core Ultra 7 258V | 已发布 | SoC；封装内 128-bit；带宽理论值 | 32 GB LPDDR5X-8533 | 136.5 | 64 TOPS INT8 GPU；47 TOPS INT8 NPU（不相加） | [Intel ARK](https://www.intel.com/content/www/us/en/products/sku/240957/intel-core-ultra-7-processor-258v-12m-cache-up-to-4-80-ghz/specifications.html) · [Intel Lunar Lake](https://cdrdv2-public.intel.com/824443/2024_Intel_Tech%20Tour%20TW_Lunar%20Lake%20Architecture%20Session%20Highlights-3.pdf) |
-| AMD Ryzen AI Max PRO 490 | 官方披露 | SoC；256-bit 满宽计算值；依 OEM 配置 | 最高 192 GB LPDDR5X UMA | 约 273 | 50 TOPS NPU | [AMD 490 规格](https://www.amd.com/en/products/processors/laptop/ryzen-pro/ai-max-pro-400-series/amd-ryzen-ai-max-pro-490.html) · [AMD 规格对照](https://www.amd.com/en/products/specifications/processors.html) |
-| 算能 SG2380 | 官方披露；Oasis 板暂停 | 单 SoC；256-bit 满宽理论值；未核出货 | 最高 128 GB LPDDR5；支持 LPDDR4/X | 204.8（LPDDR5-6400） | 32 TOPS INT8；16 TFLOPS FP16 | [Milk-V SoC 规格](https://milkv.io/chips/sg2380) · [Oasis 暂停公告](https://community.milkv.io/t/introducing-the-milk-v-oasis-with-sg2380-a-revolutionary-risc-v-desktop-experience/780/196) |
 
 ## 桌面 GPU 与工作站
 
@@ -126,7 +115,6 @@
 | 算能 SC11 FP300 | 已发布；伙伴报道兼容验证 | 2 SoC 整卡合计；300 W；SG-Link 速率未核 | 最高 256 GB LPDDR5X | 约 1100（厂商称超过） | 超过 400 TOPS（原文 INT8/FP8）；超过 200 TFLOPS FP16/BF16 | [算能厂商申报](https://xh.21csp.com.cn/cxcp_2024/202409/2056.html) · [伙伴报道](https://bellcloudtech.com/news-info/22/) · [双 SoC 固件](https://github.com/sophgo/mcu/blob/master/SC11FP300/common.h) |
 | 算能 SC7 FP300 | 已发布 | 多芯整卡合计；300 W；PCIe 4 ×16 | 128 GB LPDDR4X | 512 | 256 TOPS INT8；128 TFLOPS FP16/BF16 | [算能 SC7 V2.2](https://sophon-file.sophon.cn/sophon-prod-s3/drive/23/03/09/10/SOPHGO%20AI%E5%8A%A0%E9%80%9F%E5%8D%A1%20SC7%E7%B3%BB%E5%88%97%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D_V2.2.pdf) |
 | 算能 SC7 HP75 | 已发布 | 多芯整卡合计；75 W；PCIe 3 ×8；非 HP75-2 | 48 GB LPDDR4X | 205 | 96 TOPS INT8；48 TFLOPS FP16/BF16 | [算能 SC7 V2.2](https://sophon-file.sophon.cn/sophon-prod-s3/drive/23/03/09/10/SOPHGO%20AI%E5%8A%A0%E9%80%9F%E5%8D%A1%20SC7%E7%B3%BB%E5%88%97%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D_V2.2.pdf) |
-| 算能 SC5-3-H | 已发布 | 整卡；75 W；PCIe 3 ×8 | 36 GB LPDDR4X | 192 | 52.8 TOPS INT8 | [算能 SC5 V1.0](https://sophon-file.sophon.cn/sophon-prod-s3/drive/21/11/19/10/%E6%99%BA%E7%AE%97%E5%8D%A1SC5%E7%B3%BB%E5%88%97%E4%BA%A7%E5%93%81%E5%BD%A9%E9%A1%B5_V1.0.pdf) |
 | Qualcomm Cloud AI 80 Ultra | 已发布 | 4 SoC 整卡合计；内存分域；150 W | 128 GB LPDDR4X | 548 | 618 TOPS INT8；222 TFLOPS FP16（产品表） | [Qualcomm 产品表](https://www.qualcomm.com/data-center/products/cloud-ai-100-ultra) · [SDK 1.21](https://qualcomm.github.io/cloud-ai-sdk-pages/1.21/Getting-Started/Architecture/index.html) |
 | Qualcomm Cloud AI 100 Pro | 已发布 | 单 SoC；75 W | 32 GB LPDDR4X | 137 | 400 TOPS INT8 / 200 TFLOPS FP16（产品表）；375 / 125（SDK） | [Qualcomm 产品表](https://www.qualcomm.com/data-center/products/cloud-ai-100-ultra) · [SDK 1.21](https://qualcomm.github.io/cloud-ai-sdk-pages/1.21/Getting-Started/Architecture/index.html) |
 | Qualcomm Cloud AI 100 Standard | 已发布 | 单 SoC；75 W | 16 GB LPDDR4X | 137 | 350 TOPS INT8 / 175 TFLOPS FP16（产品表）；325 / 110（SDK） | [Qualcomm 产品表](https://www.qualcomm.com/data-center/products/cloud-ai-100-ultra) · [SDK 1.21](https://qualcomm.github.io/cloud-ai-sdk-pages/1.21/Getting-Started/Architecture/index.html) |
@@ -140,11 +128,12 @@
 | Groq GroqChip LPU | 特殊架构 | 单芯片；片上 SRAM | 230 MB SRAM | 80000（SRAM） | 750 TOPS INT8 | [GroqChip 数据表](https://groq.com/wp-content/uploads/2024/08/GroqChip%E2%84%A2-Processor-Product-Brief-v1.7.pdf) |
 | Cerebras WSE-3 | 特殊架构 | 整片晶圆；片上 SRAM | 44 GB SRAM | 21000000（SRAM） | 125 PFLOPS 峰值 AI；精度口径核对 | [Cerebras WSE-3](https://www.cerebras.ai/press-release/cerebras-announces-third-generation-wafer-scale-engine) |
 
+
 ## 待核或低于双门槛
 
 | 型号 | 阶段 | 计量范围 | 内存容量／类型 | 带宽（GB/s） | 峰值 AI 算力 | 一手来源 |
 | --- | --- | --- | --- | ---: | --- | --- |
-| Apple M3 / M3 Pro / M3 Max | 待核 | SoC；不拿媒体估算当官方量化峰值 | 最高 24 / 36 / 128 GB UMA | 100 / 150 / 400 | Neural Engine 数值未在对应一手规格核实 | [Mac M3 系列对照](https://www.apple.com/mac/compare/?modelList=MacBook-Air-M3-15%2CMacBook-Pro-16-M3) |
+| Apple M3 / M3 Pro / M3 Max | 待核 | SoC；不拿媒体估算当官方量化峰值 | 最高 24 / 36 / 128 GB UMA | 100（M3，低于门槛）/ 150 / 400 | Neural Engine 数值未在对应一手规格核实 | [Mac M3 系列对照](https://www.apple.com/mac/compare/?modelList=MacBook-Air-M3-15%2CMacBook-Pro-16-M3) |
 | Apple M3 Ultra | 待核 | SoC；统一内存 | 最高 512 GB UMA | 819 | 32 核 Neural Engine；该规格页未列 TOPS | [Apple Mac Studio 2025](https://support.apple.com/en-us/122211) |
 | Apple M4 Pro / M4 Max | 待核 | SoC；Max 分 GPU SKU | 最高 64 / 128 GB UMA | 273 / 410–546 | 16 核 Neural Engine；不直接继承 M4 的 38 TOPS | [MacBook Pro M4 Pro/Max](https://support.apple.com/en-ie/121553) |
 | Apple M5 | 待核 | SoC；统一内存 | 最高 32 GB UMA | 153 | 未核实可直接比较的绝对 AI 峰值 | [Apple M5](https://www.apple.com/newsroom/2025/10/apple-unleashes-m5-the-next-big-leap-in-ai-performance-for-apple-silicon/) |
@@ -157,13 +146,25 @@
 | Qualcomm Dragonfly AI200 | 少量云端评估 | 单卡容量；414 TB/s 为 56 卡机架汇总 | 768 GB LPDDR5X | 独立单卡物理口径待核 | 绝对算力待核 | [Qualcomm 规格](https://www.qualcomm.com/data-center/products/qualcomm-dragonfly-ai200) · [2026-11-17 Cirrascale](https://www.cirrascale.com/press/qualcomm-and-cirrascale-ai-inference) |
 | Qualcomm Dragonfly AI250 | Gen1 硅片验证；计划 2027 H1 送样 | HBC 133 TB/s 每卡有效值，不是 DRAM 物理带宽 | 厂商称 768 GB | 物理带宽待核 | 绝对算力待核 | [Qualcomm 规格](https://www.qualcomm.com/data-center/products/qualcomm-dragonfly-ai250) · [2026-11-02 HBC 验证](https://www.qualcomm.com/news/onq/2026/11/qualcomm-hbc-validated-silicon-ai-inference) |
 | SambaNova SN40L | 待核 | 单 RDU 多层内存；不得合并带宽 | 64 GB HBM + 768 GB DDR + 520 MB SRAM | 未核到同口径分层带宽 | 厂商整机 BF16 数据不替代单芯片 | [SambaNova SN40L 规格](https://sambanova.ai/hubfs/SambaRack%20data%20sheet%20template%2007%2001%2025%20%281%29.pdf) |
-| Hailo-10H | 待核 | 边缘模组，PCIe 不能当内存带宽 | LPDDR4/4X | 未核实达到 100 GB/s | 40 TOPS INT4 | [Hailo-10H 产品页](https://hailo.ai/products/ai-accelerators/hailo-10h-ai-accelerator/) |
+| Hailo-10H | 低于算力门槛 | 边缘模组，PCIe 不能当内存带宽 | LPDDR4/4X | 未核实达到 128 GB/s | 40 TOPS INT4 | [Hailo-10H 产品页](https://hailo.ai/products/ai-accelerators/hailo-10h-ai-accelerator/) |
 | 昆仑芯 M100 | 待核 | 厂商称已公开展示 | 待核 | 待核 | 待核 | [百度 2026 Q3 官方披露](https://ir.baidu.com/news-releases/news-release-details/baidu-announces-third-quarter-2026-results) |
 | 沐曦 曦云 C550 | 待核 | OAM；最大 450 W；896 GB/s 为八卡 MetaXLink 口径 | 64 GB | 物理内存带宽待核 | 峰值待核 | [沐曦规格](https://www.metax-tech.com/prod.html?cid=107&id=35) |
 | 华为昇腾 950DT（ModelArts A5） | 云端配置披露 | 2026-10-21 A5 1D PoD；单封装 UMA | 96 GB | 最高 4000 | 该配置峰值待核；不继承 144 GB 路线值 | [华为云 A5 资源规格](https://support.huaweicloud.com/resmgmt-modelarts/resmgmt-a5_0002.html) |
 | 沐曦 曦云 C600 | 待核 | OAM 2.0；最大 1000 W | 高带宽内存；容量待核 | 物理内存带宽待核 | 峰值待核 | [沐曦规格](https://www.metax-tech.com/prod.html?cid=107&id=68) |
 | HyperAccel Bertha 100 | 低于带宽门槛 | 单卡；不是 Bertha 500 | 16 GB LPDDR5X | 64 | 带宽未过门槛 | [HyperAccel 规格](https://hyperaccel.ai/ha_product/bertha-100/) |
-| SpacemiT K3 | 低于带宽门槛 | 单 SoC；多节点不合并 | LPDDR5 | 51 | 60 TOPS（厂商口径） | [SpacemiT K3 数据手册](https://github.com/spacemit-com/docs-chip/blob/main/en/key_stone/k3/k3_docs/k3_ds.md) |
+| SpacemiT K3 | 低于两项门槛 | 单 SoC；多节点不合并 | LPDDR5 | 51 | 60 TOPS（厂商口径） | [SpacemiT K3 数据手册](https://github.com/spacemit-com/docs-chip/blob/main/en/key_stone/k3/k3_docs/k3_ds.md) |
+| Apple M1 Ultra | 低于门槛；已发布 | SoC；双 die 统一内存；已列 Neural Engine 算力低于门槛 | 128 GB UMA | 800 | 22 TOPS Neural Engine；精度未列 | [Apple M1 Ultra](https://www.apple.com/newsroom/2022/03/apple-unveils-m1-ultra-the-worlds-most-powerful-chip-for-a-personal-computer/) |
+| Apple M2 Ultra | 低于门槛；已发布 | SoC；双 die 统一内存；已列 Neural Engine 算力低于门槛 | 192 GB UMA | 800 | 31.6 TOPS Neural Engine；精度未列 | [Apple M2 Ultra](https://www.apple.com/newsroom/2023/06/apple-introduces-m2-ultra/) |
+| Apple M4（Mac mini） | 低于门槛；已发布 | SoC；内存带宽和已列 Neural Engine 算力均低于门槛 | 32 GB UMA | 120 | 38 TOPS Neural Engine；精度未列 | [Apple M4](https://www.apple.com/newsroom/2024/05/apple-introduces-m4-chip/) · [Mac mini M4 规格](https://support.apple.com/en-us/121555) |
+| AMD Ryzen AI Max+ 395 | 低于门槛；已发布 | SoC；已列 NPU 算力低于门槛 | 128 GB LPDDR5X UMA | 256 | 50 TOPS NPU | [AMD Ryzen AI Halo 配置](https://developer.amd.com/playbooks/user-guide/) · [AMD Ryzen AI Max+ 395](https://www.amd.com/en/products/processors/laptop/ryzen/ai-300-series/amd-ryzen-ai-max-plus-395.html) |
+| Qualcomm Snapdragon X Elite（X1E-84/80/78） | 低于门槛；已发布 | SoC；按 OEM 配置；已列 NPU 算力低于门槛 | LPDDR5X UMA | 135 | 45 TOPS NPU | [Qualcomm PC SKU 规格](https://www.qualcomm.com/laptops/products) |
+| Qualcomm Snapdragon X Plus（X1P-66/64/46/42） | 低于门槛；已发布 | SoC；按 OEM 配置；已列 NPU 算力低于门槛 | LPDDR5X UMA | 135 | 45 TOPS NPU | [Qualcomm PC SKU 规格](https://www.qualcomm.com/laptops/products) |
+| NVIDIA Jetson Orin Nano Super 8GB | 低于门槛；已发布 | 开发套件，Super 档；算力和内存带宽均低于门槛 | 8 GB LPDDR5 | 102 | 67 AI TOPS（官方档位） | [NVIDIA Jetson 模块对照](https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/) |
+| AMD Ryzen AI Max+ PRO 495 | 低于门槛；官方披露 | SoC；AMD Halo 192 GB 型；已列 NPU 算力低于门槛 | 192 GB LPDDR5X UMA | 273 | 55 TOPS NPU | [AMD Ryzen AI Halo 配置](https://developer.amd.com/playbooks/user-guide/) · [AMD Ryzen AI Max+ PRO 495 规格](https://www.amd.com/en/products/processors/laptop/ryzen-pro/ai-max-pro-400-series/amd-ryzen-ai-max-plus-pro-495.html) · [AMD Ryzen AI Max PRO 400 发布](https://www.amd.com/en/blogs/2026/amd-powers-next-generation-agent-computers-with-new-ryzen-ai-hal.html) |
+| Intel Core Ultra 7 258V | 低于门槛；已发布 | SoC；封装内 128-bit；带宽理论值；已列 GPU 和 NPU 的独立算力均低于门槛 | 32 GB LPDDR5X-8533 | 136.5 | 64 TOPS INT8 GPU；47 TOPS INT8 NPU（不相加） | [Intel ARK](https://www.intel.com/content/www/us/en/products/sku/240957/intel-core-ultra-7-processor-258v-12m-cache-up-to-4-80-ghz/specifications.html) · [Intel Lunar Lake](https://cdrdv2-public.intel.com/824443/2024_Intel_Tech%20Tour%20TW_Lunar%20Lake%20Architecture%20Session%20Highlights-3.pdf) |
+| AMD Ryzen AI Max PRO 490 | 低于门槛；官方披露 | SoC；256-bit 满宽计算值；依 OEM 配置；已列 NPU 算力低于门槛 | 最高 192 GB LPDDR5X UMA | 约 273 | 50 TOPS NPU | [AMD 490 规格](https://www.amd.com/en/products/processors/laptop/ryzen-pro/ai-max-pro-400-series/amd-ryzen-ai-max-pro-490.html) · [AMD 规格对照](https://www.amd.com/en/products/specifications/processors.html) |
+| 算能 SG2380 | 低于门槛；官方披露；Oasis 板暂停 | 单 SoC；256-bit 满宽理论值；未核出货；算力低于门槛 | 最高 128 GB LPDDR5；支持 LPDDR4/X | 204.8（LPDDR5-6400） | 32 TOPS INT8；16 TFLOPS FP16 | [Milk-V SoC 规格](https://milkv.io/chips/sg2380) · [Oasis 暂停公告](https://community.milkv.io/t/introducing-the-milk-v-oasis-with-sg2380-a-revolutionary-risc-v-desktop-experience/780/196) |
+| 算能 SC5-3-H | 低于门槛；已发布 | 整卡；75 W；PCIe 3 ×8；已列 INT8 算力低于门槛 | 36 GB LPDDR4X | 192 | 52.8 TOPS INT8 | [算能 SC5 V1.0](https://sophon-file.sophon.cn/sophon-prod-s3/drive/21/11/19/10/%E6%99%BA%E7%AE%97%E5%8D%A1SC5%E7%B3%BB%E5%88%97%E4%BA%A7%E5%93%81%E5%BD%A9%E9%A1%B5_V1.0.pdf) |
 
 ## 本轮口径说明
 
